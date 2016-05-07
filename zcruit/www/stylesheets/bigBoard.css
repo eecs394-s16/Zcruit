@@ -1,0 +1,59 @@
+body {
+      width:1024px;
+      height:768px; 
+      background-color:white;
+}
+
+.playerCard {
+  width: 30%; 
+  height: 11%; 
+  border: solid black; 
+  border-radius: 2px;
+}
+
+.status {
+  background-color: green; 
+  width: 5%; 
+  height:100%; 
+  display: inline-block; 
+  float: left;
+}
+
+.player {
+  padding-top: 3.25%;
+}
+
+.avatar {
+  width: 20%; 
+  display: inline-block; 
+  padding-left: 5%; 
+  float: left;
+}
+
+.playerInfo {
+  display: inline-block; 
+  margin-left: 5%; 
+  float: left;
+}
+
+.playerInfoName {
+  font-weight: bold;
+  padding-top: 3%
+}
+.playerInfoStats {
+  font-weight: lighter;
+}
+.zscore {
+  display: inline-block; 
+  float: left; 
+  text-align:center; 
+  margin-left: 5%; 
+  margin-top: 3.5%
+}
+
+.playerZscore {
+  padding: 12px; 
+  background-color:#99ffbb; 
+  font-weight:bold; 
+  border-radius: 5px;
+}
