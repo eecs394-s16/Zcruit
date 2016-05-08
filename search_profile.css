@@ -1,0 +1,107 @@
+tr,
+td {
+  padding: 0 2em .5em 0;
+}
+
+body {
+  font-family: "Helvetica Neue", Helvetica, sans-serif;
+  width: 1024px;
+  height: 768px;
+}
+
+#sidebar {
+  height: 100%;
+  width: 10%;
+  background-color: grey;
+  float: left;
+}
+
+#resultlist {
+  height: 100%;
+  width: 30%;
+  border-right: 1px solid grey;
+  box-sizing: border-box;
+  float: left;
+}
+
+#profile {
+  height: 100%;
+  width: 60%;
+  float: left;
+}
+
+#topcard {
+  height: 40%;
+  width: 100%;
+  padding: 3%;
+  position: relative;
+}
+
+#image-box {
+  height: 80%;
+  width: 30%;
+  float: left;
+}
+
+#profile-image {
+  height: 85%;
+  width: 100%;
+}
+
+#status {
+  height: 15%;
+  text-align: center;
+  line-height: 250%;
+  background: purple;
+  color: white;
+}
+
+#glanceinfo {
+  position: relative;
+  height: 70%;
+  width: 70%;
+  box-sizing: border-box;
+  padding: 0 0 2% 3%;
+  float: left;
+}
+
+#name {
+  font-weight: bold;
+  font-size: 1.7em;
+  margin-bottom: 3%;
+}
+
+#zscore {
+  display: inline-block;
+  width: 1.7em;
+  height: 1.7em;
+  line-height: 1.7em;
+  background-color: red;
+  text-align: center;
+  color: white;
+  margin: 0 1% 0 0;
+}
+
+#offer-summary {
+  position: absolute;
+  bottom: 0;
+  height: 20%;
+  width: 100%;
+  background-color: red;
+}
+
+#offer-icon {
+  width: 1em;
+  height: 1em;
+  background-color: blue;
+}
+
+#profile-tabs {
+  margin: 3%;
+}
+
+.summary {
+  width: 50%;
+  float: left;
+  padding: 2%;
+}
