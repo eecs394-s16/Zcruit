@@ -3,17 +3,18 @@ td {
   padding: 0 2em .5em 0;
 }
 
-body {
+html, body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   width: 1024px;
   height: 768px;
+  overflow: hidden;
 }
 
 #sidebar {
   height: 100%;
   width: 10%;
-  background-color: grey;
   float: left;
+  background: url('dark_texture.png') repeat-y bottom;
 }
 
 #resultlist {
@@ -34,7 +35,6 @@ body {
   height: 40%;
   width: 100%;
   padding: 3%;
-  position: relative;
 }
 
 #image-box {
@@ -61,6 +61,7 @@ body {
   height: 70%;
   width: 70%;
   box-sizing: border-box;
+  font-size: 1.2em;
   padding: 0 0 2% 3%;
   float: left;
 }
@@ -83,21 +84,24 @@ body {
 }
 
 #offer-summary {
-  position: absolute;
-  bottom: 0;
-  height: 20%;
   width: 100%;
-  background-color: red;
+  margin: 8px 0 0 0;
+  overflow-x: scroll;
+  white-space: nowrap;
+  float: left;
 }
 
-#offer-icon {
-  width: 1em;
-  height: 1em;
+.offer-icon {
+  width: 3em;
+  height: 3em;
   background-color: blue;
+  display: inline-block;
+  margin: 8px 0;
+  vertical-align: top;
 }
 
 #profile-tabs {
-  margin: 3%;
+  margin: 0 3%;
 }
 
 .summary {
