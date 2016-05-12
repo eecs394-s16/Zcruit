@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html ng-app="zcruit.search">
+	
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.5/angular-touch.min.js"></script>
+  <script src="../zcruit.js"></script>
+  <script src="../controllers/bigBoardController.js"></script>
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
+  <link rel="stylesheet" type="text/css" href="../css/player_card.css">
+  <link rel="stylesheet" type="text/css" href="../css/big_board.css">
+</head>
+
+<body ng-controller="bigBoardController">
+  <div id="sidebar">
+    <div id="sidebar-upper" ng-click="openSearchProfile();">
+      <div class="sidebar-icon">
+        <img src="../img/search.png">
+        <div>Search</div>
+      </div>
+    </div>
+    
+    <div id="sidebar-middle">
+      <div class="sidebar-icon">
+        <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
+        <img src="../img/calendar.png">
+        <div>Pick year</div>
+      </div>
+    </div>
+  </div>
+  
+  <div id="board">
+  	<div class="position" ng-repeat="pos in ['RB', 'QB', 'WR', 'LB', 'K', 'C', 'G', 'T', 'DT', 'MLB', 'OLB']">
+			<h1 class="position-title">{{pos}}</h1>
+			<div class='positionWrapper'>
+				<div class='playerCardWrapper'>
+			    <div class="playerCard" ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]">
+						<div class="status offered"></div>
+						<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
+		        </div>
+				    <div class="player">
+			        <div class="playerInfo">
+				        <div class="playerInfoName">Michael Jordan</div>
+				        <div class="playerInfoStats">QB - 6'11" 280lbs</div>
+				        <div class="playerInfoCoach">IL - Fitzgerald</div>
+			        </div>
+			        <div class="zscore">
+			        	<div class="playerZscore">92</div>
+			        </div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	
+		<div class="position">
+			<h1 class="position-title">Defense</h1>
+	
+	    <div class="playerCard">
+				<div class="status offered"></div>
+				<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
+        </div>
+		    <div class="player">
+	        <div class="playerInfo">
+	        	<div class="playerInfoName">Walt Frazier</div>
+		        <div class="playerInfoStats">LB - 5'10" 270lbs</div>
+		        <div class="playerInfoCoach">FL - Obama</div>
+	        </div>
+	        <div class="zscore">
+	        	<div class="playerZscore">88</div>
+	        </div>
+				</div>
+			</div>
+	
+			<div class="playerCard">
+				<div class="status offered"></div>
+				<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
+        </div>
+		    <div class="player">
+	        <div class="playerInfo">
+		        <div class="playerInfoName">George Yardley</div>
+		        <div class="playerInfoStats">LB - 6'6" 273lbs</div>
+		        <div class="playerInfoCoach">IL - Obama</div>
+	        </div>
+	        <div class="zscore">
+	        	<div class="playerZscore">85</div>
+	        </div>
+				</div>
+			</div>
+	
+		</div>
+	
+		<div class="position">
+			<h1 class="position-title">Other</h1>
+	
+	    <div class="playerCard">
+				<div class="status offered"></div>
+				<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
+        </div>
+		    <div class="player">
+	        <div class="playerInfo">
+		        <div class="playerInfoName">Larry Foust</div>
+		        <div class="playerInfoStats">K - 5'11" 221lbs</div>
+		        <div class="playerInfoCoach">MA - Bush</div>
+	        </div>
+	        <div class="zscore">
+	        	<div class="playerZscore">90</div>
+	        </div>
+				</div>
+			</div>
+	
+		</div>
+  </div>
+
+</body>
+</html>
