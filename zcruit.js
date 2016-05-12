@@ -1,0 +1,1 @@
+angular.module('zcruit.search', ['ngAnimate', 'ui.bootstrap']);

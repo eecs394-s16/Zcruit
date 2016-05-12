@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html ng-app="zcruit.search">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.5/angular-touch.min.js"></script>
+  <script src="../zcruit.js"></script>
+  <script src="../controllers/searchController.js"></script>
+  <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/player_card.css" rel="stylesheet">
+  <link href="../css/sidebar.css" rel="stylesheet">
+  <link href="../css/search_profile.css" rel="stylesheet">
+</head>
+
+<body ng-app="zcruit.search" ng-controller="searchController">
+  <div id="sidebar">
+    <div id="sidebar-upper" ng-click="openBigBoard();">
+      <div class="sidebar-icon">
+        <img src="../img/big_board.png">
+        <div>Big Board</div>
+      </div>
+    </div>
+    
+    <div id="sidebar-middle">
+      <div class="sidebar-icon">
+        <img src="../img/search.png">
+        <div>Search</div>
+      </div>
+      <div class="sidebar-icon">
+        <img src="../img/sort.png">
+        <div>Sort</div>
+      </div>
+      <div class="sidebar-icon">
+        <img src="../img/save.png">
+        <div>Save list</div>
+      </div>
+    </div>
+  </div>
+  <div id="resultlist">
+    <div class="playerCard" ng-repeat="i in [1,2,3,4,5,6,7,8,9,10,11,12]">
+			<div class="status offered"></div>
+			  <div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
+		    </div>
+				<div class="player">
+			  <div class="playerInfo">
+				<div class="playerInfoName">Michael Jordan</div>
+				<div class="playerInfoStats">QB - 6'11" 280lbs</div>
+				<div class="playerInfoCoach">IL - Fitzgerald</div>
+        </div>
+        <div class="zscore">
+        	<div class="playerZscore">92</div>
+        </div>
+			</div>
+		</div>
+  </div>
+  <div id="profile">
+    <div id="topcard">
+      <div id="image-box">
+        <img id="profile-image" src="https://placeholdit.imgix.net/~text?txtsize=47&txt=500%C3%97500&w=500&h=500">
+        <div id="profile-status">Committed</div>
+      </div>
+
+      <div id="glanceinfo">
+        <div id="name">
+          George Foreman
+          <!--uib-popover={{zscoreExplanation}}-->
+          <div id="profileZscore" 
+            uib-popover-html='zscorePopoverHtml'
+            popover-title="Zcruit Score" 
+            popover-placement="bottom" 
+            popover-trigger="outsideClick">
+            {{zscore}}
+          </div>
+        </div>
+
+        <div class="summary">
+          <p>QB, RB</p>
+          <p>6'4", 220lb.</p>
+          <p>Year: 2016</p>
+          <p>Coach: Washington</p>
+        </div>
+
+        <div class="summary">
+          <p>New Trier HS</p>
+          <p>GPA: 3.50</p>
+          <p>Evanston, IL</p>
+        </div>
+      </div>
+
+      <div id="offer-summary">
+        <img class="offer-icon" src="../img/college_logos/Northwestern.gif">
+        <img class="offer-icon" src="../img/college_logos/Duke.gif">
+        <img class="offer-icon" src="../img/college_logos/Alabama.gif">
+        <img class="offer-icon" src="../img/college_logos/Michigan.gif">
+        <img class="offer-icon" src="../img/college_logos/Notre Dame.gif">
+        <img class="offer-icon" src="../img/college_logos/Purdue.gif">
+        <img class="offer-icon" src="../img/college_logos/Robert Morris.gif">
+        <img class="offer-icon" src="../img/college_logos/Tulane.gif">
+        <img class="offer-icon" src="../img/college_logos/Texas A&M.gif">
+        <img class="offer-icon" src="../img/college_logos/Towson.gif">
+        <img class="offer-icon" src="../img/college_logos/UC Davis.gif">
+        <img class="offer-icon" src="../img/college_logos/Vanderbilt.gif">
+        <img class="offer-icon" src="../img/college_logos/Miami.gif">
+        <img class="offer-icon" src="../img/college_logos/Navy.gif">
+      </div>
+    </div>
+
+    <uib-tabset id="profile-tabs" activeloelwfoeow="activeJustified" justified="true">
+      <uib-tab index="0" heading="Bio">
+        <div id="bio" class="tab">
+          <div class="summary">
+            <h4>Contact Information</h4>
+            <table>
+              <tr>
+                <td>Phone: </td>
+                <td>123-444-5500</td>
+              </tr>
+              <tr>
+                <td>Email: </td>
+                <td>mjordan@trier.edu</td>
+              </tr>
+              <tr>
+                <td>Address: </td>
+                <td>2200 Football Dr
+                  <br> Evanston, IL 60201</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="summary">
+            <h4>High School</h4>
+            <table>
+              <tr>
+                <td>Name: </td>
+                <td>New Trier HS</td>
+              </tr>
+              <tr>
+                <td>HS Coach: </td>
+                <td>John Adams</td>
+              </tr>
+              <tr>
+                <td>Position: </td>
+                <td>QB</td>
+              </tr>
+              <tr>
+                <td>Record: </td>
+                <td>10-2</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="summary">
+            <h4>Family</h4>
+            <table>
+              <tr>
+                <td>Parent 1: </td>
+                <td>Donna Jordan</td>
+              </tr>
+              <tr>
+                <td>Parent 2: </td>
+                <td>Matt Jordan</td>
+              </tr>
+              <tr>
+                <td>Home: </td>
+                <td>Chicago, IL</td>
+              </tr>
+              <tr>
+                <td>SES: </td>
+                <td>Middle</td>
+              </tr>
+            </table>
+          </div>
+
+          <div class="summary">
+            <h4>Connections</h4>
+            <table>
+              <tr>
+                <td>Legacy: </td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Sibling: </td>
+                <td>No</td>
+              </tr>
+              <tr>
+                <td>Other: </td>
+                <td>N/A</td>
+              </tr>
+            </table>
+          </div>
+
+        </div>
+      </uib-tab>
+      <uib-tab index="1" heading="Stats">
+        Short Labeled Justified content
+      </uib-tab>
+      <uib-tab index="2" heading="Media">
+        Long Labeled Justified content
+      </uib-tab>
+      <uib-tab index="3" heading="Notes">
+        Long Labeled Justified content
+      </uib-tab>
+    </uib-tabset>
+  </div>
+</body>
+
+</html>
