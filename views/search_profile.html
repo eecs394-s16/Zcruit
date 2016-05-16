@@ -26,10 +26,12 @@
     </div>
     
     <div id="sidebar-middle">
-      <div class="sidebar-icon">
+      <div ng-controller="ModalDemoCtrl">
+      <div class="sidebar-icon" ng-click="open();">
         <img src="../img/search.png">
         <div>Search</div>
       </div>
+    </div>
       <div class="sidebar-icon">
         <img src="../img/sort.png">
         <div>Sort</div>
@@ -206,6 +208,28 @@
       </uib-tab>
     </uib-tabset>
   </div>
+
+<!-- Handle the Modal Popup -->
+<div ng-controller="ModalDemoCtrl" style="visibility: hidden">
+    <script type="text/ng-template" id="myModalContent.html">
+        <div class="modal-header">
+            <h3 class="modal-title">Im a modal!</h3>
+        </div>
+        <div class="modal-body">
+            <ul>
+                <li ng-repeat="item in items">
+                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
+                </li>
+            </ul>
+            Selected: <b>{{ selected.item }}</b>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+        </div>
+    </script>
+</div>
+  
 </body>
 
 </html>
