@@ -1,13 +1,14 @@
-tr,
-td {
-  padding: 0 2em .5em 0;
-}
-
-html, body {
+html,
+body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   width: 1024px;
   height: 768px;
-  overflow: hidden;
+  overflow: auto;
+}
+
+tr,
+td {
+  padding: 0 2em .5em 0;
 }
 
 #resultlist {
@@ -18,9 +19,12 @@ html, body {
   float: left;
   display: inline-block;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
+
 /* Override style in player_card.css */
+
 .playerCard {
   margin-top: 0;
   border-width: 0;
@@ -79,7 +83,7 @@ html, body {
   width: 1.7em;
   height: 1.7em;
   line-height: 1.7em;
-  background-color: rgb(120,207,66);
+  /*background-color: rgb(120, 207, 66);*/
   text-align: center;
   margin: 0 1% 0 0;
 }
@@ -90,6 +94,7 @@ html, body {
   overflow-x: scroll;
   white-space: nowrap;
   float: left;
+  -webkit-overflow-scrolling: touch;
 }
 
 .offer-icon {
@@ -112,6 +117,10 @@ html, body {
 }
 
 .popover {
-  width: 30vw;
+  width: 35vw;
   max-width: 100vw;
 }
+
+
+
+

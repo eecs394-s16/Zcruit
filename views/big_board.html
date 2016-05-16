@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html ng-app="zcruit.search">
+<html ng-app="zcruit">
 	
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.5/angular-touch.min.js"></script>
   <script src="../zcruit.js"></script>
   <script src="../controllers/bigBoardController.js"></script>
@@ -41,79 +41,21 @@
 				<div class='playerCardWrapper'>
 			    <div class="playerCard" ng-repeat="i in [1,2,3,4,5,6,7,8,9,10]">
 						<div class="status offered"></div>
-						<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
-		        </div>
+			  		<div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
 				    <div class="player">
 			        <div class="playerInfo">
-				        <div class="playerInfoName">Michael Jordan</div>
-				        <div class="playerInfoStats">QB - 6'11" 280lbs</div>
-				        <div class="playerInfoCoach">IL - Fitzgerald</div>
-			        </div>
-			        <div class="zscore">
-			        	<div class="playerZscore">92</div>
+			  				<div class="playerInfoName">Clayton Thorson</div>
+			  				<div class="playerInfoStats">QB - 6'4" 220lb</div>
+			  				<div class="playerInfoCoach">Wheaton, IL - PF</div>
 			        </div>
 						</div>
+		        <div class="zscore">
+		        	<div class="playerZscore"
+		        	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">9.2</div>
+		        </div>
 					</div>
 				</div>
 			</div>
-		</div>
-	
-		<div class="position">
-			<h1 class="position-title">Defense</h1>
-	
-	    <div class="playerCard">
-				<div class="status offered"></div>
-				<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
-        </div>
-		    <div class="player">
-	        <div class="playerInfo">
-	        	<div class="playerInfoName">Walt Frazier</div>
-		        <div class="playerInfoStats">LB - 5'10" 270lbs</div>
-		        <div class="playerInfoCoach">FL - Obama</div>
-	        </div>
-	        <div class="zscore">
-	        	<div class="playerZscore">88</div>
-	        </div>
-				</div>
-			</div>
-	
-			<div class="playerCard">
-				<div class="status offered"></div>
-				<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
-        </div>
-		    <div class="player">
-	        <div class="playerInfo">
-		        <div class="playerInfoName">George Yardley</div>
-		        <div class="playerInfoStats">LB - 6'6" 273lbs</div>
-		        <div class="playerInfoCoach">IL - Obama</div>
-	        </div>
-	        <div class="zscore">
-	        	<div class="playerZscore">85</div>
-	        </div>
-				</div>
-			</div>
-	
-		</div>
-	
-		<div class="position">
-			<h1 class="position-title">Other</h1>
-	
-	    <div class="playerCard">
-				<div class="status offered"></div>
-				<div class="avatar" style="background-image: url('https://blog-blogmediainc.netdna-ssl.com/upload/SportsBlogcom/2159727/0413747001456770288_filepicker.png');">
-        </div>
-		    <div class="player">
-	        <div class="playerInfo">
-		        <div class="playerInfoName">Larry Foust</div>
-		        <div class="playerInfoStats">K - 5'11" 221lbs</div>
-		        <div class="playerInfoCoach">MA - Bush</div>
-	        </div>
-	        <div class="zscore">
-	        	<div class="playerZscore">90</div>
-	        </div>
-				</div>
-			</div>
-	
 		</div>
   </div>
 

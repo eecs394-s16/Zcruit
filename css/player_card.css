@@ -25,7 +25,7 @@
 .player {
   display: table;
   float: left;
-  width: 70%;
+  width: 50%;
   margin-left: 5%;
   height: 100%;
 }
@@ -53,16 +53,34 @@
 }
 
 .zscore {
-  display: table-cell;
-  vertical-align: middle;
+  width: 20%;
+  height: 100%;
   text-align: center;
+  float: right;
 }
 
-.playerZscore {
-  height: 5vw;
-  width: 5vw;
+.zscore_full {
+  padding-top: 10%;
+  height: 100%;
+  width: 100%;
   font-size: 1.5em;
   line-height: 5vw;
   background-color: rgb(120,207,66);
   font-weight: bold;
+}
+
+.zscore_half {
+  height: 50%;
+  width: 100%;
+  float: top;
+}
+
+.green {
+    background-color: rgb(120,207,66);
+}
+.red {
+    background-color: rgb(207,60,66);
+}
+.yellow {
+    background-color: rgb(255,255,102);
 }

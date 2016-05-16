@@ -8,6 +8,11 @@ if (mysqli_connect_errno($conn))
 
 $query = $_GET['query'];
 
+if (stripos($query, "drop") !== false || stripos($query, "select") === false) {
+  echo "Don't be bad";
+  return;
+}
+
 $result_arr = array();
 
 $query_result = mysqli_query($conn, $query);

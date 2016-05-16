@@ -3,8 +3,13 @@ body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   width: 1024px;
   height: 768px;
+  overflow: auto;
   background-color: white;
   white-space: nowrap;
+}
+
+* {
+  -webkit-overflow-scrolling: touch;
 }
 
 #board {
@@ -15,6 +20,7 @@ body {
   overflow-y: hidden;
   display: inline-block;
   padding-right: 2%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .position {
@@ -39,12 +45,18 @@ body {
   color: white;
 }
 
-.playerCardWrapper{
+.playerCardWrapper {
   width: 100%;
   display: inline-block;
 }
+
 .positionWrapper {
-  width:100%;
-  height:90%;
-  overflow-y:scroll;
+  width: 100%;
+  height: 90%;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.zscore {
+  padding-right: 0.5px;
 }
