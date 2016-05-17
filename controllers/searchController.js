@@ -1,4 +1,5 @@
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', function($scope, $location, $http) {
+
   $scope.initials = function(name) {
     name = name.split(' ');
     return name[0][0] + name[1][0];
@@ -43,4 +44,40 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   $scope.openBigBoard = function() {
     window.open('big_board.html', '_self');
   }
+
+// List Controller Functions
+
+  $scope.showLists = false;
+
+  $scope.openSearchProfile = function(){
+    window.open('search_profile.html','_self');
+  }
+
+  $scope.openList = function(listID){
+    window.open('search_profile.html','_self');
+  }
+
+   $scope.openMyLists = function(){
+    $scope.showLists = !$scope.showLists;
+  }
+
+  $scope.hideOptions = false;
+
+  $scope.showOptions = function() {
+    $scope.hideOptions = false;
+  }
+  $scope.changeList = function(lst){
+    document.getElementById("chosenList").innerHTML = lst;
+    document.getElementById("chosenListTitle").innerHTML = lst;
+    $scope.hideOptions = true;
+  }
+
+  $scope.changeListPlayers = function(i){
+    document.getElementById("chosenList").innerHTML = "what";
+    document.getElementById("chosenListTitle").innerHTML = lst;
+  }
+
+
+
+
 }]);

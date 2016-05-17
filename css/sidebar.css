@@ -14,12 +14,7 @@
   color: white;
 }
 
-#sidebar-upper {
-  position: absolute;
+#sidebar-field {
+  position: relative;
   width: 100%;
-}
-
-#sidebar-middle {
-  display: table-cell;
-  vertical-align: middle;
 }

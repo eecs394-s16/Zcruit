@@ -60,3 +60,59 @@ body {
 .zscore {
   padding-right: 0.5px;
 }
+
+/* List CSS */
+
+.lists {
+  margin: 0 0 0 2%;
+  padding-top: 2%;
+  width: 30%;
+  height: 100%;
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  background-color: #007a99;
+}
+
+.listCard {
+  width: 100%;
+  height: 10vh;
+  border-width: 1px;
+  border-color: #aaa;
+  border-style: solid;
+  position: relative;
+  margin-top: 2%;
+  background-color: white;
+}
+
+.listName {
+  padding-left: 10px;
+  vertical-align: middle;
+}
+
+@keyframes listHide {
+  from {
+      width: 30%;
+  }
+  to {
+      width: 0%;
+  }
+}
+@keyframes listShow {
+  from {
+      width: 0%;
+  }
+  to {
+      width: 30%;
+  }
+}
+
+.lists.ng-hide-add {
+  animation: 0.3s listHide;
+}
+
+.lists.ng-hide-remove {
+  animation: 0.3s listShow;
+}
+
+
