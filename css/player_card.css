@@ -52,7 +52,7 @@
   font-weight: lighter;
 }
 
-.zscore_wrapper {
+.zscore-wrapper {
   width: 20%;
   height: 100%;
   text-align: center;
@@ -63,7 +63,7 @@
   flex-direction: column;
 }
 
-.zscore_flex {
+.zscore-flex {
   height: 100%;
   width: 100%;
   font-size: 1.5em;
@@ -75,7 +75,7 @@
   align-items: center; /* align vertical */
 }
 
-.zscore_flex:nth-child(2) {
+.zscore-flex:nth-child(2) {
   border-top: 1px solid grey;
 }
 

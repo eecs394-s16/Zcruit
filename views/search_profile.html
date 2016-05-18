@@ -55,10 +55,10 @@
   				<div class="playerInfoCoach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
-      <div class="zscore_wrapper">
-      	<div class="zscore_flex" 
+      <div class="zscore-wrapper">
+      	<div class="zscore-flex" 
       	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
-        <div class="zscore_flex" 
+        <div class="zscore-flex" 
         ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
       </div>
 		</div>
