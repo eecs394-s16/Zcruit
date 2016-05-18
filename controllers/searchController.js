@@ -6,13 +6,13 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   
   $scope.phoneFormat = function(phone) {
     if (phone) {
-      return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10)
+      return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
     }
   };
   
   $scope.boolToText = function(bool) {
     return bool === '0' ? 'No' : 'Yes';
-  }
+  };
   
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
@@ -26,11 +26,48 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
     }
   };
+
+  $scope.savePlayer = function(player, list) {
+    if (list.Player_ids.find(function(e) { return e === player.Player_id; })) {
+      // If the list already contains the player, show some kind of message?
+    } else {
+      list.Player_ids.push(player.Player_id);
+      runQuery('UPDATE SavedLists SET Player_ids = "' + list.Player_ids.join() + '" WHERE List_id = ' + list.List_id);
+    }
+  };
+
+  // Callback is passed the response object
+  function runQuery(queryString, callback) {
+    $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
+    .then(function(response) {
+      if (response.status === 200 && callback) {
+        callback(response.data);
+      } else {
+        console.log("Query error: " + response);
+      }
+    });
+  }
+
+  function runSearch(queryString) {
+    runQuery(queryString, function(response) {
+      $scope.players = response;
+      $scope.setSelectedPlayer($scope.players[0]);
+    });
+  }
   
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id'))
-  .then(function(response) {
-    $scope.players = eval(response.data);
-    $scope.setSelectedPlayer($scope.players[0]);
+  runSearch('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
+
+  var coach = 1;
+  runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
+    for (var i = 0, l = response.length; i < l; i++) {
+      // Save a representation of the player lists on client
+      var playerList = [];
+      if (response[i].Player_ids) {
+        playerList = response[i].Player_ids.split(',');
+      }
+      response[i].Player_ids = playerList;
+    }
+    $scope.savedLists = response;
   });
   
   $scope.test = "hi";
