@@ -27,16 +27,29 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
+  // Add player to a list
   $scope.savePlayer = function(player, list) {
     if (list.Player_ids.find(function(e) { return e === player.Player_id; })) {
       // If the list already contains the player, show some kind of message?
     } else {
       list.Player_ids.push(player.Player_id);
       runQuery('UPDATE SavedLists SET Player_ids = "' + list.Player_ids.join() + '" WHERE List_id = ' + list.List_id);
+      // Give user some kind of feedback
     }
   };
 
-  // Callback is passed the response object
+  var coach = 1;
+
+  $scope.newList = function(name) {
+    $scope.newListPopoverIsOpen = false;
+    runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")',
+      function() {
+        getSavedLists();
+        // Give user some kind of feedback
+    });
+  };
+
+  // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
     .then(function(response) {
@@ -48,29 +61,37 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   }
 
+  // Update the search results with a query string
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
       $scope.players = response;
       $scope.setSelectedPlayer($scope.players[0]);
     });
   }
+
+  // Retrieve the saved lists for this coach from the server
+  function getSavedLists() {
+    runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
+      for (var i = 0, l = response.length; i < l; i++) {
+        // Save a representation of the player lists on client
+        var playerList = [];
+        if (response[i].Player_ids) {
+          playerList = response[i].Player_ids.split(',');
+        }
+        response[i].Player_ids = playerList;
+      }
+      $scope.savedLists = response;
+    });
+  }
   
   runSearch('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
 
-  var coach = 1;
-  runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
-    for (var i = 0, l = response.length; i < l; i++) {
-      // Save a representation of the player lists on client
-      var playerList = [];
-      if (response[i].Player_ids) {
-        playerList = response[i].Player_ids.split(',');
-      }
-      response[i].Player_ids = playerList;
-    }
-    $scope.savedLists = response;
-  });
-  
-  $scope.test = "hi";
+  getSavedLists();
+
+  $scope.newListPopover = {
+    templateUrl: 'new_list_popover.html',
+    title: "New List"
+  };
 
   $scope.zscorePopover = {
     templateUrl: 'zscore_popover.html',
