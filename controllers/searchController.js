@@ -45,6 +45,45 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   }
 }]);
 
+function buildSearchQuery($scope) {
+  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Coaches c, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id = pos.Player_id';
+
+  query +=         ' AND p.GPA BETWEEN ' + $scope.minGPA + ' AND ' + $scope.maxGPA;
+  query += ' AND p.Height BETWEEN ' + $scope.minHeight + ' AND ' + $scope.maxHeight;
+  query += ' AND p.Weight BETWEEN ' + $scope.minWeight + ' AND ' + $scope.maxWeight;
+
+  if ($scope.year) {
+    query += ' AND p.Year = ' + $scope.year;
+  }
+  if ($scope.state) {
+    query += ' AND p.State = ' + $scope.state;
+  }
+  if ($scope.state) {
+    query += ' AND p.State = ' + $scope.state;
+  }
+  if ($scope.firstName) {
+    query += ' AND p.FirstName = ' + $scope.firstName + '%';
+  }
+  if ($scope.lastName) {
+    query += ' AND p.LastName = ' + $scope.lastName + '%';
+  }
+  if ($scope.highSchool) {
+    query += ' AND h.HS_name = ' + '%' + $scope.highSchool + '%';
+  }
+  if ($scope.positions) {
+    query += 'AND pos.Position_name in ("' + $scope.positions[0].label + '"';
+    for (var i = 1, l = $scope.positions.length; i < l; i++) {
+      query += ',"' + $scope.positions[i].label + '"';
+    }
+    query += ')';
+  }
+  if ($scope.coach) {
+    query += ' AND c.Coach_name = ' + '%' + $scope.coach + '%';
+  }
+
+  return query;
+}
+
 // MODAL CONTROLLERS
 angular.module('zcruit').controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
 
