@@ -8,6 +8,10 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.3/angular-touch.min.js"></script>
+  <link href='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css' type='text/css' rel='stylesheet'>
+  <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
+  <script src='../lib/lodash.js'></script>
+  <script src='https://rawgit.com/dotansimha/angularjs-dropdown-multiselect/master/src/angularjs-dropdown-multiselect.js'></script>
   <script src="../zcruit.js"></script>
   <script src="../controllers/searchController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -24,7 +28,7 @@
         <div>Big Board</div>
       </div>
     </div>
-    
+
     <div id="sidebar-middle">
       <div ng-controller="ModalDemoCtrl">
       <div class="sidebar-icon" ng-click="open();">
@@ -54,7 +58,7 @@
         </div>
 			</div>
       <div class="zscore">
-      	<div class="zscore_full" 
+      	<div class="zscore_full"
       	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
       </div>
 		</div>
@@ -213,15 +217,40 @@
 <div ng-controller="ModalDemoCtrl" style="visibility: hidden">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
-            <h3 class="modal-title">Im a modal!</h3>
+            <h3 class="modal-title">Player search</h3>
         </div>
         <div class="modal-body">
-            <ul>
-                <li ng-repeat="item in items">
-                    <a href="#" ng-click="$event.preventDefault(); selected.item = item">{{ item }}</a>
-                </li>
-            </ul>
-            Selected: <b>{{ selected.item }}</b>
+        <form>
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">Name</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" ng-model='Name' placeholder="Name">
+            </div>
+          </div>
+          <div class='form group row'>
+            <label class="col-sm-2 form-control-label">Zcruit score</label>
+            <rzslider class='col-sm-5' rz-slider-model="minRangeSlider.minValue" rz-slider-high="minRangeSlider.maxValue" rz-slider-options="minRangeSlider.options"></rzslider>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">Position</label>
+            <div class="col-sm-5">
+              <div ng-dropdown-multiselect="" options="positionData" selected-model="positionModel"></div>
+            </div>
+            <div class="col-sm-5">
+              {{positionModel}}
+            </div>
+          </div>
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">Status</label>
+            <div class="col-sm-5">
+              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel"></div>
+            </div>
+          </div>
+
+
+        </form>
+
+
         </div>
         <div class="modal-footer">
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
@@ -229,7 +258,7 @@
         </div>
     </script>
 </div>
-  
+
 </body>
 
 </html>
