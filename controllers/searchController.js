@@ -6,13 +6,13 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   
   $scope.phoneFormat = function(phone) {
     if (phone) {
-      return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
+      return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10)
     }
   };
   
   $scope.boolToText = function(bool) {
     return bool === '0' ? 'No' : 'Yes';
-  };
+  }
   
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
@@ -26,17 +26,23 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
     }
   };
-
-  runQuery('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
+  
+  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id'))
+  .then(function(response) {
+    $scope.players = eval(response.data);
+    $scope.setSelectedPlayer($scope.players[0]);
+  });
+  
+  $scope.test = "hi";
 
   $scope.zscorePopover = {
     templateUrl: 'zscore_popover.html',
     title: "Zcruit Score"
-  };
+  }
 
   $scope.openBigBoard = function() {
     window.open('big_board.html', '_self');
-  };
+  }
 }]);
 
 function buildSearchQuery($scope) {
@@ -76,14 +82,6 @@ function buildSearchQuery($scope) {
   }
 
   return query;
-}
-
-function runQuery(queryString) {
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
-  .then(function(response) {
-    $scope.players = eval(response.data);
-    $scope.setSelectedPlayer($scope.players[0]);
-  });
 }
 
 // MODAL CONTROLLERS
