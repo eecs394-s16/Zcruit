@@ -90,7 +90,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     });
 
   //Range slider config
-  $scope.minRangeSlider = {
+  $scope.zscoreSlider = {
       minValue: 200,
       maxValue: 400,
       options: {
@@ -130,6 +130,65 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:5, label: "5 - Walk on"},
     {id:6, label: "6 - Reject"}
   ];
+
+ $scope.yearModel = [];
+  $scope.yearData = [
+    {id:2015, label: 2015},
+    {id:2016, label: 2016},
+    {id:2017, label: 2017},
+    {id:2018, label: 2018},
+    {id:2019, label: 2019},
+    {id:2020, label: 2020}
+  ];
+
+  $scope.heightSlider = {
+      minValue: 200,
+      maxValue: 400,
+      options: {
+          floor:150,
+          ceil: 500,
+          step: 2
+      }
+  };
+
+  $scope.weightSlider = {
+      minValue: 200,
+      maxValue: 400,
+      options: {
+          floor:150,
+          ceil: 500,
+          step: 2
+      }
+  };
+
+
+ $scope.stateModel = [];
+  $scope.stateData = [
+    {id:"IL", label: "IL"},
+    {id:"WA", label: "WA"},
+    {id:"CA", label: "CA"},
+    {id:"MA", label: "MA"},  
+  ];
+
+ $scope.coachModel = [];
+  $scope.coachData = [
+    {id:"Fitz", label: "Fitz"},
+    {id:"Sander", label: "Sander"},
+    {id:"Clinton", label: "Clinton"},
+    {id:"Jordan", label: "Jordan"},  
+  ];
+
+
+  $scope.gpaSlider = {
+      minValue: 2.0,
+      maxValue: 3.5,
+      options: {
+          floor:1.0,
+          ceil: 4.0,
+          step: 0.1,
+          precision: 1
+      }
+  };
 
 
   $scope.selected = {
