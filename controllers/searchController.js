@@ -50,6 +50,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 function buildSearchQuery(params) {
   var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Coaches c, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id = pos.Player_id';
 
+  query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
   query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
   query += ' AND p.Height BETWEEN ' + params.minHeight + ' AND ' + params.maxHeight;
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
