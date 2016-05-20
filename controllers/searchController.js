@@ -48,7 +48,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 }]);
 
 function buildSearchQuery(params) {
-  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Coaches c, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id = pos.Player_id';
+  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id';
 
   query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
   query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
@@ -56,21 +56,21 @@ function buildSearchQuery(params) {
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
 
   if (params.year) {
-    query += ' AND pos.Year in ("' + params.year[0].id + '"';
+    query += ' AND p.Year in (' + params.year[0].id;
     for (var i = 1, l = params.year.length; i < l; i++) {
-      query += ',"' + params.year[i].id + '"';
+      query += ',' + params.year[i].id + '';
     }
     query += ')';
   }
   if (params.statuses) {
-    query += ' AND pos.NU_status in ("' + params.statuses[0].id + '"';
+    query += ' AND p.NU_status in (' + params.statuses[0].id + '';
     for (var i = 1, l = params.statuses.length; i < l; i++) {
       query += ',"' + params.statuses[i].id + '"';
     }
     query += ')';
   }
   if (params.states) {
-    query += ' AND pos.Hometown_state in ("' + params.states[0].id + '"';
+    query += ' AND p.Hometown_state in ("' + params.states[0].id + '"';
     for (var i = 1, l = params.states.length; i < l; i++) {
       query += ',"' + params.states[i].id + '"';
     }
@@ -92,8 +92,12 @@ function buildSearchQuery(params) {
     }
     query += ')';
   }
-  if (params.coach) {
-    query += ' AND c.AreaCoach_id = ' + '%' + $scope.coach + '%';
+  if (params.coaches) {
+    query += ' AND p.AreaCoach_id in (' + params.coaches[0].id;
+    for (var i = 1, l = params.coaches.length; i < l; i++) {
+      query += ',' + params.coaches[i].id + '';
+    }
+    query += ')';
   }
 
   return query;
