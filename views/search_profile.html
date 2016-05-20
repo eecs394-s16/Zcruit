@@ -55,9 +55,11 @@
   				<div class="playerInfoCoach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
-      <div class="zscore">
-      	<div class="zscore_full"
+      <div class="zscore-wrapper">
+      	<div class="zscore-flex" 
       	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
+        <div class="zscore-flex" 
+        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
       </div>
 		</div>
   </div>
@@ -71,13 +73,15 @@
       <div id="glanceinfo">
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
-          <div id="profileZscore"
+          <div id="profile-zscore-wrapper"
             uib-popover-template='zscorePopover.templateUrl'
             popover-title="{{zscorePopover.title}}"
             popover-placement="bottom-right"
-            popover-trigger="outsideClick"
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">
-            {{selected.Zscore}}
+            popover-trigger="outsideClick">
+            <div class="profile-zscore" 
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
+            <div class="profile-zscore" 
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
           </div>
         </div>
 
