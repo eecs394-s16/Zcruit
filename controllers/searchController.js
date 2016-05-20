@@ -110,7 +110,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         // Save a representation of the player lists on client
         var playerList = [];
         if (response[i].Player_ids) {
-          playerList = response[i].Player_ids;//.split(',');
+          playerList = response[i].Player_ids.toString().split(',');
+          console.log(playerList);
         }
         response[i].Player_ids = playerList;
       }
