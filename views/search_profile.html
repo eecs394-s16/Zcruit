@@ -45,7 +45,7 @@
     </div>
   </div>
   <div id="resultlist">
-    <div class="playerCard" ng-repeat="p in players" ng-click="setSelectedPlayer(p)">
+    <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
 		  <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
 			<div class="player">
@@ -113,22 +113,9 @@
         </div>
       </div>
 
-      <div id="offer-summary" ng-repeat="offer_url in selected.offers" >
-        <img class="offer-icon" src="{{offer_url}}">
-        <!-- <img class="offer-icon" src="../img/college_logos/Northwestern.gif">
-        <img class="offer-icon" src="../img/college_logos/Duke.gif">
-        <img class="offer-icon" src="../img/college_logos/Alabama.gif">
-        <img class="offer-icon" src="../img/college_logos/Michigan.gif">
-        <img class="offer-icon" src="../img/college_logos/Notre Dame.gif">
-        <img class="offer-icon" src="../img/college_logos/Purdue.gif">
-        <img class="offer-icon" src="../img/college_logos/Robert Morris.gif">
-        <img class="offer-icon" src="../img/college_logos/Tulane.gif">
-        <img class="offer-icon" src="../img/college_logos/Texas A&M.gif">
-        <img class="offer-icon" src="../img/college_logos/Towson.gif">
-        <img class="offer-icon" src="../img/college_logos/UC Davis.gif">
-        <img class="offer-icon" src="../img/college_logos/Vanderbilt.gif">
-        <img class="offer-icon" src="../img/college_logos/Miami.gif">
-        <img class="offer-icon" src="../img/college_logos/Navy.gif"> -->
+      <!-- Be careful here - how are multiple offers displaying  -->
+      <div id="offer-summary" >
+        <img class="offer-icon" ng-repeat="offer_url in selected.offers" ng-src="{{offer_url}}">
       </div>
     </div>
 
