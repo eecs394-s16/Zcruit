@@ -1,5 +1,4 @@
-angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', function($scope, $location, $http) {
-
+angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
 
   $scope.initials = function(name) {
     name = name.split(' ');
@@ -8,17 +7,19 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.phoneFormat = function(phone) {
     if (phone) {
-      return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10)
+      phone = phone.toString();
+      return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
     }
   };
 
   $scope.boolToText = function(bool) {
     return bool === '0' ? 'No' : 'Yes';
-  }
+  };
 
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
-    console.log(player);
+    // console.log(player);
+    // console.log(player.offers);
 
     if (player.Zscore >= 8.5) {
       $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
@@ -29,13 +30,128 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id'))
-  .then(function(response) {
-    $scope.players = eval(response.data);
-    $scope.setSelectedPlayer($scope.players[0]);
-  });
+  $scope.height = function(heightInfo, type) {
 
-  $scope.test = "hi";
+    if (type == 1) {
+      // get foot
+      return Math.floor(heightInfo / 12)
+    } else {
+      // get inches
+      return (heightInfo % 12)
+    }
+  };
+
+  // Add player to a list
+  $scope.savePlayer = function(player, list) {
+    if (list.Player_ids.find(function(e) { return e === player.Player_id; })) {
+      // If the list already contains the player, show some kind of message?
+    } else {
+      list.Player_ids.push(player.Player_id);
+      runQuery('UPDATE SavedLists SET Player_ids = "' + list.Player_ids.join() + '" WHERE List_id = ' + list.List_id);
+      // Give user some kind of feedback
+    }
+  };
+
+  var coach = 1;
+  $scope.sortParam = 'FirstName';
+  $scope.sortReverse = false;
+
+  $scope.newList = function(name) {
+    $scope.newListPopoverIsOpen = false;
+    runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")',
+      function() {
+        getSavedLists();
+        // Give user some kind of feedback
+    });
+  };
+
+  // Run an arbitrary query, callback is passed the response if the query succeeds
+  function runQuery(queryString, callback) {
+    $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
+    .then(function(response) {
+      if (response.status === 200 && callback) {
+        callback(response.data);
+      } else {
+        console.log("Query error: " + response);
+      }
+    });
+  }
+
+  // Update the search results with a query string
+  function runSearch(queryString) {
+    runQuery(queryString, function(response) {
+      $scope.players = response;
+      $scope.setSelectedPlayer($scope.players[0]);
+
+      var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
+      // get offers for all players
+      runQuery(offerQueryString, function(responseColleges){
+
+          for(var i = 0; i < $scope.players.length; i++)
+          {
+            // for each player, loop through the array of colleges and add on anything that works
+            currentPlayer = $scope.players[i];
+            $scope.players[i].offers = Array();
+            for (var j = 0; j < responseColleges.length; j++)
+            {
+              if (responseColleges[j].Player_id === currentPlayer.Player_id)
+              {
+                $scope.players[i].offers.push('../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif');
+                console.log($scope.players[i].offers.slice(-1));
+              }
+            }
+          }
+      });
+      console.log($scope.players);
+    });
+  }
+
+  // Retrieve the saved lists for this coach from the server
+  function getSavedLists() {
+    runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
+      for (var i = 0, l = response.length; i < l; i++) {
+        // Save a representation of the player lists on client
+        var playerList = [];
+        if (response[i].Player_ids) {
+          playerList = response[i].Player_ids.toString().split(',');
+          console.log(playerList);
+        }
+        response[i].Player_ids = playerList;
+      }
+      $scope.savedLists = response;
+    });
+  }
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.openSearchModal = function (size) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (searchParams) {
+      runSearch(buildSearchQuery(searchParams));
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+  runSearch('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
+
+  getSavedLists();
+
+  $scope.newListPopover = {
+    templateUrl: 'new_list_popover.html',
+    title: "New List"
+  };
 
   $scope.zscorePopover = {
     templateUrl: 'zscore_popover.html',
@@ -48,28 +164,28 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 }]);
 
 function buildSearchQuery(params) {
-  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id';
+  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
   query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
   query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
   query += ' AND p.Height BETWEEN ' + params.minHeight + ' AND ' + params.maxHeight;
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
 
-  if (params.year) {
+  if (params.year && params.year.length) {
     query += ' AND p.Year in (' + params.year[0].id;
     for (var i = 1, l = params.year.length; i < l; i++) {
       query += ',' + params.year[i].id + '';
     }
     query += ')';
   }
-  if (params.statuses) {
+  if (params.statuses && params.statuses.length) {
     query += ' AND p.NU_status in (' + params.statuses[0].id + '';
     for (var i = 1, l = params.statuses.length; i < l; i++) {
       query += ',"' + params.statuses[i].id + '"';
     }
     query += ')';
   }
-  if (params.states) {
+  if (params.states && params.states.length) {
     query += ' AND p.Hometown_state in ("' + params.states[0].id + '"';
     for (var i = 1, l = params.states.length; i < l; i++) {
       query += ',"' + params.states[i].id + '"';
@@ -77,22 +193,22 @@ function buildSearchQuery(params) {
     query += ')';
   }
   if (params.firstName) {
-    query += ' AND p.FirstName = ' + params.firstName + '%';
+    query += ' AND p.FirstName LIKE "' + params.firstName + '%"';
   }
   if (params.lastName) {
-    query += ' AND p.LastName = ' + params.lastName + '%';
+    query += ' AND p.LastName LIKE "' + params.lastName + '%"';
   }
   if (params.highSchool) {
-    query += ' AND h.HS_name = ' + '%' + params.highSchool + '%';
+    query += ' AND h.HS_name LIKE "' + '%' + params.highSchool + '%"';
   }
-  if (params.positions) {
+  if (params.positions && params.positions.length) {
     query += ' AND pos.Position_name in ("' + params.positions[0].id + '"';
     for (var i = 1, l = params.positions.length; i < l; i++) {
       query += ',"' + params.positions[i].id + '"';
     }
     query += ')';
   }
-  if (params.coaches) {
+  if (params.coaches && params.coaches.length) {
     query += ' AND p.AreaCoach_id in (' + params.coaches[0].id;
     for (var i = 1, l = params.coaches.length; i < l; i++) {
       query += ',' + params.coaches[i].id + '';
@@ -103,36 +219,8 @@ function buildSearchQuery(params) {
   return query;
 }
 
+
 // MODAL CONTROLLERS
-angular.module('zcruit').controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.animationsEnabled = true;
-
-
-  $scope.open = function (size) {
-
-    var modalInstance = $uibModal.open({
-      animation: $scope.animationsEnabled,
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-
-});
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
@@ -281,8 +369,31 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     item: $scope.items[0]
   };
 
+
+
   $scope.ok = function () {
-    $uibModalInstance.close($scope.selected.item);
+    // build the object to return
+    var returnParams = {};
+    returnParams = {
+      minZscore : $scope.zscoreSlider.minValue,
+      maxZscore : $scope.zscoreSlider.maxValue,
+      minGpa : $scope.gpaSlider.minValue,
+      maxGpa : $scope.gpaSlider.maxValue,
+      minHeight : $scope.heightSlider.minValue,
+      maxHeight : $scope.heightSlider.maxValue,
+      minWeight : $scope.weightSlider.minValue,
+      maxWeight : $scope.weightSlider.maxValue,
+      year : $scope.yearModel,
+      statuses : $scope.statusModel,
+      states : $scope.stateModel,
+      firstName : $scope.firstName,
+      lastName : $scope.lastName,
+      highSchool : $scope.highSchool,
+      positions : $scope.positionModel,
+      coaches : $scope.coachModel
+    };
+    console.log(returnParams);
+    $uibModalInstance.close(returnParams);
   };
 
   $scope.cancel = function () {
