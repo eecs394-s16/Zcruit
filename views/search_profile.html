@@ -22,7 +22,7 @@
 
 <body ng-controller="searchController">
   <div id="sidebar">
-    <div id="sidebar-upper" ng-click="openBigBoard();">
+    <div id="sidebar-upper" ng-click="openBigBoard()">
       <div class="sidebar-icon">
         <img src="../img/big_board.png">
         <div>Big Board</div>
@@ -30,12 +30,10 @@
     </div>
 
     <div id="sidebar-middle">
-      <div ng-controller="ModalDemoCtrl">
-      <div class="sidebar-icon" ng-click="open();">
+      <div class="sidebar-icon" ng-click="openSearchModal()">
         <img src="../img/search.png">
         <div>Search</div>
       </div>
-    </div>
       <div class="sidebar-icon">
         <img src="../img/sort.png">
         <div>Sort</div>
@@ -94,6 +92,24 @@
           <p>Uniform #: 18</p>
           <p>Wheaton North</p>
           <p>Wheaton, IL</p>
+        </div>
+
+        <div class="btn-group" uib-dropdown>
+          <button id="single-button" class="btn btn-primary"
+            type="button"
+            uib-dropdown-toggle
+            uib-popover-template="newListPopover.templateUrl"
+            popover-placement="left"
+            popover-title="{{newListPopover.title}}"
+            popover-trigger="none"
+            popover-is-open="newListPopoverIsOpen">
+            Add to list <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+            <li role="menuitem" ng-repeat="list in savedLists" ng-click="savePlayer(selected, list)"><a href="#">{{list.List_name}}</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-click="newListPopoverIsOpen = true"><a href="#">New list</a></li>
+          </ul>
         </div>
       </div>
 
@@ -214,7 +230,7 @@
   </div>
 
 <!-- Handle the Modal Popup -->
-<div ng-controller="ModalDemoCtrl" style="visibility: hidden">
+<div style="visibility: hidden">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
             <h3 class="modal-title">Player search</h3>
