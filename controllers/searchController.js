@@ -82,7 +82,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         }
         response[i].Player_ids = playerList;
       }
-      
       $scope.savedLists = response;
     });
   }
