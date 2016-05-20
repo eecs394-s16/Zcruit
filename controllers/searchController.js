@@ -281,8 +281,31 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     item: $scope.items[0]
   };
 
+
+
   $scope.ok = function () {
-    $uibModalInstance.close($scope.selected.item);
+    // build the object to return
+    var returnParams = {};
+    returnParams = {
+      minZscore : $scope.zscoreSlider.minValue,
+      maxZscore : $scope.zscoreSlider.maxValue,
+      minGpa : $scope.gpaSlider.minValue,
+      maxGpa : $scope.gpaSlider.maxValue,
+      minHeight : $scope.heightSlider.minValue,
+      maxHeight : $scope.heightSlider.maxValue,
+      minWeight : $scope.weightSlider.minValue,
+      maxWeight : $scope.weightSlider.maxValue,
+      year : $scope.yearModel,
+      statuses : $scope.statusModel,
+      states : $scope.stateModel,
+      firstName : $scope.firstName,
+      lastName : $scope.lastName,
+      highSchool : $scope.highSchool,
+      positions : $scope.positionModel,
+      coach : $scope.coachModel
+    };
+    console.log(returnParams);
+    $uibModalInstance.close(returnParams);
   };
 
   $scope.cancel = function () {
