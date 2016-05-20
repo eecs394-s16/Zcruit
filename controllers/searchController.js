@@ -1,5 +1,4 @@
-angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', function($scope, $location, $http) {
-
+angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
 
   $scope.initials = function(name) {
     name = name.split(' ');
@@ -85,6 +84,28 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       $scope.savedLists = response;
     });
   }
+
+  $scope.items = ['item1', 'item2', 'item3'];
+
+  $scope.openSearchModal = function (size) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'myModalContent.html',
+      controller: 'ModalInstanceCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (searchParams) {
+      runSearch(buildSearchQuery(searchParams));
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
   
   runSearch('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
 
@@ -106,28 +127,28 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 }]);
 
 function buildSearchQuery(params) {
-  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id';
+  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
   query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
   query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
   query += ' AND p.Height BETWEEN ' + params.minHeight + ' AND ' + params.maxHeight;
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
 
-  if (params.year) {
+  if (params.year && params.year.length) {
     query += ' AND p.Year in (' + params.year[0].id;
     for (var i = 1, l = params.year.length; i < l; i++) {
       query += ',' + params.year[i].id + '';
     }
     query += ')';
   }
-  if (params.statuses) {
+  if (params.statuses && params.statuses.length) {
     query += ' AND p.NU_status in (' + params.statuses[0].id + '';
     for (var i = 1, l = params.statuses.length; i < l; i++) {
       query += ',"' + params.statuses[i].id + '"';
     }
     query += ')';
   }
-  if (params.states) {
+  if (params.states && params.states.length) {
     query += ' AND p.Hometown_state in ("' + params.states[0].id + '"';
     for (var i = 1, l = params.states.length; i < l; i++) {
       query += ',"' + params.states[i].id + '"';
@@ -135,22 +156,22 @@ function buildSearchQuery(params) {
     query += ')';
   }
   if (params.firstName) {
-    query += ' AND p.FirstName = ' + params.firstName + '%';
+    query += ' AND p.FirstName LIKE "' + params.firstName + '%"';
   }
   if (params.lastName) {
-    query += ' AND p.LastName = ' + params.lastName + '%';
+    query += ' AND p.LastName LIKE "' + params.lastName + '%"';
   }
   if (params.highSchool) {
-    query += ' AND h.HS_name = ' + '%' + params.highSchool + '%';
+    query += ' AND h.HS_name LIKE "' + '%' + params.highSchool + '%"';
   }
-  if (params.positions) {
+  if (params.positions && params.positions.length) {
     query += ' AND pos.Position_name in ("' + params.positions[0].id + '"';
     for (var i = 1, l = params.positions.length; i < l; i++) {
       query += ',"' + params.positions[i].id + '"';
     }
     query += ')';
   }
-  if (params.coaches) {
+  if (params.coaches && params.coaches.length) {
     query += ' AND p.AreaCoach_id in (' + params.coaches[0].id;
     for (var i = 1, l = params.coaches.length; i < l; i++) {
       query += ',' + params.coaches[i].id + '';
@@ -161,36 +182,8 @@ function buildSearchQuery(params) {
   return query;
 }
 
+
 // MODAL CONTROLLERS
-angular.module('zcruit').controller('ModalDemoCtrl', function ($scope, $uibModal, $log) {
-
-  $scope.items = ['item1', 'item2', 'item3'];
-
-  $scope.animationsEnabled = true;
-
-
-  $scope.open = function (size) {
-
-    var modalInstance = $uibModal.open({
-      animation: $scope.animationsEnabled,
-      templateUrl: 'myModalContent.html',
-      controller: 'ModalInstanceCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-
-    modalInstance.result.then(function (selectedItem) {
-      $scope.selected = selectedItem;
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-
-});
 
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
@@ -360,7 +353,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       lastName : $scope.lastName,
       highSchool : $scope.highSchool,
       positions : $scope.positionModel,
-      coach : $scope.coachModel
+      coaches : $scope.coachModel
     };
     console.log(returnParams);
     $uibModalInstance.close(returnParams);

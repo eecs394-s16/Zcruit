@@ -22,7 +22,7 @@
 
 <body ng-controller="searchController">
   <div id="sidebar">
-    <div id="sidebar-upper" ng-click="openBigBoard();">
+    <div id="sidebar-upper" ng-click="openBigBoard()">
       <div class="sidebar-icon">
         <img src="../img/big_board.png">
         <div>Big Board</div>
@@ -30,12 +30,10 @@
     </div>
 
     <div id="sidebar-middle">
-      <div ng-controller="ModalDemoCtrl">
-      <div class="sidebar-icon" ng-click="open();">
+      <div class="sidebar-icon" ng-click="openSearchModal()">
         <img src="../img/search.png">
         <div>Search</div>
       </div>
-    </div>
       <div class="sidebar-icon">
         <img src="../img/sort.png">
         <div>Sort</div>
@@ -232,7 +230,7 @@
   </div>
 
 <!-- Handle the Modal Popup -->
-<div ng-controller="ModalDemoCtrl" style="visibility: hidden">
+<div style="visibility: hidden">
     <script type="text/ng-template" id="myModalContent.html">
         <div class="modal-header">
             <h3 class="modal-title">Player search</h3>
