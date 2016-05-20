@@ -23,10 +23,9 @@
 }
 
 .player {
-  display: table;
   float: left;
   width: 50%;
-  margin-left: 5%;
+  margin-left: 4%;
   height: 100%;
 }
 
@@ -38,49 +37,72 @@
   background-size: auto 100%;
 }
 
-.playerInfo {
-  display: table-cell;
+.player-info-outer {
+  float: left;
+  width: 50%;
+  margin-left: 4%;
+  height: 100%;
+}
+
+.player-info-outer:before {
+  content: '';
+  display: inline-block;
+  height: 100%; 
   vertical-align: middle;
-  padding-left: 5%;
+  margin-right: -0.25em;
 }
 
-.playerInfoName {
+.player-info-inner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 99%;
+}
+
+.player-info-name {
   font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }
 
-.playerInfoStats {
+.player-info-stats {
   font-weight: lighter;
 }
 
-.zscore {
+.zscore-wrapper {
   width: 20%;
   height: 100%;
   text-align: center;
   float: right;
+  display: -webkit-flex;
+  display: flex;
+  -webkit-flex-direction: column;
+  flex-direction: column;
 }
 
-.zscore_full {
-  padding-top: 10%;
+.zscore-flex {
   height: 100%;
   width: 100%;
   font-size: 1.5em;
-  line-height: 5vw;
-  background-color: rgb(120,207,66);
   font-weight: bold;
+  background-color: rgb(120,207,66);
+  display: -webkit-flex;
+  display: flex;
+  justify-content: center; /* align horizontal */
+  align-items: center; /* align vertical */
 }
 
-.zscore_half {
-  height: 50%;
-  width: 100%;
-  float: top;
+.zscore-flex:nth-child(2) {
+  border-top: 1px solid grey;
 }
 
 .green {
-    background-color: rgb(120,207,66);
+  background-color: rgb(120,207,66);
 }
 .red {
-    background-color: rgb(207,60,66);
+  background-color: rgb(207,60,66);
 }
 .yellow {
-    background-color: rgb(255,255,102);
+  background-color: rgb(255,255,102);
 }
