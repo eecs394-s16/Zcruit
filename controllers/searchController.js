@@ -50,18 +50,30 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 function buildSearchQuery(params) {
   var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Coaches c, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id = pos.Player_id';
 
-  query +=         ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
+  query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
   query += ' AND p.Height BETWEEN ' + params.minHeight + ' AND ' + params.maxHeight;
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
 
   if (params.year) {
-    query += ' AND p.Year = ' + params.year;
+    query += ' AND pos.Year in ("' + params.year[0].id + '"';
+    for (var i = 1, l = params.year.length; i < l; i++) {
+      query += ',"' + params.year[i].id + '"';
+    }
+    query += ')';
   }
-  if (params.state) {
-    query += ' AND p.State = ' + params.state;
+  if (params.statuses) {
+    query += ' AND pos.NU_status in ("' + params.statuses[0].id + '"';
+    for (var i = 1, l = params.statuses.length; i < l; i++) {
+      query += ',"' + params.statuses[i].id + '"';
+    }
+    query += ')';
   }
-  if (params.state) {
-    query += ' AND p.State = ' + params.state;
+  if (params.states) {
+    query += ' AND pos.Hometown_state in ("' + params.states[0].id + '"';
+    for (var i = 1, l = params.states.length; i < l; i++) {
+      query += ',"' + params.states[i].id + '"';
+    }
+    query += ')';
   }
   if (params.firstName) {
     query += ' AND p.FirstName = ' + params.firstName + '%';
@@ -73,14 +85,14 @@ function buildSearchQuery(params) {
     query += ' AND h.HS_name = ' + '%' + params.highSchool + '%';
   }
   if (params.positions) {
-    query += 'AND pos.Position_name in ("' + params.positions[0].label + '"';
+    query += ' AND pos.Position_name in ("' + params.positions[0].id + '"';
     for (var i = 1, l = params.positions.length; i < l; i++) {
-      query += ',"' + params.positions[i].label + '"';
+      query += ',"' + params.positions[i].id + '"';
     }
     query += ')';
   }
   if (params.coach) {
-    query += ' AND c.Coach_name = ' + '%' + $scope.coach + '%';
+    query += ' AND c.AreaCoach_id = ' + '%' + $scope.coach + '%';
   }
 
   return query;
