@@ -60,11 +60,8 @@
       <h1 class="position-title">My Lists</h1>
       <div class='positionWrapper'>
         <div class='playerCardWrapper'>
-          <div class="listCard" ng-click="openList(1);">
-            <h2 class="listName">Top Runningbacks</h2>
-          </div>
-          <div class="listCard" ng-click="openList(2);">
-            <h2 class="listName">Top QB's</h2>
+          <div class="listCard" ng-click="openList(lst);" ng-repeat="lst in myLists">
+            <h2 class="listName">{{lst.List_name}}</h2>
           </div>
         </div>
       </div>
