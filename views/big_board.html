@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html ng-app="zcruit">
-	
+
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
@@ -8,7 +8,11 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.5/angular-touch.min.js"></script>
-  <script src="../zcruit.js"></script>
+	<link href='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css' type='text/css' rel='stylesheet'>
+  <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
+  <script src='../lib/lodash.js'></script>
+  <script src='../lib/angularjs-dropdown-multiselect.js'></script>
+	<script src="../zcruit.js"></script>
   <script src="../controllers/bigBoardController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" type="text/css" href="../css/sidebar.css">
@@ -24,7 +28,7 @@
         <div>Search</div>
       </div>
     </div>
-    
+
     <div id="sidebar-middle">
       <div class="sidebar-icon">
         <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
@@ -33,7 +37,7 @@
       </div>
     </div>
   </div>
-  
+
   <div id="board">
   	<div class="position" ng-repeat="pos in ['RB', 'QB', 'WR', 'LB', 'K', 'C', 'G', 'T', 'DT', 'MLB', 'OLB']">
 			<h1 class="position-title">{{pos}}</h1>
