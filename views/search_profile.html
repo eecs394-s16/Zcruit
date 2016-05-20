@@ -48,11 +48,11 @@
     <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
 		  <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
-			<div class="player">
-			  <div class="playerInfo">
-  				<div class="playerInfoName">{{p.FirstName}} {{p.LastName}}</div>
-  				<div class="playerInfoStats">QB - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
-  				<div class="playerInfoCoach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
+			<div class="player-info-outer">
+			  <div class="player-info-inner">
+  				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
+  				<div class="player-info-stats">QB - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
+  				<div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
       <div class="zscore-wrapper">

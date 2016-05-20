@@ -23,7 +23,6 @@
 }
 
 .player {
-  display: table;
   float: left;
   width: 50%;
   margin-left: 4%;
@@ -38,17 +37,36 @@
   background-size: auto 100%;
 }
 
-.playerInfo {
-  display: table-cell;
+.player-info-outer {
+  float: left;
+  width: 50%;
+  margin-left: 4%;
+  height: 100%;
+}
+
+.player-info-outer:before {
+  content: '';
+  display: inline-block;
+  height: 100%; 
   vertical-align: middle;
-  padding-left: 5%;
+  margin-right: -0.25em;
 }
 
-.playerInfoName {
+.player-info-inner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 99%;
+}
+
+.player-info-name {
   font-weight: bold;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  width: 100%;
 }
 
-.playerInfoStats {
+.player-info-stats {
   font-weight: lighter;
 }
 
