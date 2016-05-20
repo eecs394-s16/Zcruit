@@ -113,8 +113,9 @@
         </div>
       </div>
 
-      <div id="offer-summary" >
-        <img class="offer-icon" src="../img/college_logos/Northwestern.gif">
+      <div id="offer-summary" ng-repeat="offer_url in selected.offers" >
+        <img class="offer-icon" src="{{offer_url}}">
+        <!-- <img class="offer-icon" src="../img/college_logos/Northwestern.gif">
         <img class="offer-icon" src="../img/college_logos/Duke.gif">
         <img class="offer-icon" src="../img/college_logos/Alabama.gif">
         <img class="offer-icon" src="../img/college_logos/Michigan.gif">
@@ -127,7 +128,7 @@
         <img class="offer-icon" src="../img/college_logos/UC Davis.gif">
         <img class="offer-icon" src="../img/college_logos/Vanderbilt.gif">
         <img class="offer-icon" src="../img/college_logos/Miami.gif">
-        <img class="offer-icon" src="../img/college_logos/Navy.gif">
+        <img class="offer-icon" src="../img/college_logos/Navy.gif"> -->
       </div>
     </div>
 

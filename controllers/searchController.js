@@ -7,6 +7,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.phoneFormat = function(phone) {
     if (phone) {
+      phone = phone.toString();
       return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
     }
   };
@@ -17,7 +18,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
-    console.log(player);
+    // console.log(player);
+    // console.log(player.offers);
 
     if (player.Zscore >= 8.5) {
       $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
@@ -78,6 +80,26 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runQuery(queryString, function(response) {
       $scope.players = response;
       $scope.setSelectedPlayer($scope.players[0]);
+
+      var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
+      // get offers for all players
+      runQuery(offerQueryString, function(responseColleges){
+
+          for(var i = 0; i < $scope.players.length; i++)
+          {
+            // for each player, loop through the array of colleges and add on anything that works
+            currentPlayer = $scope.players[i];
+            $scope.players[i].offers = Array();
+            for (var j = 0; j < responseColleges.length; j++)
+            {
+              if (responseColleges[j].Player_id === currentPlayer.Player_id)
+              {
+                $scope.players[i].offers.push('../img/college_logos/'+responseColleges[j].College_name+'.gif');
+              }
+            }
+          }
+      });
+      console.log($scope.players);
     });
   }
 
@@ -88,7 +110,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         // Save a representation of the player lists on client
         var playerList = [];
         if (response[i].Player_ids) {
-          playerList = response[i].Player_ids.split(',');
+          playerList = response[i].Player_ids;//.split(',');
         }
         response[i].Player_ids = playerList;
       }
