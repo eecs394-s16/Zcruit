@@ -11,7 +11,7 @@
   <link href='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css' type='text/css' rel='stylesheet'>
   <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
   <script src='../lib/lodash.js'></script>
-  <script src='https://rawgit.com/dotansimha/angularjs-dropdown-multiselect/master/src/angularjs-dropdown-multiselect.js'></script>
+  <script src='../lib/angularjs-dropdown-multiselect.js'></script>
   <script src="../zcruit.js"></script>
   <script src="../controllers/searchController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -233,18 +233,18 @@
             <label class="col-sm-2 form-control-label">Zcruit score</label>
             <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
           </div>
-          
+
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Status</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel"></div>
+              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
 
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Position</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="positionData" selected-model="positionModel"></div>
+              <div ng-dropdown-multiselect="" options="positionData" selected-model="positionModel" extra-settings="settings_dropdown"></div>
             </div>
             <div class="col-sm-5">
               {{positionModel}}
@@ -254,10 +254,9 @@
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Year</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel"></div>
+              <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
-          // need to fix!!!
          <div class='form group row'>
             <label class="col-sm-2 form-control-label">Height</label>
             <rzslider class='col-sm-5' rz-slider-model="heightSlider.minValue" rz-slider-high="heightSlider.maxValue" rz-slider-options="heightSlider.options"></rzslider>
@@ -268,18 +267,17 @@
             <rzslider class='col-sm-5' rz-slider-model="weightSlider.minValue" rz-slider-high="weightSlider.maxValue" rz-slider-options="weightSlider.options"></rzslider>
           </div>
 
-        //need a state lib
          <div class="form-group row">
             <label class="col-sm-2 form-control-label">State</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="stateData" selected-model="stateModel"></div>
+              <div ng-dropdown-multiselect="" options="stateData" selected-model="stateModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
 
          <div class="form-group row">
             <label class="col-sm-2 form-control-label">Area Coach</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="coachData" selected-model="coachModel"></div>
+              <div ng-dropdown-multiselect="" options="coachData" selected-model="coachModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
 
