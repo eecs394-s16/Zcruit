@@ -29,6 +29,17 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
+  $scope.height = function(heightInfo, type) {
+
+    if (type == 1) {
+      // get foot
+      return Math.floor(heightInfo / 12)
+    } else {
+      // get inches
+      return (heightInfo % 12)
+    }
+  };
+
   $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id'))
   .then(function(response) {
     $scope.players = eval(response.data);

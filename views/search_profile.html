@@ -85,7 +85,7 @@
 
         <div class="summary">
           <p>QB</p>
-          <p>{{selected.Height_feet}}'{{selected.Height_inches}}", {{selected.Weight}}lb.</p>
+          <p>{{height(selected.Height, 1)}}'{{height(selected.Height, 2)}}", {{selected.Weight}}lb.</p>
           <p>Year: {{selected.Year}}</p>
           <p>Coach: {{selected.Coach_name}}</p>
         </div>
@@ -97,7 +97,7 @@
         </div>
       </div>
 
-      <div id="offer-summary">
+      <div id="offer-summary" >
         <img class="offer-icon" src="../img/college_logos/Northwestern.gif">
         <img class="offer-icon" src="../img/college_logos/Duke.gif">
         <img class="offer-icon" src="../img/college_logos/Alabama.gif">
