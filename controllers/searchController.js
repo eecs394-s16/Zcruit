@@ -250,10 +250,13 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
  $scope.coachModel = [];
   $scope.coachData = [
-    {id:"Fitz", label: "Fitz"},
-    {id:"Sander", label: "Sander"},
-    {id:"Clinton", label: "Clinton"},
-    {id:"Jordan", label: "Jordan"},
+    {id:1, label: "Fitz"},
+    {id:2, label: "Morty"},
+    {id:3, label: "Shulz"},
+    {id:4, label: "Obama"},
+    {id:5, label: "Bienen"},
+    {id:6, label: "Jordan"},
+    {id:7, label: "Washington"}
   ];
 
 
