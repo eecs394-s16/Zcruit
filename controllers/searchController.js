@@ -130,13 +130,20 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   //Range slider config
   $scope.zscoreSlider = {
-      minValue: 200,
-      maxValue: 400,
+      minValue: 0,
+      maxValue: 10,
       options: {
-          floor:150,
-          ceil: 500,
-          step: 2
+          floor:0,
+          ceil: 10,
+          step: 0.5,
+          precision: 0.5,
+          noSwitching: true
       }
+  };
+
+  $scope.settings_dropdown = {
+    scrollableHeight: '150px',
+    scrollable: true
   };
 
   $scope.positionModel = [];
@@ -181,32 +188,51 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   ];
 
   $scope.heightSlider = {
-      minValue: 200,
-      maxValue: 400,
+      minValue: 60,
+      maxValue: 84,
       options: {
-          floor:150,
-          ceil: 500,
-          step: 2
+          floor:60,
+          ceil: 84,
+          step: 2,
+          noSwitching: true,
+          translate: function(value, sliderId, label) {
+            var feet = Math.floor(value/12);
+            var inches = value%12
+            return feet+"' "+inches+'"'
+          }
       }
   };
 
   $scope.weightSlider = {
-      minValue: 200,
+      minValue: 150,
       maxValue: 400,
       options: {
           floor:150,
-          ceil: 500,
-          step: 2
+          ceil: 400,
+          step: 10,
+          noSwitching: true
       }
   };
 
 
  $scope.stateModel = [];
   $scope.stateData = [
-    {id:"IL", label: "IL"},
-    {id:"WA", label: "WA"},
-    {id:"CA", label: "CA"},
-    {id:"MA", label: "MA"},  
+    {id:"AL", label: "AL"},{id:"AK", label: "AK"},{id:"AZ", label: "AZ"},
+    {id:"AR", label: "AR"},{id:"CA", label: "CA"},{id:"CO", label: "CO"},
+    {id:"CT", label: "CT"},{id:"DE", label: "DE"},{id:"FL", label: "FL"},
+    {id:"GA", label: "GA"},{id:"HI", label: "HI"},{id:"ID", label: "ID"},
+    {id:"IL", label: "IL"},{id:"IN", label: "IN"},{id:"IA", label: "IA"},
+    {id:"KS", label: "KS"},{id:"KY", label: "KY"},{id:"LA", label: "LA"},
+    {id:"ME", label: "ME"},{id:"MD", label: "MD"},{id:"MA", label: "MA"},
+    {id:"MI", label: "MI"},{id:"MN", label: "MN"},{id:"MO", label: "MO"},
+    {id:"MT", label: "MT"},{id:"NE", label: "NE"},{id:"NV", label: "NV"},
+    {id:"NH", label: "NH"},{id:"NJ", label: "NJ"},{id:"NM", label: "NM"},
+    {id:"NY", label: "NY"},{id:"NC", label: "NC"},{id:"ND", label: "ND"},
+    {id:"OH", label: "OH"},{id:"OK", label: "OK"},{id:"OR", label: "OR"},
+    {id:"PA", label: "PA"},{id:"RI", label: "RI"},{id:"SC", label: "SC"},{id:"SD", label: "SD"},
+    {id:"TN", label: "TN"},{id:"TX", label: "TX"},{id:"UT", label: "UT"},{id:"VT", label: "VT"},
+    {id:"VA", label: "VA"},{id:"WA", label: "WA"},{id:"WV", label: "WV"},{id:"WI", label: "WI"},
+    {id:"WY", label: "WY"},{id:"Other", label: "Other"}
   ];
 
  $scope.coachModel = [];
@@ -214,18 +240,19 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:"Fitz", label: "Fitz"},
     {id:"Sander", label: "Sander"},
     {id:"Clinton", label: "Clinton"},
-    {id:"Jordan", label: "Jordan"},  
+    {id:"Jordan", label: "Jordan"},
   ];
 
 
   $scope.gpaSlider = {
-      minValue: 2.0,
-      maxValue: 3.5,
+      minValue: 1.0,
+      maxValue: 4.0,
       options: {
           floor:1.0,
           ceil: 4.0,
-          step: 0.1,
-          precision: 1
+          step: 0.5,
+          precision: 1,
+          noSwitching: true
       }
   };
 
