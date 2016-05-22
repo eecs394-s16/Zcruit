@@ -4,7 +4,6 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     window.open('search_profile.html','_self');
   }
   // Begin List JS
-
   $scope.showLists = false;
   $scope.openMyLists = function(){
     $scope.showLists = !$scope.showLists;

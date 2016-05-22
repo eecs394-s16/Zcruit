@@ -44,7 +44,13 @@
       </div>
     </div>
   </div>
+
   <div id="resultlist">
+    <select class="form-control titleCard">
+        <option selected="selected">Search Results</option>
+        <option ng-repeat="lst in myLists">{{lst.List_name}}</option>
+    </select>
+
     <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
 		  <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>

@@ -399,4 +399,15 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+
+  // List JS
+
+  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT List_name FROM SavedLists'))
+  .then(function(response){
+    $scope.myLists = eval(response.data);
+    console.log($scope.myLists);
+  });
+
+  // End List JS
+
 });
