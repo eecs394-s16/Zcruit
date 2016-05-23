@@ -63,7 +63,7 @@
       	<div class="zscore-flex" 
       	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
         <div class="zscore-flex" 
-        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
+        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
       </div>
 		</div>
   </div>
@@ -85,7 +85,7 @@
             <div class="profile-zscore" 
             ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
             <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}" ng-if="p.Visits < 2">{{selected.Zscore2}}</div>
           </div>
         </div>
 
