@@ -1,14 +1,21 @@
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
 
-  // List JS
+  var defaultSearch = 'SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id';
+  var coach = 1;
+  $scope.sortParam = 'FirstName';
+  $scope.sortReverse = false;
 
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT List_name FROM SavedLists'))
-  .then(function(response){
-    $scope.myLists = eval(response.data);
-    console.log($scope.myLists);
-  });
-
-  // End List JS
+  // Called when an option is selected from the lists drop-down
+  $scope.showList = function() {
+    var list = $scope.selectedList;
+    console.log(list);
+    if (list.List_id === 0) {
+      // "Search Results" selected
+      runSearch(defaultSearch);
+    } else {
+      runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ")");
+    }
+  };
 
   $scope.initials = function(name) {
     name = name.split(' ');
@@ -28,8 +35,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
-    // console.log(player);
-    // console.log(player.offers);
 
     if (player.Zscore >= 8.5) {
       $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
@@ -61,10 +66,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // Give user some kind of feedback
     }
   };
-
-  var coach = 1;
-  $scope.sortParam = 'FirstName';
-  $scope.sortReverse = false;
 
   $scope.newList = function(name) {
     $scope.newListPopoverIsOpen = false;
@@ -129,6 +130,10 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         response[i].Player_ids = playerList;
       }
       $scope.savedLists = response;
+      // Add the default option to the selections
+      $scope.savedLists.unshift({List_name:"Search Results", List_id: 0});
+      // Select the default option
+      $scope.selectedList = $scope.savedLists[0];
     });
   }
 
@@ -154,7 +159,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  runSearch('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
+  runSearch(defaultSearch);
 
   getSavedLists();
 
