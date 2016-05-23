@@ -51,7 +51,7 @@
 
     <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
-		  <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
+		  <div class="avatar" style="background-image: url('{{p.Img_url}}');"></div>
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
@@ -70,7 +70,7 @@
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
-        <img id="profile-image" src="https://placeholdit.imgix.net/~text?txtsize=47&txt=500%C3%97500&w=500&h=500">
+        <div id="profile-image" style="background-image: url('{{selected.Img_url}}');"></div>
         <div id="profile-status">Committed</div>
       </div>
 
