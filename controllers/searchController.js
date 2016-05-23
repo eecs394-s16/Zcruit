@@ -117,12 +117,12 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
               if (responseColleges[j].Player_id === currentPlayer.Player_id)
               {
                 $scope.players[i].offers.push('../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif');
-                console.log($scope.players[i].offers.slice(-1));
+                // console.log($scope.players[i].offers.slice(-1));
               }
             }
           }
       });
-      console.log($scope.players);
+      // console.log($scope.players);
     });
   }
 
@@ -134,7 +134,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         var playerList = [];
         if (response[i].Player_ids) {
           playerList = response[i].Player_ids.toString().split(',').map(function(e, i, a) { return parseInt(e, 10); });
-          console.log(playerList);
+          // console.log(playerList);
         }
         response[i].Player_ids = playerList;
       }
@@ -249,7 +249,28 @@ function buildSearchQuery(params) {
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
+// Make the returnParams a global variable so the previous search is saved after closing modal
+var returnParams = {
+      minZscore : 0,
+      maxZscore : 10,
+      minGpa : 1.0,
+      maxGpa : 4.0,
+      minHeight : 60,
+      maxHeight : 84,
+      minWeight : 150,
+      maxWeight : 400,
+      year : [],
+      statuses : [],
+      states : [],
+      firstName : null,
+      lastName : null,
+      highSchool : null,
+      positions : [],
+      coaches : []
+    };
+
 angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
+
 
   $scope.items = items;
 
@@ -259,8 +280,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   //Range slider config
   $scope.zscoreSlider = {
-      minValue: 0,
-      maxValue: 10,
+      minValue: returnParams.minZscore,
+      maxValue: returnParams.maxZscore,
       options: {
           floor:0,
           ceil: 10,
@@ -275,7 +296,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     scrollable: true
   };
 
-  $scope.positionModel = [];
+  $scope.positionModel = returnParams.positions;
   $scope.positionData = [
     {id: 'QB', label: "QB"},
     {id: "RB", label: "RB"},
@@ -295,7 +316,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id: "Walk on", label: "Walk on"}
   ];
 
-  $scope.statusModel = [];
+  $scope.statusModel = returnParams.statuses;
   $scope.statusData = [
     {id:0, label: "0 - Commit"},
     {id:1, label: "1 - Offer"},
@@ -306,7 +327,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:6, label: "6 - Reject"}
   ];
 
- $scope.yearModel = [];
+ $scope.yearModel = returnParams.year;
   $scope.yearData = [
     {id:2015, label: 2015},
     {id:2016, label: 2016},
@@ -317,8 +338,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   ];
 
   $scope.heightSlider = {
-      minValue: 60,
-      maxValue: 84,
+      minValue: returnParams.minHeight,
+      maxValue: returnParams.maxHeight,
       options: {
           floor:60,
           ceil: 84,
@@ -333,8 +354,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
   $scope.weightSlider = {
-      minValue: 150,
-      maxValue: 400,
+      minValue: returnParams.minWeight,
+      maxValue: returnParams.maxWeight,
       options: {
           floor:150,
           ceil: 400,
@@ -344,7 +365,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
 
- $scope.stateModel = [];
+ $scope.stateModel = returnParams.states;
   $scope.stateData = [
     {id:"AL", label: "AL"},{id:"AK", label: "AK"},{id:"AZ", label: "AZ"},
     {id:"AR", label: "AR"},{id:"CA", label: "CA"},{id:"CO", label: "CO"},
@@ -364,7 +385,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:"WY", label: "WY"},{id:"Other", label: "Other"}
   ];
 
- $scope.coachModel = [];
+ $scope.coachModel = returnParams.coaches;
   $scope.coachData = [
     {id:1, label: "Fitz"},
     {id:2, label: "Morty"},
@@ -377,8 +398,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
 
   $scope.gpaSlider = {
-      minValue: 1.0,
-      maxValue: 4.0,
+      minValue: returnParams.minGpa,
+      maxValue: returnParams.maxGpa,
       options: {
           floor:1.0,
           ceil: 4.0,
@@ -397,7 +418,6 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   $scope.ok = function () {
     // build the object to return
-    var returnParams = {};
     returnParams = {
       minZscore : $scope.zscoreSlider.minValue,
       maxZscore : $scope.zscoreSlider.maxValue,
