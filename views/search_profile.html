@@ -49,9 +49,9 @@
     <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
     </select>
 
-    <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
+    <div class="playerCard" ng-repeat="p in players track by p.Player_id | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
-		  <div class="avatar" style="background-image: url('{{p.Img_url}}');"></div>
+		  <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
@@ -70,7 +70,7 @@
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
-        <div id="profile-image" style="background-image: url('{{selected.Img_url}}');"></div>
+        <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
         <div id="profile-status">Committed</div>
       </div>
 
@@ -121,9 +121,8 @@
         </div>
       </div>
 
-      <!-- Be careful here - how are multiple offers displaying  -->
       <div id="offer-summary" >
-        <img class="offer-icon" ng-repeat="offer_url in selected.offers" ng-src="{{offer_url}}">
+        <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
       </div>
     </div>
 
