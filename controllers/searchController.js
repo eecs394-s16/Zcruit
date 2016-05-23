@@ -275,6 +275,11 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       }
   };
 
+  $scope.checkboxModel = {
+       includePredicted : false,
+     };
+
+
   $scope.settings_dropdown = {
     scrollableHeight: '150px',
     scrollable: true

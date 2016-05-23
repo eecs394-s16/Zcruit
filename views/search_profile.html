@@ -234,6 +234,7 @@
         <div class="modal-body">
 
         <form>
+
           <div class="form-group row">
             <label class="col-sm-1 form-control-label">First Name</label>
             <div class="col-sm-4">
@@ -247,13 +248,13 @@
           </div>
 
           <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Current<br>Z-Score</label>
-            <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
-          </div>
-
-          <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Ultimate<br>Z-Score</label>
-            <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+            <label class="col-sm-2 form-control-label">Z-Score</label>
+            <div class='col-sm-5'>
+            <rzslider rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+            <br><br>
+            <input type="checkbox" ng-model="checkboxModel.includePredicted">
+            <label>Include Ultimate Z-Score</label>
+            </div>
           </div>
 
 
