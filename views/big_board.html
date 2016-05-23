@@ -22,24 +22,52 @@
 
 <body ng-controller="bigBoardController">
   <div id="sidebar">
-    <div id="sidebar-upper" ng-click="openSearchProfile();">
+    <div id="sidebar-field" ng-click="openSearchProfile();">
       <div class="sidebar-icon">
         <img src="../img/search.png">
         <div>Search</div>
       </div>
     </div>
-
-    <div id="sidebar-middle">
+    <br>
+    <div id="sidebar-field">
       <div class="sidebar-icon">
         <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
         <img src="../img/calendar.png">
         <div>Pick year</div>
       </div>
     </div>
+    <br>
+    <div id="sidebar-field">
+      <div class="sidebar-icon">
+        <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
+        <img src="../img/star.png">
+        <div>My Favorites</div>
+      </div>
+    </div>
+    <br>
+    <div id="sidebar-field" ng-click="openMyLists();">
+      <div class="sidebar-icon">
+        <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
+        <img src="../img/note.png">
+        <div>My Lists</div>
+      </div>
+    </div>
   </div>
 
   <div id="board">
-<div class="position" ng-repeat="pos in positions">
+
+    <div class="lists" ng-show="showLists">
+      <h1 class="position-title">My Lists</h1>
+      <div class='positionWrapper'>
+        <div class='playerCardWrapper'>
+          <div class="listCard" ng-click="openList(lst);" ng-repeat="lst in myLists">
+            <h2 class="listName">{{lst.List_name}}</h2>
+          </div>
+        </div>
+      </div>
+    </div>  
+
+    <div class="position" ng-repeat="pos in positions">
       <h1 class="position-title">{{pos.Position_name}}</h1>
       <div class='positionWrapper'>
         <div class='playerCardWrapper'>
@@ -48,17 +76,17 @@
             <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
             <div class="player-info-outer">
               <div class="player-info-inner">
-          <div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-          <div class="player-info-stats">{{p.Position_name}} - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
-          <div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
-        </div>
+                <div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
+                <div class="player-info-stats">{{p.Position_name}} - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
+                <div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
+              </div>
             </div>
             <div class="zscore-wrapper">
-        <div class="zscore-flex"
-        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
-        <div class="zscore-flex"
-        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
-      </div>
+              <div class="zscore-flex" 
+              ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
+              <div class="zscore-flex" 
+              ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+            </div>
           </div>
         </div>
       </div>

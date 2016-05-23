@@ -1,5 +1,22 @@
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
 
+  var defaultSearch = 'SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id';
+  var coach = 1;
+  $scope.sortParam = 'FirstName';
+  $scope.sortReverse = false;
+
+  // Called when an option is selected from the lists drop-down
+  $scope.showList = function() {
+    var list = $scope.selectedList;
+    if (list.List_id === 0) {
+      // "Search Results" selected
+      runSearch(defaultSearch);
+    } else {
+      // Any other list selected
+      runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
+    }
+  };
+
   $scope.initials = function(name) {
     name = name.split(' ');
     return name[0][0] + name[1][0];
@@ -18,8 +35,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
-    // console.log(player);
-    // console.log(player.offers);
 
     if (player.Zscore >= 8.5) {
       $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
@@ -52,10 +67,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
-  var coach = 1;
-  $scope.sortParam = 'FirstName';
-  $scope.sortReverse = false;
-
   $scope.newList = function(name) {
     $scope.newListPopoverIsOpen = false;
     runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")',
@@ -81,6 +92,15 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
       $scope.players = response;
+      if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
+        // Results already ordered! Don't do any sorting
+        $scope.sortParam = '';
+        $scope.sortReverse = false;
+      } else {
+        // It's just a regular search, so just sort regularly
+        $scope.sortParam = 'FirstName';
+        $scope.sortReverse = false;
+      }
       $scope.setSelectedPlayer($scope.players[0]);
 
       var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
@@ -113,12 +133,16 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         // Save a representation of the player lists on client
         var playerList = [];
         if (response[i].Player_ids) {
-          playerList = response[i].Player_ids.toString().split(',');
+          playerList = response[i].Player_ids.toString().split(',').map(function(e, i, a) { return parseInt(e, 10); });
           console.log(playerList);
         }
         response[i].Player_ids = playerList;
       }
       $scope.savedLists = response;
+      // Add the default option to the selections
+      $scope.savedLists.unshift({List_name:"Search Results", List_id: 0});
+      // Select the default option
+      $scope.selectedList = $scope.savedLists[0];
     });
   }
 
@@ -144,7 +168,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  runSearch('SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id');
+  runSearch(defaultSearch);
 
   getSavedLists();
 
@@ -399,4 +423,5 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
+
 });

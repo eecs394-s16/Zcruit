@@ -51,6 +51,8 @@ td {
 #profile-image {
   width: 100%;
   height: 85%;
+  background-position: top center;
+  background-size: 100% auto;
 }
 
 #profile-status {
@@ -133,4 +135,20 @@ td {
 .popover {
   width: 35vw;
   max-width: 100vw;
+}
+
+.titleCard {
+  width: 100%;
+  height: 7vh;
+  border-width: 1px;
+  border-color: #aaa;
+  border-radius: 0;
+  border-style: solid;
+  position: relative;
+  margin-top: 2%;
+  font-weight: bold; 
+  font-size: 3vw;
+  margin-top: 0;
+  border-width: 0;
+  border-bottom-width: 1px;
 }
