@@ -8,11 +8,11 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   // Called when an option is selected from the lists drop-down
   $scope.showList = function() {
     var list = $scope.selectedList;
-    console.log(list);
     if (list.List_id === 0) {
       // "Search Results" selected
       runSearch(defaultSearch);
     } else {
+      // Any other list selected
       runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ")");
     }
   };
@@ -92,6 +92,18 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
       $scope.players = response;
+      if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
+        // Sort the players in the selected list by the actual order in the list
+        $scope.players.sort(function(a, b) {
+          return $scope.selectedList.Player_ids.indexOf(a.Player_id) - $scope.selectedList.Player_ids.indexOf(b.Player_id);
+        });
+        $scope.sortParam = '';
+        $scope.sortReverse = false;
+      } else {
+        // It's just a regular search, so just sort regularly
+        $scope.sortParam = 'FirstName';
+        $scope.sortReverse = false;
+      }
       $scope.setSelectedPlayer($scope.players[0]);
 
       var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
@@ -124,7 +136,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         // Save a representation of the player lists on client
         var playerList = [];
         if (response[i].Player_ids) {
-          playerList = response[i].Player_ids.toString().split(',');
+          playerList = response[i].Player_ids.toString().split(',').map(function(e, i, a) { return parseInt(e, 10); });
           console.log(playerList);
         }
         response[i].Player_ids = playerList;
