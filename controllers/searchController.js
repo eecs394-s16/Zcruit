@@ -117,7 +117,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
               if (responseColleges[j].Player_id === currentPlayer.Player_id)
               {
                 $scope.players[i].offers.push('../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif');
-                console.log($scope.players[i].offers.slice(-1));
+                // console.log($scope.players[i].offers.slice(-1));
               }
             }
           }
