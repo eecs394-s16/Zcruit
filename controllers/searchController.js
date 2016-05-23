@@ -253,6 +253,11 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   $scope.items = items;
 
+  $scope.advancedFilters = false;
+  $scope.showAdvancedFilters = function () {
+    $scope.advancedFilters = !$scope.advancedFilters;
+  };
+
   $timeout(function () {
         $scope.$broadcast('rzSliderForceRender');
     });

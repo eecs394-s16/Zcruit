@@ -235,22 +235,27 @@
 
         <form>
           <div class="form-group row">
-            <label class="col-sm-2 form-control-label">First Name</label>
-            <div class="col-sm-5">
+            <label class="col-sm-1 form-control-label">First Name</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" ng-model='firstName' placeholder="John">
             </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-sm-2 form-control-label">Last Name</label>
-            <div class="col-sm-5">
+
+            <label class="col-sm-1 form-control-label">Last Name</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" ng-model='lastName' placeholder="Smith">
             </div>
           </div>
 
           <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Zcruit score</label>
+            <label class="col-sm-2 form-control-label">Current<br>Z-Score</label>
             <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
           </div>
+
+          <div class='form group row'>
+            <label class="col-sm-2 form-control-label">Ultimate<br>Z-Score</label>
+            <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+          </div>
+
 
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Status</label>
@@ -275,14 +280,12 @@
               <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
-         <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Height</label>
-            <rzslider class='col-sm-5' rz-slider-model="heightSlider.minValue" rz-slider-high="heightSlider.maxValue" rz-slider-options="heightSlider.options"></rzslider>
-          </div>
 
-        <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Weight</label>
-            <rzslider class='col-sm-5' rz-slider-model="weightSlider.minValue" rz-slider-high="weightSlider.maxValue" rz-slider-options="weightSlider.options"></rzslider>
+        <div class="form-group row">
+            <label class="col-sm-2 form-control-label">High School</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
+            </div>
           </div>
 
          <div class="form-group row">
@@ -299,21 +302,31 @@
             </div>
           </div>
 
+        <div ng-show="advancedFilters">
+         <div class='form group row'>
+            <label class="col-sm-2 form-control-label">Height</label>
+            <rzslider class='col-sm-5' rz-slider-model="heightSlider.minValue" rz-slider-high="heightSlider.maxValue" rz-slider-options="heightSlider.options"></rzslider>
+          </div>
+
+        <div class='form group row'>
+            <label class="col-sm-2 form-control-label">Weight</label>
+            <rzslider class='col-sm-5' rz-slider-model="weightSlider.minValue" rz-slider-high="weightSlider.maxValue" rz-slider-options="weightSlider.options"></rzslider>
+          </div>
+
         <div class='form group row'>
             <label class="col-sm-2 form-control-label">GPA</label>
             <rzslider class='col-sm-5' rz-slider-model="gpaSlider.minValue" rz-slider-high="gpaSlider.maxValue" rz-slider-options="gpaSlider.options"></rzslider>
           </div>
-
-        <div class="form-group row">
-            <label class="col-sm-2 form-control-label">High School</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
-            </div>
-          </div>
+        </div>
 
         </form>
         </div>
         <div class="modal-footer">
+            <button id="advancedFiltersButton" style="float: left;" class="btn btn-info" type="button" ng-click="showAdvancedFilters()">
+                <span ng-show="advancedFilters">Hide</span>
+                <span ng-show="!advancedFilters">Show</span>
+                Advanced Filters
+            </button>
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
