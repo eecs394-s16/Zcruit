@@ -3,6 +3,23 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   $scope.openSearchProfile = function(){
     window.open('search_profile.html','_self');
   }
+  // Begin List JS
+  $scope.showLists = false;
+  $scope.openMyLists = function(){
+    $scope.showLists = !$scope.showLists;
+  }
+
+  $scope.openList = function(listID){
+    window.open('search_profile.html','_self');
+  }
+
+  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT List_name FROM SavedLists'))
+  .then(function(response){
+    $scope.myLists = eval(response.data);
+    console.log($scope.myLists);
+  });
+
+  // End List JS
 
   $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT Position_name FROM Positions'))
   .then(function(response){
