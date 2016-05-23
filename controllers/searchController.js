@@ -13,7 +13,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       runSearch(defaultSearch);
     } else {
       // Any other list selected
-      runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ")");
+      runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
     }
   };
 
@@ -93,10 +93,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runQuery(queryString, function(response) {
       $scope.players = response;
       if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
-        // Sort the players in the selected list by the actual order in the list
-        $scope.players.sort(function(a, b) {
-          return $scope.selectedList.Player_ids.indexOf(a.Player_id) - $scope.selectedList.Player_ids.indexOf(b.Player_id);
-        });
+        // Results already ordered! Don't do any sorting
         $scope.sortParam = '';
         $scope.sortReverse = false;
       } else {
