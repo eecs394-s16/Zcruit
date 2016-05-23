@@ -56,6 +56,23 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
+  $scope.zscoreColor = function(score) {
+    if (score >= 8.0) {
+      return "bright-green";
+    } else if (score >= 6.5) {
+      return "green";
+    } else if (score > 5.0) {
+      return "light-green";
+    } else if (score === 5.0) {
+      return "yellow";
+    } else if (score >= 3.5) {
+      return "light-red";
+    } else if (score >= 2.0) {
+      return "red";
+    }
+    return "bright-red";
+  };
+
   // Add player to a list
   $scope.savePlayer = function(player, list) {
     if (list.Player_ids.find(function(e) { return e === player.Player_id; })) {

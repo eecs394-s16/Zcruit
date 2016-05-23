@@ -1,9 +1,37 @@
+/* Colors for Zscores */
+.bright-green {
+  background-color: #228B22;
+  border-right-color: #228B22;
+}
+.green {
+  background-color: #93c47d;
+  border-right-color: #93c47d;
+}
+.light-green {
+  background-color: #93c47d;
+  border-right-color: #93c47d;
+}
+.light-red {
+  background-color: #f4cccc;
+  border-right-color: #f4cccc;
+}
+.red {
+  background-color: #e06666;
+  border-right-color: #e06666;
+}
+.bright-red {
+  background-color: rgb(207,60,66);
+  border-right-color: rgb(207,60,66);
+}
+.yellow {
+  background-color: rgb(255,255,102);
+  border-right-color: rgb(255,255,102);
+}
+
 .playerCard {
   width: 100%;
   height: 10vh;
-  border-width: 1px;
-  border-color: #aaa;
-  border-style: solid;
+  border: 1px solid grey;
   position: relative;
   margin-top: 2%;
 }
@@ -75,9 +103,7 @@
   height: 100%;
   text-align: center;
   float: right;
-  display: -webkit-flex;
   display: flex;
-  -webkit-flex-direction: column;
   flex-direction: column;
 }
 
@@ -86,23 +112,22 @@
   width: 100%;
   font-size: 1.5em;
   font-weight: bold;
-  background-color: rgb(120,207,66);
-  display: -webkit-flex;
   display: flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
 
-.zscore-flex:nth-child(2) {
-  border-top: 1px solid grey;
-}
-
-.green {
-  background-color: rgb(120,207,66);
-}
-.red {
-  background-color: rgb(207,60,66);
-}
-.yellow {
-  background-color: rgb(255,255,102);
+.zscore-corner {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  z-index: 9;
+  border-style: solid;
+  border-width: 0 4vh 4vh 0;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+  border-left-color: transparent;
+  background-color: unset;
 }
