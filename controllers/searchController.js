@@ -8,6 +8,10 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     console.log($scope.myLists);
   });
 
+  $scope.showTest = false;
+
+
+
   // End List JS
 
   $scope.initials = function(name) {

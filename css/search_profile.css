@@ -137,9 +137,10 @@ td {
 
 .titleCard {
   width: 100%;
-  height: 10vh;
+  height: 7vh;
   border-width: 1px;
   border-color: #aaa;
+  border-radius: 0;
   border-style: solid;
   position: relative;
   margin-top: 2%;
