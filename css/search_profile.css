@@ -81,7 +81,7 @@ td {
 
 #profile-zscore-wrapper {
   display: inline-block;
-  width: 3.5em;
+  width: 3.8em;
   height: 1.75em;
   vertical-align: middle;
 }
@@ -101,14 +101,14 @@ td {
 
 /* Style the first z-score if there's two of them */
 .double-zscore-left {
-  width: 45%;
+  width: 42.5%;
   padding-left: 7%;
 }
 
 /* Shift the second z-score so it looks good */
 .double-zscore-right {
-  width: 55%;
-  padding-left: 7%;
+  width: 57.5%;
+  padding-left: 10%;
 }
 
 /* Adds the arrow onto the first of two z-scores */
