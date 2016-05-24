@@ -190,7 +190,12 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 function buildSearchQuery(params) {
   var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
-  query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
+  if (params.includePredicted) {
+      query += ' AND ( (p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore + ') OR (p.Zscore2 BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore + ') )';
+  }
+  else {
+      query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
+  }
   query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
   query += ' AND p.Height BETWEEN ' + params.minHeight + ' AND ' + params.maxHeight;
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
@@ -424,7 +429,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       lastName : $scope.lastName,
       highSchool : $scope.highSchool,
       positions : $scope.positionModel,
-      coaches : $scope.coachModel
+      coaches : $scope.coachModel,
+      includePredicted: $scope.checkboxModel.includePredicted
     };
     console.log(returnParams);
     $uibModalInstance.close(returnParams);
