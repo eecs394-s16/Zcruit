@@ -107,24 +107,18 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // get offers for all players
       runQuery(offerQueryString, function(responseColleges){
 
-          for(var i = 0; i < $scope.players.length; i++)
+      for (var j = 0; j < responseColleges.length; j++)
+        {
+          if (responseColleges[j].Player_id === currentPlayer.Player_id)
           {
-            // for each player, loop through the array of colleges and add on anything that works
-            currentPlayer = $scope.players[i];
-            $scope.players[i].offers = Array();
-            for (var j = 0; j < responseColleges.length; j++)
-            {
-              if (responseColleges[j].Player_id === currentPlayer.Player_id)
-              {
-                $scope.players[i].offers.push('../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif');
+            $scope.players[i].offers.push({id: responseColleges[j].College_id, img_path: '../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif'});
                 // console.log($scope.players[i].offers.slice(-1));
               }
             }
-          }
-      });
+          });
       // console.log($scope.players);
     });
-  }
+}
 
   // Retrieve the saved lists for this coach from the server
   function getSavedLists() {
@@ -271,7 +265,8 @@ var returnParams = {
       lastName : null,
       highSchool : null,
       positions : [],
-      coaches : []
+      coaches : [],
+      includePredicted: false
     };
 
 angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
@@ -423,7 +418,6 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
           noSwitching: true
       }
   };
-
 
   $scope.selected = {
     item: $scope.items[0]
