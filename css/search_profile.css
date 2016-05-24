@@ -76,26 +76,23 @@ td {
 #name {
   font-size: 1.5em;
   font-weight: bold;
-  width: 75%;
   padding: 1.5% 2%;
 }
 
 #profile-zscore-wrapper {
   display: inline-block;
-  width: 6em;
-  height: 3em;
-  position: absolute;
-  top: 0;
-  right: 0;
+  width: 3.5em;
+  height: 1.75em;
+  vertical-align: middle;
 }
 
 .profile-zscore {
   position: relative;
-  float: right;
+  float: left;
   height: 100%;
   width: 50%;
-  font-size: 1.5em;
-  line-height: 1.5em;
+  font-size: 0.9em;
+  line-height: 0.9em;
   font-weight: bold;
   display: flex;
   justify-content: center; /* align horizontal */
@@ -128,13 +125,13 @@ td {
 }
 .double-zscore-left:after {
   border-left-color: inherit;
-  border-width: 25.2px 0 25.2px 10px;
-  margin-top: -25.2px;
+  border-width: 22px 0 22px 10px;
+  margin-top: -22px;
 }
 .double-zscore-left:before {
   border-left-color: black;
-  border-width: 26.2px 0 26.2px 11px;
-  margin-top: -26.2px;
+  border-width: 22.7px 0 22.7px 11px;
+  margin-top: -22.7px;
 }
 
 #offer-summary {
