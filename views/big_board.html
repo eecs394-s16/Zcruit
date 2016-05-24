@@ -76,17 +76,17 @@
             <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
             <div class="player-info-outer">
               <div class="player-info-inner">
-          <div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-          <div class="player-info-stats">{{p.Position_name}} - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
-          <div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
-        </div>
+                <div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
+                <div class="player-info-stats">{{p.Position_name}} - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
+                <div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
+              </div>
             </div>
             <div class="zscore-wrapper">
-        <div class="zscore-flex"
-        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
-        <div class="zscore-flex"
-        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
-      </div>
+              <div class="zscore-flex" 
+              ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
+              <div class="zscore-flex" 
+              ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+            </div>
           </div>
         </div>
       </div>
