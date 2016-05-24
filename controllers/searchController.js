@@ -297,7 +297,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
   $scope.checkboxModel = {
-       includePredicted : false,
+       includePredicted : returnParams.includePredicted,
      };
 
 
