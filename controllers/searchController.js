@@ -75,7 +75,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         // Give user some kind of feedback
     });
   };
-
+  $scope.cancel = function() {
+     $scope.newListPopoverIsOpen = false;
+  }
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
