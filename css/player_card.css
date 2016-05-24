@@ -1,31 +1,31 @@
 /* Colors for Zscores */
 .bright-green {
   background-color: #228B22;
-  border-right-color: #228B22;
+  border-color: #228B22;
 }
 .green {
   background-color: #93c47d;
-  border-right-color: #93c47d;
+  border-color: #93c47d;
 }
 .light-green {
   background-color: #93c47d;
-  border-right-color: #93c47d;
+  border-color: #93c47d;
 }
 .light-red {
   background-color: #f4cccc;
-  border-right-color: #f4cccc;
+  border-color: #f4cccc;
 }
 .red {
   background-color: #e06666;
-  border-right-color: #e06666;
+  border-color: #e06666;
 }
 .bright-red {
   background-color: rgb(207,60,66);
-  border-right-color: rgb(207,60,66);
+  border-color: rgb(207,60,66);
 }
 .yellow {
   background-color: rgb(255,255,102);
-  border-right-color: rgb(255,255,102);
+  border-color: rgb(255,255,102);
 }
 
 .playerCard {

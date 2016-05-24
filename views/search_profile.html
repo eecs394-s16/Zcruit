@@ -73,16 +73,17 @@
       </div>
 
       <div id="glanceinfo">
+        <div id="profile-zscore-wrapper"
+          uib-popover-template='zscorePopover.templateUrl'
+          popover-title="{{zscorePopover.title}}"
+          popover-placement="bottom-right"
+          popover-trigger="outsideClick">
+          <div ng-if="selected.Visits < 2" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': selected.Visits < 2}]">{{selected.Zscore2}}</div>
+          <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
+        </div>
+
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
-          <div id="profile-zscore-wrapper"
-            uib-popover-template='zscorePopover.templateUrl'
-            popover-title="{{zscorePopover.title}}"
-            popover-placement="bottom-right"
-            popover-trigger="outsideClick">
-            <div class="profile-zscore" ng-class="zscoreColor(selected.Zscore)">{{selected.Zscore}}</div>
-            <div class="profile-zscore" ng-class="zscoreColor(selected.Zscore2)" ng-if="selected.Visits < 2">{{selected.Zscore2}}</div>
-          </div>
         </div>
 
         <div class="summary">
