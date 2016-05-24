@@ -51,26 +51,26 @@
 
     <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
-		  <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
+		  <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-  				<div class="player-info-stats">QB - {{height(p.Height, 1)}}'{{height(p.Height, 2)}}" {{p.Weight}}lb</div>
+  				<div class="player-info-stats">QB - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
   				<div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
       <div class="zscore-wrapper">
       	<div class="zscore-flex" 
-      	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
+      	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
         <div class="zscore-flex" 
-        ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore2}}</div>
       </div>
 		</div>
   </div>
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
-        <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
+        <img id="profile-image" src="https://placeholdit.imgix.net/~text?txtsize=47&txt=500%C3%97500&w=500&h=500">
         <div id="profile-status">Committed</div>
       </div>
 
@@ -83,9 +83,9 @@
             popover-placement="bottom-right"
             popover-trigger="outsideClick">
             <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 7.0 && selected.Zscore >= 5.5), green: selected.Zscore >=7.0}">{{selected.Zscore}}</div>
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
             <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore2 < 5.5, yellow: (selected.Zscore2 < 7.0 && selected.Zscore2 >= 5.5), green: selected.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{selected.Zscore2}}</div>
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
           </div>
         </div>
 
@@ -121,8 +121,9 @@
         </div>
       </div>
 
+      <!-- Be careful here - how are multiple offers displaying  -->
       <div id="offer-summary" >
-        <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
+        <img class="offer-icon" ng-repeat="offer_url in selected.offers" ng-src="{{offer_url}}">
       </div>
     </div>
 
@@ -233,23 +234,29 @@
         <div class="modal-body">
 
         <form>
+
           <div class="form-group row">
-            <label class="col-sm-2 form-control-label">First Name</label>
-            <div class="col-sm-5">
+            <label class="col-sm-1 form-control-label">First Name</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" ng-model='firstName' placeholder="John">
             </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-sm-2 form-control-label">Last Name</label>
-            <div class="col-sm-5">
+
+            <label class="col-sm-1 form-control-label">Last Name</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" ng-model='lastName' placeholder="Smith">
             </div>
           </div>
 
           <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Zcruit score</label>
-            <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+            <label class="col-sm-2 form-control-label">Z-Score</label>
+            <div class='col-sm-5'>
+            <rzslider rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+            <br><br>
+            <input type="checkbox" ng-model="checkboxModel.includePredicted">
+            <label>Include Ultimate Z-Score</label>
+            </div>
           </div>
+
 
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Status</label>
@@ -274,14 +281,12 @@
               <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
-         <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Height</label>
-            <rzslider class='col-sm-5' rz-slider-model="heightSlider.minValue" rz-slider-high="heightSlider.maxValue" rz-slider-options="heightSlider.options"></rzslider>
-          </div>
 
-        <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Weight</label>
-            <rzslider class='col-sm-5' rz-slider-model="weightSlider.minValue" rz-slider-high="weightSlider.maxValue" rz-slider-options="weightSlider.options"></rzslider>
+        <div class="form-group row">
+            <label class="col-sm-2 form-control-label">High School</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
+            </div>
           </div>
 
          <div class="form-group row">
@@ -298,21 +303,31 @@
             </div>
           </div>
 
+        <div ng-show="advancedFilters">
+         <div class='form group row'>
+            <label class="col-sm-2 form-control-label">Height</label>
+            <rzslider class='col-sm-5' rz-slider-model="heightSlider.minValue" rz-slider-high="heightSlider.maxValue" rz-slider-options="heightSlider.options"></rzslider>
+          </div>
+
+        <div class='form group row'>
+            <label class="col-sm-2 form-control-label">Weight</label>
+            <rzslider class='col-sm-5' rz-slider-model="weightSlider.minValue" rz-slider-high="weightSlider.maxValue" rz-slider-options="weightSlider.options"></rzslider>
+          </div>
+
         <div class='form group row'>
             <label class="col-sm-2 form-control-label">GPA</label>
             <rzslider class='col-sm-5' rz-slider-model="gpaSlider.minValue" rz-slider-high="gpaSlider.maxValue" rz-slider-options="gpaSlider.options"></rzslider>
           </div>
-
-        <div class="form-group row">
-            <label class="col-sm-2 form-control-label">High School</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
-            </div>
-          </div>
+        </div>
 
         </form>
         </div>
         <div class="modal-footer">
+            <button id="advancedFiltersButton" style="float: left;" class="btn btn-info" type="button" ng-click="showAdvancedFilters()">
+                <span ng-show="advancedFilters">Hide</span>
+                <span ng-show="!advancedFilters">Show</span>
+                Advanced Filters
+            </button>
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
