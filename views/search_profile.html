@@ -81,6 +81,7 @@
             popover-title="{{zscorePopover.title}}"
             popover-placement="bottom-right"
             popover-trigger="outsideClick">
+            <div id="visits-remaining" ng-if="selected.Visits < 2">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
             <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
             <div ng-if="selected.Visits < 2" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': selected.Visits < 2}]">{{selected.Zscore2}}</div>
           </div>

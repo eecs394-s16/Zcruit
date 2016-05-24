@@ -81,6 +81,7 @@ td {
 
 #profile-zscore-wrapper {
   display: inline-block;
+  position: relative;
   width: 3.8em;
   height: 1.75em;
   vertical-align: middle;
@@ -132,6 +133,14 @@ td {
   border-left-color: black;
   border-width: 22.7px 0 22.7px 11px;
   margin-top: -22.7px;
+}
+
+#visits-remaining {
+  position: absolute;
+  width: 100%;
+  top: -40%;
+  font-size: 0.5em;
+  text-align: center;
 }
 
 #offer-summary {
