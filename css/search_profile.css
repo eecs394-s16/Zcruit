@@ -191,3 +191,7 @@ td {
   border-width: 0;
   border-bottom-width: 1px;
 }
+
+.row {
+  padding-top: 3px;
+}

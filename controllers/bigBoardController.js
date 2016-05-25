@@ -38,6 +38,17 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   });
 
   // End List JS
+  
+  $scope.height = function(heightInfo, type) {
+
+    if (type == 1) {
+      // get foot
+      return Math.floor(heightInfo / 12)
+    } else {
+      // get inches
+      return (heightInfo % 12)
+    }
+  };
 
   $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT Position_name FROM Positions'))
   .then(function(response){
