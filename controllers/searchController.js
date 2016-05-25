@@ -93,7 +93,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   // Update the search results with a query string
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
-      console.table(response);
+      // console.table(response);
       $scope.players = response;
       if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
         // Results already ordered! Don't do any sorting
@@ -247,7 +247,7 @@ function buildSearchQuery(params) {
     }
     query += ')';
   }
-  console.log(query);
+  // console.log(query);
   return query;
 }
 
