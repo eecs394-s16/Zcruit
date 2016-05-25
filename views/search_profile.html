@@ -51,26 +51,26 @@
 
     <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
 			<div class="status offered"></div>
-		  <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
+      <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-  				<div class="player-info-stats">QB - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
+  				<div class="player-info-stats">QB - {{height(p.Height, 1)}}'{{height(p.Height, 2)}}" {{p.Weight}}lb</div>
   				<div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
       <div class="zscore-wrapper">
-      	<div class="zscore-flex" 
-      	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore}}</div>
-        <div class="zscore-flex" 
-        ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 8.5 && p.Zscore >= 5.5), green: p.Zscore >=8.5}">{{p.Zscore2}}</div>
+      	<div class="zscore-flex"
+      	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
+        <div class="zscore-flex"
+        ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
       </div>
 		</div>
   </div>
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
-        <img id="profile-image" src="https://placeholdit.imgix.net/~text?txtsize=47&txt=500%C3%97500&w=500&h=500">
+        <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
         <div id="profile-status">Committed</div>
       </div>
 
@@ -82,10 +82,10 @@
             popover-title="{{zscorePopover.title}}"
             popover-placement="bottom-right"
             popover-trigger="outsideClick">
-            <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
-            <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 8.5 && selected.Zscore >= 5.5), green: selected.Zscore >=8.5}">{{selected.Zscore}}</div>
+            <div class="profile-zscore"
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 7.0 && selected.Zscore >= 5.5), green: selected.Zscore >=7.0}">{{selected.Zscore}}</div>
+            <div class="profile-zscore"
+            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 7.0 && selected.Zscore >= 5.5), green: selected.Zscore >=7.0}">{{selected.Zscore}}</div>
           </div>
         </div>
 
@@ -123,7 +123,7 @@
 
       <!-- Be careful here - how are multiple offers displaying  -->
       <div id="offer-summary" >
-        <img class="offer-icon" ng-repeat="offer_url in selected.offers" ng-src="{{offer_url}}">
+        <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
       </div>
     </div>
 

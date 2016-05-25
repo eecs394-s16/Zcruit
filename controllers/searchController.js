@@ -93,6 +93,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   // Update the search results with a query string
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
+      console.table(response);
       $scope.players = response;
       if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
         // Results already ordered! Don't do any sorting
@@ -109,15 +110,21 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // get offers for all players
       runQuery(offerQueryString, function(responseColleges){
 
-      for (var j = 0; j < responseColleges.length; j++)
-        {
-          if (responseColleges[j].Player_id === currentPlayer.Player_id)
+          for(var i = 0; i < $scope.players.length; i++)
           {
-            $scope.players[i].offers.push({id: responseColleges[j].College_id, img_path: '../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif'});
+            // for each player, loop through the array of colleges and add on anything that works
+            var currentPlayer = $scope.players[i];
+            $scope.players[i].offers = Array();
+            for (var j = 0; j < responseColleges.length; j++)
+            {
+              if (responseColleges[j].Player_id === currentPlayer.Player_id)
+              {
+                $scope.players[i].offers.push({id: responseColleges[j].College_id, img_path: '../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif'});
                 // console.log($scope.players[i].offers.slice(-1));
               }
             }
-          });
+          }
+      });
       // console.log($scope.players);
     });
 }
@@ -240,7 +247,7 @@ function buildSearchQuery(params) {
     }
     query += ')';
   }
-
+  console.log(query);
   return query;
 }
 
