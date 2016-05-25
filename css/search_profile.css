@@ -74,33 +74,73 @@ td {
 }
 
 #name {
-  font-size: 1.7em;
+  font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 3%;
+  padding: 1.5% 2%;
 }
 
 #profile-zscore-wrapper {
   display: inline-block;
-  width: 3.4em;
-  height: 1.7em;
+  position: relative;
+  width: 3.8em;
+  height: 1.75em;
   vertical-align: middle;
 }
 
 .profile-zscore {
+  position: relative;
   float: left;
   height: 100%;
   width: 50%;
-  font-size: 1em;
-  line-height: 1em;
+  font-size: 0.9em;
+  line-height: 0.9em;
   font-weight: bold;
-  display: -webkit-flex;
   display: flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
 
-.profile-zscore:nth-child(2) {
-  border-left: 1px solid grey;
+/* Style the first z-score if there's two of them */
+.double-zscore-left {
+  width: 42.5%;
+  padding-left: 7%;
+}
+
+/* Shift the second z-score so it looks good */
+.double-zscore-right {
+  width: 57.5%;
+  padding-left: 10%;
+}
+
+/* Adds the arrow onto the first of two z-scores */
+.double-zscore-left:after, .double-zscore-left:before {
+  left: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  z-index: 1;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.double-zscore-left:after {
+  border-left-color: inherit;
+  border-width: 22px 0 22px 10px;
+  margin-top: -22px;
+}
+.double-zscore-left:before {
+  border-left-color: black;
+  border-width: 22.7px 0 22.7px 11px;
+  margin-top: -22.7px;
+}
+
+#visits-remaining {
+  position: absolute;
+  width: 100%;
+  top: -40%;
+  font-size: 0.5em;
+  text-align: center;
 }
 
 #offer-summary {

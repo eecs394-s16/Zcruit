@@ -82,10 +82,8 @@
               </div>
             </div>
             <div class="zscore-wrapper">
-              <div class="zscore-flex" 
-              ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
-              <div class="zscore-flex" 
-              ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+              <div class="zscore-flex" ng-class="zscoreColor(p.Zscore)">{{p.Zscore}}</div>
+              <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
             </div>
           </div>
         </div>

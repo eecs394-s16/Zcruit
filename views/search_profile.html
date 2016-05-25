@@ -60,10 +60,8 @@
         </div>
 			</div>
       <div class="zscore-wrapper">
-      	<div class="zscore-flex"
-      	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
-        <div class="zscore-flex"
-        ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+      	<div class="zscore-flex" ng-class="zscoreColor(p.Zscore)">{{p.Zscore}}</div>
+        <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
       </div>
 		</div>
   </div>
@@ -75,6 +73,7 @@
       </div>
 
       <div id="glanceinfo">
+
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
           <div id="profile-zscore-wrapper"
@@ -82,10 +81,9 @@
             popover-title="{{zscorePopover.title}}"
             popover-placement="bottom-right"
             popover-trigger="outsideClick">
-            <div class="profile-zscore"
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 7.0 && selected.Zscore >= 5.5), green: selected.Zscore >=7.0}">{{selected.Zscore}}</div>
-            <div class="profile-zscore"
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 7.0 && selected.Zscore >= 5.5), green: selected.Zscore >=7.0}">{{selected.Zscore}}</div>
+            <div id="visits-remaining" ng-if="selected.Visits < 2">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
+            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
+            <div ng-if="selected.Visits < 2" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': selected.Visits < 2}]">{{selected.Zscore2}}</div>
           </div>
         </div>
 
