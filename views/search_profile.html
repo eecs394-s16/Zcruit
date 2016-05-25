@@ -55,7 +55,7 @@
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-  				<div class="player-info-stats">QB - {{height(p.Height, 1)}}'{{height(p.Height, 2)}}" {{p.Weight}}lb</div>
+  				<div class="player-info-stats">{{p.Position_name}} - {{height(p.Height, 1)}}'{{height(p.Height, 2)}}" {{p.Weight}}lb</div>
   				<div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
@@ -90,7 +90,7 @@
         </div>
 
         <div class="summary">
-          <p>QB</p>
+          <p>{{selected.Position_name}}</p>
           <p>{{height(selected.Height, 1)}}'{{height(selected.Height, 2)}}", {{selected.Weight}}lb.</p>
           <p>Year: {{selected.Year}}</p>
           <p>Coach: {{selected.Coach_name}}</p>

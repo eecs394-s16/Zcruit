@@ -1,6 +1,6 @@
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
 
-  var defaultSearch = 'SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id';
+  var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
   var coach = 1;
   $scope.sortParam = 'FirstName';
   $scope.sortReverse = false;
@@ -13,7 +13,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       runSearch(defaultSearch);
     } else {
       // Any other list selected
-      runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
+      runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
     }
   };
 
@@ -94,7 +94,29 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
       // console.table(response);
-      $scope.players = response;
+
+      // append to end of position name any new ones
+      var playerDict = {};
+      for (var i=0, l = response.length; i<l; i++ )
+      {
+        var Player = response[i];
+        if (Player.Player_id in playerDict)
+        {
+          playerDict[Player.Player_id].Position_name += ', '+Player.Position_name;
+        }
+        else
+        {
+          playerDict[Player.Player_id] = Player;
+        }
+      }
+      var playerArray = [];
+      // fill out the array from dictionary
+      for (var key in playerDict)
+      {
+        playerArray.push(playerDict[key]);
+      }
+
+      $scope.players = playerArray;
       if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
         // Results already ordered! Don't do any sorting
         $scope.sortParam = '';
@@ -104,6 +126,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         $scope.sortParam = 'FirstName';
         $scope.sortReverse = false;
       }
+
       $scope.setSelectedPlayer($scope.players[0]);
 
       var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
@@ -191,8 +214,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 }]);
 
 function buildSearchQuery(params) {
-  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
-
+  var query = defaultSearch;
   if (params.includePredicted) {
       query += ' AND ( (p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore + ') OR (p.Zscore2 BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore + ') )';
   }
