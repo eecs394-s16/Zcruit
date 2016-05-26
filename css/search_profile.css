@@ -192,6 +192,17 @@ td {
   border-bottom-width: 1px;
 }
 
-.row {
-  padding-top: 3px;
+.tab {
+  width: 100%;
+  padding: 1% 2%;
+}
+
+.info-section-header {
+  margin-top: 10%;
+  margin-bottom: 0;
+}
+
+.info-label {
+  padding-top: 2%;
+  font-weight: bold;
 }

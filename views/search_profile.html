@@ -127,88 +127,51 @@
 
     <uib-tabset id="profile-tabs" activeloelwfoeow="activeJustified" justified="true">
       <uib-tab index="0" heading="Bio">
-        <div id="bio" class="tab">
-          <div class="summary">
-            <h4>Contact Information</h4>
-            <table>
-              <tr>
-                <td>Phone: </td>
-                <td>{{phoneFormat(selected.Phone)}}</td>
-              </tr>
-              <tr>
-                <td>Email: </td>
-                <td>{{selected.Email}}</td>
-              </tr>
-              <tr>
-                <td>Address: </td>
-                <td>{{selected.Address}}
-                  <br>{{selected.Hometown_city}}, {{selected.Hometown_state}} {{selected.Hometown_zip}}</td>
-              </tr>
-            </table>
+        <div id="bio" class="tab row">
+          <!-- TODO: Cleanup html/css structure -->
+          <div class="col-md-6">
+            <h4 class="info-section-header">Contact Information</h4>
+            <div class="info-label">Phone</div class="info-label">
+            <span class="col-md-offset-1">{{phoneFormat(selected.Phone)}}</span>
+            <div class="info-label">Email</div class="info-label">
+            <span class="col-md-offset-1">{{selected.Email}}</span>
+            <div class="info-label">Address</div class="info-label">
+            <span class="col-md-offset-1">{{selected.Address}}</span><br>
+            <span class="col-md-offset-1">{{selected.Hometown_city}}, {{selected.Hometown_state}} {{selected.Hometown_zip}}</span>
+
+
+            <h4 class="info-section-header">High School</h4>
+            <div class="info-label">Name</div>
+            <span class="col-md-offset-1">{{selected.HS_name}}</span>
+            <div class="info-label">Positions</div>
+            <span class="col-md-offset-1">{{selected.Position_name}}</span>
+            <div class="info-label">GPA</div>
+            <span class="col-md-offset-1">{{selected.GPA}}</span>
           </div>
 
-          <div class="summary">
-            <h4>High School</h4>
-            <table>
-              <tr>
-                <td>Name: </td>
-                <td>{{selected.HS_name}}</td>
-              </tr>
-              <tr>
-                <td>Positions: </td>
-                <td>QB, RB</td>
-              </tr>
-              <tr>
-                <td>GPA: </td>
-                <td>{{selected.GPA}}</td>
-              </tr>
-              <tr>
-                <td>Record: </td>
-                <td>10-2</td>
-              </tr>
-            </table>
-          </div>
+          <div class="col-md-6">
+            <h4 class="info-section-header">Connections</h4>
+            <ul>
+              <li>{{selected.Visits}} visit{{selected.Visits != 1 ? "s" : ""}}</li>
+              <li>{{selected.Visits_overnight}} overnight visit{{selected.Visits_overnight != 1 ? "s" : ""}}</li>
+              <li ng-if="selected.Attended_camp == 1">Attended camp</li>
+              <li ng-if="selected.Legacy == 1">Legacy</li>
+              <li ng-if="selected.Sibling == 1">Sibling</li>
+              <li ng-if="selected.Other_strong_connections == 1">Other strong connection</li>
+            </ul>
 
-          <div class="summary">
-            <h4>Family</h4>
-            <table>
-              <tr>
-                <td>Parent 1: </td>
-                <td>{{selected.Parent1}}</td>
-              </tr>
-              <tr>
-                <td>Parent 2: </td>
-                <td>{{selected.Parent2}}</td>
-              </tr>
-              <tr>
-                <td>Home: </td>
-                <td>{{selected.Hometown_city}}, {{selected.Hometown_state}}</td>
-              </tr>
-              <tr>
-                <td>SES: </td>
-                <td>Middle</td>
-              </tr>
-            </table>
+            <h4 class="info-section-header">Family</h4>
+            <div class="info-label">Parent 1</div>
+            <span class="col-md-offset-1">{{selected.Parent1}}</span>
+            <div class="info-label">Parent 2</div>
+            <span class="col-md-offset-1">{{selected.Parent2}}</span>
+            <div class="info-label">Home</div>
+            <span class="col-md-offset-1">{{selected.Hometown_city}}, {{selected.Hometown_state}}</span>
+            <div class="info-label">SES</div>
+            <span class="col-md-offset-1">{{selected.SES}}</span>
+            <div class="info-label">Education</div>
+            <span class="col-md-offset-1">{{selected.Parental_education}}</span>
           </div>
-
-          <div class="summary">
-            <h4>Connections</h4>
-            <table>
-              <tr>
-                <td>Legacy: </td>
-                <td>{{boolToText(selected.Legacy)}}</td>
-              </tr>
-              <tr>
-                <td>Sibling: </td>
-                <td>No</td>
-              </tr>
-              <tr>
-                <td>Other: </td>
-                <td>N/A</td>
-              </tr>
-            </table>
-          </div>
-
         </div>
       </uib-tab>
       <uib-tab index="1" heading="Stats">
