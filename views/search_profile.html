@@ -69,7 +69,7 @@
     <div id="topcard">
       <div id="image-box">
         <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
-        <div id="profile-status">Committed</div>
+        <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
       </div>
 
       <div id="glanceinfo">
@@ -96,8 +96,8 @@
 
         <div class="summary">
           <p>Uniform #: 18</p>
-          <p>Wheaton North</p>
-          <p>Wheaton, IL</p>
+          <p>{{selected.HS_name}}</p>
+          <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
         </div>
 
         <div class="btn-group" uib-dropdown>
@@ -141,10 +141,10 @@
 
 
             <h4 class="info-section-header">High School</h4>
-            <div class="info-label">Name</div>
-            <span class="col-md-offset-1">{{selected.HS_name}}</span>
-            <div class="info-label">Positions</div>
-            <span class="col-md-offset-1">{{selected.Position_name}}</span>
+            <span>{{selected.HS_name}}</span><br>
+            <span>{{selected.HS_city}}, {{selected.HS_state}} {{selected.HS_zip}}</span>
+            <div class="info-label">Phone</div>
+            <span class="col-md-offset-1">{{phoneFormat(selected.HS_phone)}}</span>
             <div class="info-label">GPA</div>
             <span class="col-md-offset-1">{{selected.GPA}}</span>
           </div>

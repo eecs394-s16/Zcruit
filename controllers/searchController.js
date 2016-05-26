@@ -69,6 +69,44 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     return "bright-red";
   };
 
+  $scope.statusText = function(status) {
+    switch(status) {
+      case "0":
+        return "Committed";
+      case "1":
+        return "Offer";
+      case "2":
+        return "Active recruit";
+      case "3":
+        return "Evaluation needed";
+      case "4":
+        return "FBS recruit";
+      case "5":
+        return "Walk on";
+      case "6":
+        return "Reject";
+    }
+  };
+
+  $scope.statusColor = function(status) {
+    switch(status) {
+      case "0":
+        return "status-purple";
+      case "1":
+        return "status-green";
+      case "2":
+        return "status-gold";
+      case "3":
+        return "status-blue";
+      case "4":
+        return "status-grey";
+      case "5":
+        return "status-lilac";
+      case "6":
+        return "status-orange";
+    }
+  };
+
   // Add player to a list
   $scope.savePlayer = function(player, list) {
     if (list.Player_ids.find(function(e) { return e === player.Player_id; })) {

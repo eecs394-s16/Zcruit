@@ -59,8 +59,39 @@ td {
   line-height: 250%;
   height: 15%;
   text-align: center;
+}
+
+.status-purple {
   color: white;
   background: purple;
+}
+
+.status-green {
+  color: white;
+  background: green;
+}
+
+.status-gold {
+  background: gold;
+}
+
+.status-blue {
+  color: white;
+  background: blue;
+}
+
+.status-grey {
+  color: white;
+  background: grey;
+}
+
+.status-lilac {
+  color: white;
+  background: lilac;
+}
+
+.status-orange {
+  background: orange;
 }
 
 #glanceinfo {
@@ -199,7 +230,7 @@ td {
 
 .info-section-header {
   margin-top: 10%;
-  margin-bottom: 0;
+  margin-bottom: 2%;
 }
 
 .info-label {
