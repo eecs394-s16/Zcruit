@@ -29,10 +29,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
-  $scope.boolToText = function(bool) {
-    return bool === '0' ? 'No' : 'Yes';
-  };
-
   $scope.setSelectedPlayer = function(player) {
     $scope.selected = player;
 
