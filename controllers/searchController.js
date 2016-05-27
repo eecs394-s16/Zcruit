@@ -85,7 +85,11 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       case "5":
         return "Walk on";
       case "6":
-        return "Reject";
+        if ($scope.selected.School_committed_to > 0) {
+          return $scope.Colleges[$scope.selected.School_committed_to - 1].College_name + " commit";
+        } else {
+          return "Rejected";
+        }
     }
   };
 
@@ -209,7 +213,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       });
       // console.log($scope.players);
     });
-}
+  }
 
   // Retrieve the saved lists for this coach from the server
   function getSavedLists() {
@@ -254,6 +258,10 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   runSearch(defaultSearch);
+
+  runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
+    $scope.Colleges = response;
+  });
 
   getSavedLists();
 
