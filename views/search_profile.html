@@ -172,15 +172,10 @@
           </div>
 
           <div class="col-md-6">
-            <div class="info-section">
+            <div class="info-section" ng-if="selected.connections.length > 0">
               <h4>Connections</h4>
               <ul>
-                <li>{{selected.Visits}} visit{{selected.Visits != 1 ? "s" : ""}}</li>
-                <li>{{selected.Visits_overnight}} overnight visit{{selected.Visits_overnight != 1 ? "s" : ""}}</li>
-                <li ng-if="selected.Attended_camp == 1">Attended camp</li>
-                <li ng-if="selected.Legacy == 1">Legacy</li>
-                <li ng-if="selected.Sibling == 1">Sibling</li>
-                <li ng-if="selected.Other_strong_connections == 1">Other strong connection</li>
+                <li ng-repeat="c in selected.connections">{{c}}</li>
               </ul>
             </div>
 

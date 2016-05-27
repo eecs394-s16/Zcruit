@@ -146,25 +146,32 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runQuery(queryString, function(response) {
       // console.table(response);
 
-      // append to end of position name any new ones
+      // Build connections and position list for each player
       var playerDict = {};
-      for (var i=0, l = response.length; i<l; i++ )
-      {
-        var Player = response[i];
-        if (Player.Player_id in playerDict)
-        {
-          playerDict[Player.Player_id].Position_name += ', '+Player.Position_name;
-        }
-        else
-        {
-          playerDict[Player.Player_id] = Player;
-        }
-      }
       var playerArray = [];
-      // fill out the array from dictionary
-      for (var key in playerDict)
-      {
-        playerArray.push(playerDict[key]);
+      for (var i = 0, l = response.length; i < l; i++) {
+        var player = response[i];
+        var id = player.Player_id;
+        if (id in playerDict) {
+          // append to end of position name any new ones
+          playerArray[playerDict[id]].Position_name += ', ' + player.Position_name;
+        } else {
+          player.connections = [];
+          if (player.Attended_camp === "1") {
+            player.connections.push("Attend camp");
+          }
+          if (player.Legacy === "1") {
+            player.connections.push("Legacy");
+          }
+          if (player.Sibling === "1") {
+            player.connections.push("Sibling");
+          }
+          if (player.Other_strong_connections === "1") {
+            player.connections.push("Other strong connection");
+          }
+          playerArray.push(player);
+          playerDict[id] = playerArray.length - 1;
+        }
       }
 
       $scope.players = playerArray;
