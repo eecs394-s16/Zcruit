@@ -2,7 +2,7 @@ var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions 
 
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
-  $scope.sortParam = 'FirstName';
+  $scope.defaultSortParam = ['NU_status', '-Zscore'];
   $scope.sortReverse = false;
 
   // Called when an option is selected from the lists drop-down
@@ -141,7 +141,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         $scope.sortReverse = false;
       } else {
         // It's just a regular search, so just sort regularly
-        $scope.sortParam = 'FirstName';
+        $scope.sortParam = ['NU_status', '-Zscore'];
         $scope.sortReverse = false;
       }
 
