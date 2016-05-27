@@ -219,6 +219,11 @@ body {
   border-bottom-width: 1px;
 }
 
+.tab-pane {
+  height: 54vh;
+  overflow: scroll;
+}
+
 .tab {
   width: 100%;
   padding: 1% 2%;
@@ -230,7 +235,8 @@ body {
 }
 
 td:first-child {
-  width: 35%;
+  width: 32%;
+  font-weight: bold;
 }
 
 .info-long {
