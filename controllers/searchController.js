@@ -1,4 +1,17 @@
 var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
+angular.module('zcruit', [])
+    .service('sharedProperties', function () {
+        var property = [];
+
+        return {
+            getProperty: function () {
+                return property;
+            },
+            setProperty: function(value) {
+                property = value;
+            }
+        };
+    });
 
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
@@ -95,6 +108,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   $scope.cancel = function() {
      $scope.newListPopoverIsOpen = false;
   };
+
+  $scope.pastQuery = sharedProperties.setProperty(runQuery('SELECT name FROM SavedQueries', function() {}));
  
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
@@ -146,7 +161,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
 
       $scope.setSelectedPlayer($scope.players[0]);
-
       var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
       // get offers for all players
       runQuery(offerQueryString, function(responseColleges){
@@ -225,18 +239,31 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
 
-    modalInstance.result.then(function (queryName) {
-      var query = buildSearchQuery(returnParams);
-      console.log(query)
-      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + query +"')";
-      console.log(queryString)
-      runQuery(queryString,
-      function() {
-        console.log("saved into table")
+    $scope.openPastQueryModal = function (size) {
+      var modalInstance = $uibModal.open({
+        animation: true,
+        templateUrl: 'pastQuery.html',
+        controller: 'pastQueryCtrl',
+        size: size,
+        resolve: {
+          items: function () {
+            return $scope.items;
+          }
+        }
       });
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
+
+      // modalInstance.result.then(function (queryName) {
+      //   var query = buildSearchQuery(returnParams);
+      //   console.log(query)
+      //   var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + query +"')";
+      //   console.log(queryString)
+      //   runQuery(queryString,
+      //   function() {
+      //     console.log("saved into table")
+      //   });
+      // }, function () {
+      //   $log.info('Modal dismissed at: ' + new Date());
+      // });
   };
 
   runSearch(defaultSearch);
@@ -245,7 +272,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.openBigBoard = function() {
     window.open('big_board.html', '_self');
-  }
+  };
 }]);
 
 function buildSearchQuery(params) {
@@ -522,7 +549,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
 });
 
-angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
+angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModalInstance) {
  $scope.ok = function () {
     var queryName = $scope.newListName; 
     console.log(queryName);
@@ -534,3 +561,21 @@ angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModal
   };
 
 });
+
+angular.module('zcruit').controller('pastQueryCtrl', function ($scope, $uibModalInstance) {
+ //get the list of all query names 
+ $scope.pastQuery = sharedProperties.getProperty();
+ $scope.ok = function () {
+    var queryName = $scope.newListName; 
+    console.log(queryName);
+    $uibModalInstance.close(queryName);
+ };
+
+ $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+});
+
+
+
