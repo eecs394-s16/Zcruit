@@ -245,12 +245,26 @@ td:first-child {
 
 .info-section {
   width: 100%;
-  padding-top: 5%;
-}
-
-.info-section-header {
   margin-top: 10%;
   margin-bottom: 2%;
+}
+
+.info-section:first-child {
+  margin-top: 0;
+  margin-bottom: 2%;
+}
+
+#topcard .editable-input {
+  width: 50% !important;
+}
+
+#bio .editable-wrap {
+  margin-left: -50%;
+  width: 100%;
+}
+
+#bio .editable-input {
+  width: 100% !important;
 }
 
 .edit-in-place span {
