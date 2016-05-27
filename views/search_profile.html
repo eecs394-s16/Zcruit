@@ -153,11 +153,11 @@
             <table>
               <tr>
                 <td>Phone: </td>
-                <td><a href='#' editable-text='selected.Phone' onaftersave='updateData("Players","Phone",selected.Phone)'>{{phoneFormat(selected.Phone)}}</a></td>
+                <td><a href='#' editable-tel='selected.Phone' e-pattern="\d{10}" e-title="10 digit phone number" onaftersave='updateData("Players","Phone",selected.Phone)'>{{phoneFormat(selected.Phone)}}</a></td>
               </tr>
               <tr>
                 <td>Email: </td>
-                <td><a href='#' editable-text='selected.Email' onaftersave='updateData("Players","Email",selected.Email)'>{{selected.Email}}</a></td>
+                <td><a href='#' editable-email='selected.Email' onaftersave='updateData("Players","Email",selected.Email)'>{{selected.Email}}</a></td>
               </tr>
               <tr>
                 <td>Address: </td>
