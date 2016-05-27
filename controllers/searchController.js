@@ -1,5 +1,6 @@
 var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
+
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
   $scope.defaultSortParam = ['NU_status', '-Zscore'];
@@ -95,7 +96,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   $scope.cancel = function() {
      $scope.newListPopoverIsOpen = false;
   };
- 
+
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
@@ -153,6 +154,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
           for(var i = 0; i < $scope.players.length; i++)
           {
+            //set feet and inches for each
+            $scope.players[i].Feet = Math.floor($scope.players[i].Height/12);
+            $scope.players[i].Inches = $scope.players[i].Height%12;
             // for each player, loop through the array of colleges and add on anything that works
             var currentPlayer = $scope.players[i];
             $scope.players[i].offers = Array();
@@ -256,6 +260,40 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   $scope.openBigBoard = function() {
     window.open('big_board.html', '_self');
   }
+
+  $scope.updateData = function(tableName,key,newValue)
+  {
+      // console.log($scope.selected);
+      if (key==='Height')
+      {
+        $scope.selected.Feet = parseInt($scope.selected.Feet);
+        $scope.selected.Inches = parseInt($scope.selected.Inches);
+        $scope.selected.Height = $scope.selected.Feet * 12 + $scope.selected.Inches;
+        var sqlQuery = "Update Players SET Height = "+($scope.selected.Height)+ " WHERE ";
+      }
+      else
+      {
+        var sqlQuery = "UPDATE "+tableName+" SET "+key+"="+newValue+" WHERE ";
+      }
+      if (tableName === 'Players')
+      {
+        sqlQuery += "Player_id="+$scope.selected.Player_id;
+      }
+      else if (tableName === 'HighSchools') {
+        sqlQuery += "HS_id="+$scope.selected.HS_id;
+      }
+      for(var i = 0; i < $scope.players.length; i++)
+      {
+        if ($scope.players[i].Player_id === $scope.selected.Player_id)
+        {
+          $scope.players[i] = $scope.selected;
+        }
+      }
+      console.log(sqlQuery);
+      runQuery(sqlQuery);
+  };
+
+
 }]);
 
 function buildSearchQuery(params) {
@@ -534,7 +572,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
 angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
  $scope.ok = function () {
-    var queryName = $scope.newListName; 
+    var queryName = $scope.newListName;
     console.log(queryName);
     $uibModalInstance.close(queryName);
  };

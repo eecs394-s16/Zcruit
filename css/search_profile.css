@@ -185,7 +185,7 @@ td {
   border-style: solid;
   position: relative;
   margin-top: 2%;
-  font-weight: bold; 
+  font-weight: bold;
   font-size: 3vw;
   margin-top: 0;
   border-width: 0;
@@ -194,4 +194,20 @@ td {
 
 .row {
   padding-top: 3px;
+}
+
+.edit-in-place span {
+  cursor: pointer;
+}
+
+.edit-in-place input {
+  display: none;
+}
+
+.edit-in-place.active span {
+  display: none;
+}
+
+.edit-in-place.active input {
+  display: inline-block;
 }
