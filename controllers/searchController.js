@@ -103,7 +103,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       case "5":
         return "status-lilac";
       case "6":
-        return "status-orange";
+        return "status-red";
     }
   };
 

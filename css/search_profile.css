@@ -90,8 +90,9 @@ td {
   background: #C8A2C8;
 }
 
-.status-orange {
-  background: orange;
+.status-red {
+  color: white;
+  background: red;
 }
 
 #glanceinfo {
