@@ -2,7 +2,7 @@ var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions 
 
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
-  $scope.sortParam = 'FirstName';
+  $scope.defaultSortParam = ['NU_status', '-Zscore'];
   $scope.sortReverse = false;
   $scope._ = _;
 
@@ -133,7 +133,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
   $scope.cancel = function() {
      $scope.newListPopoverIsOpen = false;
-  }
+  };
+ 
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
@@ -186,7 +187,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         $scope.sortReverse = false;
       } else {
         // It's just a regular search, so just sort regularly
-        $scope.sortParam = 'FirstName';
+        $scope.sortParam = ['NU_status', '-Zscore'];
         $scope.sortReverse = false;
       }
 
@@ -252,6 +253,33 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
     modalInstance.result.then(function (searchParams) {
       runSearch(buildSearchQuery(searchParams));
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+  $scope.openSaveModal = function (size) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'saveQuery.html',
+      controller: 'saveQueryCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+
+    modalInstance.result.then(function (queryName) {
+      var query = buildSearchQuery(returnParams);
+      console.log(query)
+      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + query +"')";
+      console.log(queryString)
+      runQuery(queryString,
+      function() {
+        console.log("saved into table")
+      });
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });
@@ -549,6 +577,19 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
   $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+});
+
+angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
+ $scope.ok = function () {
+    var queryName = $scope.newListName; 
+    console.log(queryName);
+    $uibModalInstance.close(queryName);
+ };
+
+ $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
 
