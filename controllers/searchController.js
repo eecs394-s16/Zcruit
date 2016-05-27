@@ -4,6 +4,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   var coach = 1;
   $scope.sortParam = 'FirstName';
   $scope.sortReverse = false;
+  $scope._ = _;
 
   // Called when an option is selected from the lists drop-down
   $scope.showList = function() {

@@ -128,18 +128,17 @@
     <uib-tabset id="profile-tabs" justified="true">
       <uib-tab index="0" heading="Bio">
         <div id="bio" class="tab row">
-          <!-- TODO: Cleanup html/css structure -->
           <div class="col-md-6">
             <div class="info-section">
               <h4>Contact Information</h4>
-              <table>
+              <table class="info-table">
                 <tr>
                   <td>Phone</td>
                   <td>{{phoneFormat(selected.Phone)}}</td>
                 </tr>
                 <tr>
                   <td>Email</td>
-                  <td>{{selected.Email}}</td>
+                  <td><span class="info-long">{{selected.Email}}</span></td>
                 </tr>
                 <tr>
                   <td>Address</td>
@@ -150,7 +149,7 @@
 
             <div class="info-section">
               <h4>High School</h4>
-              <table>
+              <table class="info-table">
                 <tr>
                   <td>Name</td>
                   <td>{{selected.HS_name}}</td>
@@ -169,19 +168,20 @@
                 </tr>
               </table>
             </div>
-          </div>
 
-          <div class="col-md-6">
-            <div class="info-section" ng-if="selected.connections.length > 0">
+            <div class="info-section">
               <h4>Connections</h4>
-              <ul>
+              <p ng-if="selected.connections.length == 0">No connections</p>
+              <ul ng-if="selected.connections.length > 0">
                 <li ng-repeat="c in selected.connections">{{c}}</li>
               </ul>
             </div>
+          </div>
 
+          <div class="col-md-6">
             <div class="info-section">
               <h4>Family</h4>
-              <table>
+              <table class="info-table">
                 <tr>
                   <td>Parent 1</td>
                   <td>{{selected.Parent1}}</td>
@@ -202,6 +202,33 @@
                   <td>Education</td>
                   <td>{{selected.Parental_education}}</td>
                 </tr>
+              </table>
+            </div>
+
+            <div class="info-section">
+              <h4>Visits</h4>
+              <p ng-if="selected.Visits == 0 && selected.Visits_overnight == '0' && selected.Attended_camp == '0'">No visits</p>
+              <table class="table table-condensed" ng-if="selected.Visits > 0 || selected.Visits_overnight != '0' || selected.Attended_camp != '0'">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-if="selected.Visits_overnight == '1'">
+                    <td>5/26/2016</td>
+                    <td>Overnight</td>
+                  </tr>
+                  <tr ng-if="selected.Attended_camp == '1'">
+                    <td>5/24/2016</td>
+                    <td>Camp</td>
+                  </tr>
+                  <tr ng-repeat="i in _.range(selected.Visits) track by $index">
+                    <td>5/{{1 + i*6}}/2016</td>
+                    <td>Regular</td>
+                  </tr>
+                </tbody>
               </table>
             </div>
           </div>

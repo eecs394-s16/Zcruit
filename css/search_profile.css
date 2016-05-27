@@ -6,11 +6,6 @@ body {
   height: 768px;
 }
 
-tr,
-td {
-  padding: 0 2em .5em 0;
-}
-
 #resultlist {
   display: inline-block;
   float: left;
@@ -227,6 +222,19 @@ td {
 .tab {
   width: 100%;
   padding: 1% 2%;
+}
+
+.info-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+td:first-child {
+  width: 35%;
+}
+
+.info-long {
+  word-wrap: break-word;
 }
 
 .info-section {
