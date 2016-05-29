@@ -136,9 +136,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
      $scope.newListPopoverIsOpen = false;
   };
 
-<<<<<<< HEAD
-=======
-
   $scope.showSavedSearchPopover = false;
   $scope.runSavedSearch = function(search) {
     searchParams = JSON.parse(search.query);
@@ -146,13 +143,14 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     $scope.showSavedSearchPopover = false;
   };
  
->>>>>>> dev
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
     .then(function(response) {
-      if (response.status === 200 && callback) {
-        callback(response.data);
+      if (response.status === 200) {
+        if (callback) {
+          callback(response.data);
+        }
       } else {
         console.log("Query error: " + response);
       }
