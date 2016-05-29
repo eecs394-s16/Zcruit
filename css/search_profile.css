@@ -6,11 +6,6 @@ body {
   height: 768px;
 }
 
-tr,
-td {
-  padding: 0 2em .5em 0;
-}
-
 #resultlist {
   display: inline-block;
   float: left;
@@ -59,8 +54,40 @@ td {
   line-height: 250%;
   height: 15%;
   text-align: center;
+}
+
+.status-purple {
   color: white;
   background: purple;
+}
+
+.status-green {
+  color: white;
+  background: green;
+}
+
+.status-gold {
+  background: gold;
+}
+
+.status-blue {
+  color: white;
+  background: blue;
+}
+
+.status-grey {
+  color: white;
+  background: grey;
+}
+
+.status-lilac {
+  color: white;
+  background: #C8A2C8;
+}
+
+.status-red {
+  color: white;
+  background: red;
 }
 
 #glanceinfo {
@@ -218,6 +245,36 @@ td {
   border-bottom-width: 1px;
 }
 
-.row {
-  padding-top: 3px;
+.tab-pane {
+  height: 54vh;
+  overflow: scroll;
+}
+
+.tab {
+  width: 100%;
+  padding: 1% 2%;
+}
+
+.info-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+td:first-child {
+  width: 32%;
+  font-weight: bold;
+}
+
+.info-long {
+  word-wrap: break-word;
+}
+
+.info-section {
+  width: 100%;
+  padding-top: 5%;
+}
+
+.info-section-header {
+  margin-top: 10%;
+  margin-bottom: 2%;
 }

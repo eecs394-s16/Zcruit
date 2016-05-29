@@ -4,6 +4,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   var coach = 1;
   $scope.defaultSortParam = ['NU_status', '-Zscore'];
   $scope.sortReverse = false;
+  $scope._ = _;
 
   // Called when an option is selected from the lists drop-down
   $scope.showList = function() {
@@ -27,10 +28,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       phone = phone.toString();
       return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
     }
-  };
-
-  $scope.boolToText = function(bool) {
-    return bool === '0' ? 'No' : 'Yes';
   };
 
   $scope.setSelectedPlayer = function(player) {
@@ -71,6 +68,48 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       return "red";
     }
     return "bright-red";
+  };
+
+  $scope.statusText = function(status) {
+    switch(status) {
+      case "0":
+        return "Committed";
+      case "1":
+        return "Offer";
+      case "2":
+        return "Active recruit";
+      case "3":
+        return "Evaluation needed";
+      case "4":
+        return "FBS recruit";
+      case "5":
+        return "Walk on";
+      case "6":
+        if ($scope.selected.School_committed_to > 0) {
+          return $scope.Colleges[$scope.selected.School_committed_to - 1].College_name + " commit";
+        } else {
+          return "Rejected";
+        }
+    }
+  };
+
+  $scope.statusColor = function(status) {
+    switch(status) {
+      case "0":
+        return "status-purple";
+      case "1":
+        return "status-green";
+      case "2":
+        return "status-gold";
+      case "3":
+        return "status-blue";
+      case "4":
+        return "status-grey";
+      case "5":
+        return "status-lilac";
+      case "6":
+        return "status-red";
+    }
   };
 
   // Add player to a list
@@ -126,25 +165,32 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runQuery(queryString, function(response) {
       // console.table(response);
 
-      // append to end of position name any new ones
+      // Build connections and position list for each player
       var playerDict = {};
-      for (var i=0, l = response.length; i<l; i++ )
-      {
-        var Player = response[i];
-        if (Player.Player_id in playerDict)
-        {
-          playerDict[Player.Player_id].Position_name += ', '+Player.Position_name;
-        }
-        else
-        {
-          playerDict[Player.Player_id] = Player;
-        }
-      }
       var playerArray = [];
-      // fill out the array from dictionary
-      for (var key in playerDict)
-      {
-        playerArray.push(playerDict[key]);
+      for (var i = 0, l = response.length; i < l; i++) {
+        var player = response[i];
+        var id = player.Player_id;
+        if (id in playerDict) {
+          // append to end of position name any new ones
+          playerArray[playerDict[id]].Position_name += ', ' + player.Position_name;
+        } else {
+          player.connections = [];
+          if (player.Attended_camp === "1") {
+            player.connections.push("Attend camp");
+          }
+          if (player.Legacy === "1") {
+            player.connections.push("Legacy");
+          }
+          if (player.Sibling === "1") {
+            player.connections.push("Sibling");
+          }
+          if (player.Other_strong_connections === "1") {
+            player.connections.push("Other strong connection");
+          }
+          playerArray.push(player);
+          playerDict[id] = playerArray.length - 1;
+        }
       }
 
       $scope.players = playerArray;
@@ -255,6 +301,14 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       $log.info('Modal dismissed at: ' + new Date());
     });
   };
+
+  runSearch(defaultSearch);
+
+  runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
+    $scope.Colleges = response;
+  });
+
+  getSavedLists();
 
   $scope.openPastQueryModal = function (size) {
     var modalInstance = $uibModal.open({
