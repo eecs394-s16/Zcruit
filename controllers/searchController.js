@@ -1,9 +1,11 @@
-angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
+var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
-  var defaultSearch = 'SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id';
+
+angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
-  $scope.sortParam = 'FirstName';
+  $scope.defaultSortParam = ['NU_status', '-Zscore'];
   $scope.sortReverse = false;
+  $scope._ = _;
 
   // Called when an option is selected from the lists drop-down
   $scope.showList = function() {
@@ -13,7 +15,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       runSearch(defaultSearch);
     } else {
       // Any other list selected
-      runSearch("SELECT * FROM Players p, HighSchools h, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.AreaCoach_id = c.Coach_id AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
+      runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
     }
   };
 
@@ -27,10 +29,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       phone = phone.toString();
       return phone.substring(0, 3) + '-' + phone.substring(3, 6) + '-' + phone.substring(6, 10);
     }
-  };
-
-  $scope.boolToText = function(bool) {
-    return bool === '0' ? 'No' : 'Yes';
   };
 
   $scope.setSelectedPlayer = function(player) {
@@ -56,6 +54,65 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
+  $scope.zscoreColor = function(score) {
+    if (score >= 8.0) {
+      return "bright-green";
+    } else if (score >= 6.5) {
+      return "green";
+    } else if (score > 5.0) {
+      return "light-green";
+    } else if (score === 5.0) {
+      return "yellow";
+    } else if (score >= 3.5) {
+      return "light-red";
+    } else if (score >= 2.0) {
+      return "red";
+    }
+    return "bright-red";
+  };
+
+  $scope.statusText = function(status) {
+    switch(status) {
+      case "0":
+        return "Committed";
+      case "1":
+        return "Offer";
+      case "2":
+        return "Active recruit";
+      case "3":
+        return "Evaluation needed";
+      case "4":
+        return "FBS recruit";
+      case "5":
+        return "Walk on";
+      case "6":
+        if ($scope.selected.School_committed_to > 0) {
+          return $scope.Colleges[$scope.selected.School_committed_to - 1].College_name + " commit";
+        } else {
+          return "Rejected";
+        }
+    }
+  };
+
+  $scope.statusColor = function(status) {
+    switch(status) {
+      case "0":
+        return "status-purple";
+      case "1":
+        return "status-green";
+      case "2":
+        return "status-gold";
+      case "3":
+        return "status-blue";
+      case "4":
+        return "status-grey";
+      case "5":
+        return "status-lilac";
+      case "6":
+        return "status-red";
+    }
+  };
+
   // Add player to a list
   $scope.savePlayer = function(player, list) {
     if (list.Player_ids.find(function(e) { return e === player.Player_id; })) {
@@ -75,54 +132,104 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         // Give user some kind of feedback
     });
   };
+  $scope.cancel = function() {
+     $scope.newListPopoverIsOpen = false;
+  };
 
+  $scope.showSavedSearchPopover = false;
+  $scope.runSavedSearch = function(search) {
+    searchParams = JSON.parse(search.query);
+    runSearch(buildSearchQuery(searchParams));
+    $scope.showSavedSearchPopover = false;
+  };
+ 
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
     .then(function(response) {
-      if (response.status === 200 && callback) {
-        callback(response.data);
+      if (response.status === 200) {
+        if (callback) {
+          callback(response.data);
+        }
       } else {
         console.log("Query error: " + response);
       }
     });
   }
 
+  // Returns a promise that resolves to the response object
+  function runQueryAsync(queryString) {
+    return $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString));
+  }
+
   // Update the search results with a query string
   function runSearch(queryString) {
     runQuery(queryString, function(response) {
-      $scope.players = response;
+      // console.table(response);
+
+      // Build connections and position list for each player
+      var playerDict = {};
+      var playerArray = [];
+      for (var i = 0, l = response.length; i < l; i++) {
+        var player = response[i];
+        var id = player.Player_id;
+        if (id in playerDict) {
+          // append to end of position name any new ones
+          playerArray[playerDict[id]].Position_name += ', ' + player.Position_name;
+        } else {
+          player.connections = [];
+          if (player.Attended_camp === "1") {
+            player.connections.push("Attend camp");
+          }
+          if (player.Legacy === "1") {
+            player.connections.push("Legacy");
+          }
+          if (player.Sibling === "1") {
+            player.connections.push("Sibling");
+          }
+          if (player.Other_strong_connections === "1") {
+            player.connections.push("Other strong connection");
+          }
+          playerArray.push(player);
+          playerDict[id] = playerArray.length - 1;
+        }
+      }
+
+      $scope.players = playerArray;
       if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
         // Results already ordered! Don't do any sorting
         $scope.sortParam = '';
         $scope.sortReverse = false;
       } else {
         // It's just a regular search, so just sort regularly
-        $scope.sortParam = 'FirstName';
+        $scope.sortParam = ['NU_status', '-Zscore'];
         $scope.sortReverse = false;
       }
-      $scope.setSelectedPlayer($scope.players[0]);
 
+      $scope.setSelectedPlayer($scope.players[0]);
       var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
       // get offers for all players
       runQuery(offerQueryString, function(responseColleges){
 
           for(var i = 0; i < $scope.players.length; i++)
           {
+            //set feet and inches for each
+            $scope.players[i].Feet = Math.floor($scope.players[i].Height/12);
+            $scope.players[i].Inches = $scope.players[i].Height%12;
             // for each player, loop through the array of colleges and add on anything that works
-            currentPlayer = $scope.players[i];
+            var currentPlayer = $scope.players[i];
             $scope.players[i].offers = Array();
             for (var j = 0; j < responseColleges.length; j++)
             {
               if (responseColleges[j].Player_id === currentPlayer.Player_id)
               {
-                $scope.players[i].offers.push('../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif');
-                console.log($scope.players[i].offers.slice(-1));
+                $scope.players[i].offers.push({id: responseColleges[j].College_id, img_path: '../img/college_logos/'+encodeURIComponent(responseColleges[j].College_name)+'.gif'});
+                // console.log($scope.players[i].offers.slice(-1));
               }
             }
           }
       });
-      console.log($scope.players);
+      // console.log($scope.players);
     });
   }
 
@@ -134,7 +241,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         var playerList = [];
         if (response[i].Player_ids) {
           playerList = response[i].Player_ids.toString().split(',').map(function(e, i, a) { return parseInt(e, 10); });
-          console.log(playerList);
+          // console.log(playerList);
         }
         response[i].Player_ids = playerList;
       }
@@ -144,6 +251,14 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // Select the default option
       $scope.selectedList = $scope.savedLists[0];
     });
+  }
+
+  // Retrieve the saved queries from the server
+  function getSavedQueries() {
+    runQuery("SELECT * FROM SavedQueries",
+      function(savedSearches) {
+        $scope.savedSearches = savedSearches;
+      });
   }
 
   $scope.items = ['item1', 'item2', 'item3'];
@@ -161,8 +276,32 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
 
-    modalInstance.result.then(function (searchParams) {
+    modalInstance.result.then(function() {
       runSearch(buildSearchQuery(searchParams));
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
+
+  $scope.openSaveModal = function (size) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'saveQuery.html',
+      controller: 'saveQueryCtrl',
+      size: size,
+      resolve: {
+        items: function () {
+          return $scope.items;
+        }
+      }
+    });
+    modalInstance.result.then(function (queryName) {
+      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + JSON.stringify(searchParams) +"')";
+      console.log(queryString);
+      runQuery(queryString, function() {
+        console.log("saved into table");
+        getSavedQueries();
+      });
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
     });
@@ -170,27 +309,77 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   runSearch(defaultSearch);
 
+  runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
+    $scope.Colleges = response;
+  });
+
   getSavedLists();
 
-  $scope.newListPopover = {
-    templateUrl: 'new_list_popover.html',
-    title: "New List"
+  $scope.openPastQueryModal = function (size) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'pastQuery.html',
+      controller: 'pastQueryCtrl',
+      size: size,
+      resolve: {
+        // This actually seems to resolve and return the promise D:
+        queryResponse: function () {
+          return runQueryAsync("SELECT * FROM SavedQueries");
+        }
+      }
+    });
   };
 
-  $scope.zscorePopover = {
-    templateUrl: 'zscore_popover.html',
-    title: "Zcruit Score"
-  }
+  runSearch(defaultSearch);
+
+  getSavedLists();
+  getSavedQueries();
 
   $scope.openBigBoard = function() {
     window.open('big_board.html', '_self');
   }
+
+  $scope.updateData = function(tableName,key,newValue)
+  {
+      // console.log($scope.selected);
+      if (key==='Height')
+      {
+        $scope.selected.Feet = parseInt($scope.selected.Feet);
+        $scope.selected.Inches = parseInt($scope.selected.Inches);
+        $scope.selected.Height = $scope.selected.Feet * 12 + $scope.selected.Inches;
+        var sqlQuery = "Update Players SET Height = "+($scope.selected.Height)+ " WHERE ";
+      }
+      else
+      {
+        var sqlQuery = "UPDATE "+tableName+" SET "+key+"="+newValue+" WHERE ";
+      }
+      if (tableName === 'Players')
+      {
+        sqlQuery += "Player_id="+$scope.selected.Player_id;
+      }
+      else if (tableName === 'HighSchools') {
+        sqlQuery += "HS_id="+$scope.selected.HS_id;
+      }
+      for(var i = 0; i < $scope.players.length; i++)
+      {
+        if ($scope.players[i].Player_id === $scope.selected.Player_id)
+        {
+          $scope.players[i] = $scope.selected;
+        }
+      }
+      console.log(sqlQuery);
+      runQuery(sqlQuery);
+  };
 }]);
 
 function buildSearchQuery(params) {
-  var query = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
-
-  query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
+  var query = defaultSearch;
+  if (params.includePredicted) {
+      query += ' AND ( (p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore + ') OR (p.Zscore2 BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore + ') )';
+  }
+  else {
+      query += ' AND p.Zscore BETWEEN ' + params.minZscore + ' AND ' + params.maxZscore;
+  }
   query += ' AND p.GPA BETWEEN ' + params.minGpa + ' AND ' + params.maxGpa;
   query += ' AND p.Height BETWEEN ' + params.minHeight + ' AND ' + params.maxHeight;
   query += ' AND p.Weight BETWEEN ' + params.minWeight + ' AND ' + params.maxWeight;
@@ -239,7 +428,7 @@ function buildSearchQuery(params) {
     }
     query += ')';
   }
-
+  // console.log(query);
   return query;
 }
 
@@ -249,9 +438,38 @@ function buildSearchQuery(params) {
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
+// Make the searchParams a global variable so the previous search is saved after closing modal
+var searchParams = {
+      minZscore : 0,
+      maxZscore : 10,
+      minGpa : 1.0,
+      maxGpa : 4.0,
+      minHeight : 60,
+      maxHeight : 84,
+      minWeight : 150,
+      maxWeight : 400,
+      year : [],
+      statuses : [],
+      states : [],
+      firstName : null,
+      lastName : null,
+      highSchool : null,
+      positions : [],
+      coaches : [],
+      includePredicted: false
+    };
 
+angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
   $scope.items = items;
+
+  $scope.firstName = searchParams.firstName;
+  $scope.lastName = searchParams.lastName;
+  $scope.highSchool = searchParams.highSchool;
+
+  $scope.advancedFilters = false;
+  $scope.showAdvancedFilters = function () {
+    $scope.advancedFilters = !$scope.advancedFilters;
+  };
 
   $timeout(function () {
         $scope.$broadcast('rzSliderForceRender');
@@ -259,8 +477,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   //Range slider config
   $scope.zscoreSlider = {
-      minValue: 0,
-      maxValue: 10,
+      minValue: searchParams.minZscore,
+      maxValue: searchParams.maxZscore,
       options: {
           floor:0,
           ceil: 10,
@@ -270,12 +488,17 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       }
   };
 
+  $scope.checkboxModel = {
+       includePredicted : searchParams.includePredicted,
+     };
+
+
   $scope.settings_dropdown = {
-    scrollableHeight: '150px',
+    scrollableHeight: '250px',
     scrollable: true
   };
 
-  $scope.positionModel = [];
+  $scope.positionModel = searchParams.positions;
   $scope.positionData = [
     {id: 'QB', label: "QB"},
     {id: "RB", label: "RB"},
@@ -295,7 +518,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id: "Walk on", label: "Walk on"}
   ];
 
-  $scope.statusModel = [];
+  $scope.statusModel = searchParams.statuses;
   $scope.statusData = [
     {id:0, label: "0 - Commit"},
     {id:1, label: "1 - Offer"},
@@ -306,7 +529,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:6, label: "6 - Reject"}
   ];
 
- $scope.yearModel = [];
+ $scope.yearModel = searchParams.year;
   $scope.yearData = [
     {id:2015, label: 2015},
     {id:2016, label: 2016},
@@ -317,8 +540,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   ];
 
   $scope.heightSlider = {
-      minValue: 60,
-      maxValue: 84,
+      minValue: searchParams.minHeight,
+      maxValue: searchParams.maxHeight,
       options: {
           floor:60,
           ceil: 84,
@@ -333,8 +556,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
   $scope.weightSlider = {
-      minValue: 150,
-      maxValue: 400,
+      minValue: searchParams.minWeight,
+      maxValue: searchParams.maxWeight,
       options: {
           floor:150,
           ceil: 400,
@@ -344,7 +567,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
 
- $scope.stateModel = [];
+ $scope.stateModel = searchParams.states;
   $scope.stateData = [
     {id:"AL", label: "AL"},{id:"AK", label: "AK"},{id:"AZ", label: "AZ"},
     {id:"AR", label: "AR"},{id:"CA", label: "CA"},{id:"CO", label: "CO"},
@@ -364,7 +587,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:"WY", label: "WY"},{id:"Other", label: "Other"}
   ];
 
- $scope.coachModel = [];
+ $scope.coachModel = searchParams.coaches;
   $scope.coachData = [
     {id:1, label: "Fitz"},
     {id:2, label: "Morty"},
@@ -377,8 +600,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
 
   $scope.gpaSlider = {
-      minValue: 1.0,
-      maxValue: 4.0,
+      minValue: searchParams.minGpa,
+      maxValue: searchParams.maxGpa,
       options: {
           floor:1.0,
           ceil: 4.0,
@@ -388,7 +611,6 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       }
   };
 
-
   $scope.selected = {
     item: $scope.items[0]
   };
@@ -397,8 +619,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   $scope.ok = function () {
     // build the object to return
-    var returnParams = {};
-    returnParams = {
+    searchParams = {
       minZscore : $scope.zscoreSlider.minValue,
       maxZscore : $scope.zscoreSlider.maxValue,
       minGpa : $scope.gpaSlider.minValue,
@@ -414,14 +635,46 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       lastName : $scope.lastName,
       highSchool : $scope.highSchool,
       positions : $scope.positionModel,
-      coaches : $scope.coachModel
+      coaches : $scope.coachModel,
+      includePredicted: $scope.checkboxModel.includePredicted
     };
-    console.log(returnParams);
-    $uibModalInstance.close(returnParams);
+    console.log(searchParams);
+    $uibModalInstance.close();
   };
 
   $scope.cancel = function () {
     $uibModalInstance.dismiss('cancel');
   };
 
+});
+
+angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModalInstance) {
+ $scope.ok = function () {
+    var queryName = $scope.newListName;
+    console.log(queryName);
+    $uibModalInstance.close(queryName);
+ };
+
+ $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
+
+});
+
+angular.module('zcruit').controller('pastQueryCtrl', function ($scope, $uibModalInstance, queryResponse) {
+  if (queryResponse.status === 200) {
+    $scope.queries = queryResponse.data;
+  } else {
+    console.log("Query error: " + queryResponse);
+  }
+
+  $scope.ok = function () {
+    var queryName = $scope.newListName; 
+    console.log(queryName);
+    $uibModalInstance.close(queryName);
+  };
+
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 });

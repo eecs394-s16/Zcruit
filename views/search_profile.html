@@ -12,6 +12,8 @@
   <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
   <script src='../lib/lodash.js'></script>
   <script src='../lib/angularjs-dropdown-multiselect.js'></script>
+  <script src='../lib/xeditable.js'></script>
+  <link href='../lib/xeditable.css' rel='stylesheet'>
   <script src="../zcruit.js"></script>
   <script src="../controllers/searchController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -34,13 +36,22 @@
         <img src="../img/search.png">
         <div>Search</div>
       </div>
+      <div class="sidebar-icon" ng-click="openSaveModal()">
+        <img src="../img/save.png">
+        <div>Save search</div>
+      </div>
+      <div id="saved-search-icon" class="sidebar-icon popover-trigger"
+          uib-popover-template='"saved_search_popover.html"'
+          popover-title="Saved searches"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showSavedSearchPopover">
+        <img src="../img/saved-search.png">
+        <div>Saved<br>searches</div>
+      </div>
       <div class="sidebar-icon">
         <img src="../img/sort.png">
         <div>Sort</div>
-      </div>
-      <div class="sidebar-icon">
-        <img src="../img/save.png">
-        <div>Save list</div>
       </div>
     </div>
   </div>
@@ -49,66 +60,65 @@
     <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
     </select>
 
-    <div class="playerCard" ng-repeat="p in players | orderBy : sortParam : sortReverse " ng-click="setSelectedPlayer(p)">
-			<div class="status offered"></div>
-		  <div class="avatar" style="background-image: url('{{p.Img_url}}');"></div>
+    <div class="playerCard" ng-repeat="p in players | orderBy : sortParam || defaultSortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
+			<div class="status" ng-class="statusColor(p.NU_status)"></div>
+      <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-  				<div class="player-info-stats">QB - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
+  				<div class="player-info-stats">{{p.Position_name}} - {{p.Feet}}' {{p.Inches}}" {{p.Weight}}lb</div>
   				<div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
       <div class="zscore-wrapper">
-      	<div class="zscore-flex" 
-      	ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
-        <div class="zscore-flex" 
-        ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+      	<div class="zscore-flex" ng-class="zscoreColor(p.Zscore)">{{p.Zscore}}</div>
+        <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
       </div>
 		</div>
   </div>
+
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
-        <div id="profile-image" style="background-image: url('{{selected.Img_url}}');"></div>
-        <div id="profile-status">Committed</div>
+        <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
+        <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
       </div>
 
       <div id="glanceinfo">
+
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
-          <div id="profile-zscore-wrapper"
-            uib-popover-template='zscorePopover.templateUrl'
-            popover-title="{{zscorePopover.title}}"
-            popover-placement="bottom-right"
+          <div id="profile-zscore-wrapper" class="popover-trigger"
+            uib-popover-template='"zscore_popover.html"'
+            popover-title="Zcruit Score"
+            popover-placement="left-top"
             popover-trigger="outsideClick">
-            <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore < 5.5, yellow: (selected.Zscore < 7.0 && selected.Zscore >= 5.5), green: selected.Zscore >=7.0}">{{selected.Zscore}}</div>
-            <div class="profile-zscore" 
-            ng-class="{red: selected.Zscore2 < 5.5, yellow: (selected.Zscore2 < 7.0 && selected.Zscore2 >= 5.5), green: selected.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{selected.Zscore2}}</div>
+            <div id="visits-remaining" ng-if="selected.Visits < 2">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
+            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
+            <div ng-if="selected.Visits < 2" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': selected.Visits < 2}]">{{selected.Zscore2}}</div>
           </div>
         </div>
 
         <div class="summary">
-          <p>QB</p>
-          <p>{{height(selected.Height, 1)}}'{{height(selected.Height, 2)}}", {{selected.Weight}}lb.</p>
+          <p>{{selected.Position_name}}</p>
+          <p><a href='#' editable-text='selected.Feet' onaftersave='updateData("Players","Height",selected.Feet)'>{{selected.Feet}}</a>'<a href='#' editable-text='selected.Inches' onaftersave='updateData("Players","Height",selected.Inches)'>{{selected.Inches}}"</a>, <a href='#' editable-text='selected.Weight' onaftersave='updateData("Players","Weight",selected.Weight)'>{{selected.Weight}} </a>lb</p>
           <p>Year: {{selected.Year}}</p>
           <p>Coach: {{selected.Coach_name}}</p>
         </div>
 
         <div class="summary">
           <p>Uniform #: 18</p>
-          <p>Wheaton North</p>
-          <p>Wheaton, IL</p>
+          <p>{{selected.HS_name}}</p>
+          <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
         </div>
 
         <div class="btn-group" uib-dropdown>
-          <button id="single-button" class="btn btn-primary"
+          <button id="single-button" class="btn btn-primary popover-trigger"
             type="button"
             uib-dropdown-toggle
-            uib-popover-template="newListPopover.templateUrl"
+            uib-popover-template='"new_list_popover.html"'
             popover-placement="left"
-            popover-title="{{newListPopover.title}}"
+            popover-title="New List"
             popover-trigger="none"
             popover-is-open="newListPopoverIsOpen">
             Add to list <span class="caret"></span>
@@ -123,94 +133,118 @@
 
       <!-- Be careful here - how are multiple offers displaying  -->
       <div id="offer-summary" >
-        <img class="offer-icon" ng-repeat="offer_url in selected.offers" ng-src="{{offer_url}}">
+        <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
       </div>
     </div>
 
-    <uib-tabset id="profile-tabs" activeloelwfoeow="activeJustified" justified="true">
+    <uib-tabset id="profile-tabs" justified="true">
       <uib-tab index="0" heading="Bio">
-        <div id="bio" class="tab">
-          <div class="summary">
-            <h4>Contact Information</h4>
-            <table>
-              <tr>
-                <td>Phone: </td>
-                <td>{{phoneFormat(selected.Phone)}}</td>
-              </tr>
-              <tr>
-                <td>Email: </td>
-                <td>{{selected.Email}}</td>
-              </tr>
-              <tr>
-                <td>Address: </td>
-                <td>{{selected.Address}}
-                  <br>{{selected.Hometown_city}}, {{selected.Hometown_state}} {{selected.Hometown_zip}}</td>
-              </tr>
-            </table>
+        <div id="bio" class="tab row">
+          <div class="col-md-6">
+            <div class="info-section">
+              <h4>Contact Information</h4>
+              <table class="info-table">
+                <tr>
+                  <td>Phone</td>
+                  <td><a href='#' editable-tel='selected.Phone' e-pattern="\d{10}" e-title="10 digit phone number" onaftersave='updateData("Players","Phone",selected.Phone)'>{{phoneFormat(selected.Phone)}}</a></td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td><a href='#' editable-email='selected.Email' onaftersave='updateData("Players","Email",selected.Email)'><span class="info-long">{{selected.Email}}</span></a></td>
+                </tr>
+                <tr>
+                  <td>Address</td>
+                  <td><a href='#' editable-text='selected.Address' onaftersave='updateData("Players","Address",selected.Address)'>{{selected.Address}}</a>
+                  <br><a href='#' editable-text='selected.Hometown_city' onaftersave='updateData("Players","Hometown_city",selected.Hometown_city)'>{{selected.Hometown_city}}</a>, <a href='#' editable-text='selected.Hometown_state' onaftersave='updateData("Players","Hometown_state",selected.Hometown_state)'>{{selected.Hometown_state}} </a><a href='#' editable-text='selected.Hometown_zip' onaftersave='updateData("Players","Hometown_zip",selected.Hometown_zip)'>{{selected.Hometown_zip}}</a></td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="info-section">
+              <h4>High School</h4>
+              <table class="info-table">
+                <tr>
+                  <td>Name</td>
+                  <td>{{selected.HS_name}}</td>
+                </tr>
+                <tr>
+                  <td>Address</td>
+                  <td>{{selected.HS_city}}, {{selected.HS_state}} {{selected.HS_zip}}</td>
+                </tr>
+                <tr>
+                  <td>Phone</td>
+                  <td>{{phoneFormat(selected.HS_phone)}}</td>
+                </tr>
+                <tr>
+                  <td>GPA</td>
+                  <td><a href='#' editable-text='selected.GPA' onaftersave='updateData("Players","GPA",selected.GPA)'>{{selected.GPA}}</a></td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="info-section">
+              <h4>Connections</h4>
+              <p ng-if="selected.connections.length == 0">No connections</p>
+              <ul ng-if="selected.connections.length > 0">
+                <li ng-repeat="c in selected.connections">{{c}}</li>
+              </ul>
+            </div>
           </div>
 
-          <div class="summary">
-            <h4>High School</h4>
-            <table>
-              <tr>
-                <td>Name: </td>
-                <td>{{selected.HS_name}}</td>
-              </tr>
-              <tr>
-                <td>Positions: </td>
-                <td>QB, RB</td>
-              </tr>
-              <tr>
-                <td>GPA: </td>
-                <td>{{selected.GPA}}</td>
-              </tr>
-              <tr>
-                <td>Record: </td>
-                <td>10-2</td>
-              </tr>
-            </table>
-          </div>
+          <div class="col-md-6">
+            <div class="info-section">
+              <h4>Family</h4>
+              <table class="info-table">
+                <tr>
+                  <td>Parent 1</td>
+                  <td><a href='#' editable-text='selected.Parent1' onaftersave='updateData("Players","Parent1",selected.Parent1)'>{{selected.Parent1}}</a></td>
+                </tr>
+                <tr>
+                  <td>Parent 2</td>
+                  <td><a href='#' editable-text='selected.Parent2' onaftersave='updateData("Players","Parent2",selected.Parent2)'>{{selected.Parent2}}</a></td>
+                </tr>
+                <tr>
+                  <td>Home</td>
+                  <td><a href='#' editable-text='selected.Hometown_city' onaftersave='updateData("Players","Hometown_city",selected.Hometown_city)'>{{selected.Hometown_city}}</a>, <a href='#' editable-text='selected.Hometown_state' onaftersave='updateData("Players","Hometown_state",selected.Hometown_state)'>{{selected.Hometown_state}}</a></td>
+                </tr>
+                <tr>
+                  <td>SES</td>
+                  <td>{{selected.SES}}</td>
+                </tr>
+                <tr>
+                  <td>Education</td>
+                  <td>{{selected.Parental_education}}</td>
+                </tr>
+              </table>
+            </div>
 
-          <div class="summary">
-            <h4>Family</h4>
-            <table>
-              <tr>
-                <td>Parent 1: </td>
-                <td>{{selected.Parent1}}</td>
-              </tr>
-              <tr>
-                <td>Parent 2: </td>
-                <td>{{selected.Parent2}}</td>
-              </tr>
-              <tr>
-                <td>Home: </td>
-                <td>{{selected.Hometown_city}}, {{selected.Hometown_state}}</td>
-              </tr>
-              <tr>
-                <td>SES: </td>
-                <td>Middle</td>
-              </tr>
-            </table>
+            <div class="info-section">
+              <h4>Visits</h4>
+              <p ng-if="selected.Visits == 0 && selected.Visits_overnight == '0' && selected.Attended_camp == '0'">No visits</p>
+              <table class="table table-condensed" ng-if="selected.Visits > 0 || selected.Visits_overnight != '0' || selected.Attended_camp != '0'">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-if="selected.Visits_overnight == '1'">
+                    <td>5/26/2016</td>
+                    <td>Overnight</td>
+                  </tr>
+                  <tr ng-if="selected.Attended_camp == '1'">
+                    <td>5/24/2016</td>
+                    <td>Camp</td>
+                  </tr>
+                  <tr ng-repeat="i in _.range(selected.Visits) track by $index">
+                    <td>5/{{1 + i*6}}/2016</td>
+                    <td>Regular</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
           </div>
-
-          <div class="summary">
-            <h4>Connections</h4>
-            <table>
-              <tr>
-                <td>Legacy: </td>
-                <td>{{boolToText(selected.Legacy)}}</td>
-              </tr>
-              <tr>
-                <td>Sibling: </td>
-                <td>No</td>
-              </tr>
-              <tr>
-                <td>Other: </td>
-                <td>N/A</td>
-              </tr>
-            </table>
-          </div>
-
         </div>
       </uib-tab>
       <uib-tab index="1" heading="Stats">
@@ -235,27 +269,31 @@
 
         <form>
           <div class="form-group row">
-            <label class="col-sm-2 form-control-label">First Name</label>
-            <div class="col-sm-5">
+            <label class="col-sm-1 form-control-label">First Name</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" ng-model='firstName' placeholder="John">
             </div>
-          </div>
-          <div class="form-group row">
-            <label class="col-sm-2 form-control-label">Last Name</label>
-            <div class="col-sm-5">
+
+            <label class="col-sm-1 form-control-label">Last Name</label>
+            <div class="col-sm-4">
               <input type="text" class="form-control" ng-model='lastName' placeholder="Smith">
             </div>
           </div>
 
           <div class='form group row'>
-            <label class="col-sm-2 form-control-label">Zcruit score</label>
-            <rzslider class='col-sm-5' rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+            <label class="col-sm-2 form-control-label">Z-Score</label>
+            <div class='col-sm-5'>
+            <rzslider rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
+            <br><br>
+            <input type="checkbox" ng-model="checkboxModel.includePredicted">
+            <label>Include possible Z-Score</label>
+            </div>
           </div>
 
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Status</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel" extra-settings="settings_dropdown"></div>
+              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel"></div>
             </div>
           </div>
 
@@ -272,9 +310,32 @@
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Year</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel" extra-settings="settings_dropdown"></div>
+              <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel"></div>
             </div>
           </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">State</label>
+            <div class="col-sm-5">
+              <div ng-dropdown-multiselect="" options="stateData" selected-model="stateModel" extra-settings="settings_dropdown"></div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">Area Coach</label>
+            <div class="col-sm-5">
+              <div ng-dropdown-multiselect="" options="coachData" selected-model="coachModel"></div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">High School</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
+            </div>
+          </div>
+
+        <div ng-show="advancedFilters">
          <div class='form group row'>
             <label class="col-sm-2 form-control-label">Height</label>
             <rzslider class='col-sm-5' rz-slider-model="heightSlider.minValue" rz-slider-high="heightSlider.maxValue" rz-slider-options="heightSlider.options"></rzslider>
@@ -285,42 +346,63 @@
             <rzslider class='col-sm-5' rz-slider-model="weightSlider.minValue" rz-slider-high="weightSlider.maxValue" rz-slider-options="weightSlider.options"></rzslider>
           </div>
 
-         <div class="form-group row">
-            <label class="col-sm-2 form-control-label">State</label>
-            <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="stateData" selected-model="stateModel" extra-settings="settings_dropdown"></div>
-            </div>
-          </div>
-
-         <div class="form-group row">
-            <label class="col-sm-2 form-control-label">Area Coach</label>
-            <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="coachData" selected-model="coachModel" extra-settings="settings_dropdown"></div>
-            </div>
-          </div>
-
         <div class='form group row'>
             <label class="col-sm-2 form-control-label">GPA</label>
             <rzslider class='col-sm-5' rz-slider-model="gpaSlider.minValue" rz-slider-high="gpaSlider.maxValue" rz-slider-options="gpaSlider.options"></rzslider>
           </div>
-
-        <div class="form-group row">
-            <label class="col-sm-2 form-control-label">High School</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
-            </div>
-          </div>
+        </div>
 
         </form>
         </div>
         <div class="modal-footer">
+            <button id="advancedFiltersButton" style="float: left;" class="btn btn-info" type="button" ng-click="showAdvancedFilters()">
+                <span ng-show="advancedFilters">Hide</span>
+                <span ng-show="!advancedFilters">Show</span>
+                Advanced Filters
+            </button>
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
-
-
-
     </script>
+</div>
+
+<!-- Save search modal -->
+<div style="visibility: hidden">
+  <script type="text/ng-template" id="saveQuery.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Save search</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="input-group">
+        <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="Search name...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+</div>
+
+<!-- Saved searches modal -->
+<div style="visibility: hidden">
+    <script type="text/ng-template" id="pastQuery.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Saved searches</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="list-group">
+        <button type="button" class="list-group-item" ng-repeat="q in queries">{{q.name}}</button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
 </div>
 
 </body>

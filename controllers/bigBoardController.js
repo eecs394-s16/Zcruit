@@ -3,6 +3,24 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   $scope.openSearchProfile = function(){
     window.open('search_profile.html','_self');
   }
+
+  $scope.zscoreColor = function(score) {
+    if (score >= 8.0) {
+      return "bright-green";
+    } else if (score >= 6.5) {
+      return "green";
+    } else if (score > 5.0) {
+      return "light-green";
+    } else if (score === 5.0) {
+      return "yellow";
+    } else if (score >= 3.5) {
+      return "light-red";
+    } else if (score >= 2.0) {
+      return "red";
+    }
+    return "bright-red";
+  };
+  
   // Begin List JS
   $scope.showLists = false;
   $scope.openMyLists = function(){
@@ -20,6 +38,17 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   });
 
   // End List JS
+  
+  $scope.height = function(heightInfo, type) {
+
+    if (type == 1) {
+      // get foot
+      return Math.floor(heightInfo / 12)
+    } else {
+      // get inches
+      return (heightInfo % 12)
+    }
+  };
 
   $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT Position_name FROM Positions'))
   .then(function(response){

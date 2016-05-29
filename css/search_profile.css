@@ -6,11 +6,6 @@ body {
   height: 768px;
 }
 
-tr,
-td {
-  padding: 0 2em .5em 0;
-}
-
 #resultlist {
   display: inline-block;
   float: left;
@@ -59,8 +54,40 @@ td {
   line-height: 250%;
   height: 15%;
   text-align: center;
+}
+
+.status-purple {
   color: white;
   background: purple;
+}
+
+.status-green {
+  color: white;
+  background: green;
+}
+
+.status-gold {
+  background: gold;
+}
+
+.status-blue {
+  color: white;
+  background: blue;
+}
+
+.status-grey {
+  color: white;
+  background: grey;
+}
+
+.status-lilac {
+  color: white;
+  background: #C8A2C8;
+}
+
+.status-red {
+  color: white;
+  background: red;
 }
 
 #glanceinfo {
@@ -74,33 +101,73 @@ td {
 }
 
 #name {
-  font-size: 1.7em;
+  font-size: 1.5em;
   font-weight: bold;
-  margin-bottom: 3%;
+  padding: 1.5% 2%;
 }
 
 #profile-zscore-wrapper {
   display: inline-block;
-  width: 3.4em;
-  height: 1.7em;
+  position: relative;
+  width: 3.8em;
+  height: 1.75em;
   vertical-align: middle;
 }
 
 .profile-zscore {
+  position: relative;
   float: left;
   height: 100%;
   width: 50%;
-  font-size: 1em;
-  line-height: 1em;
+  font-size: 0.9em;
+  line-height: 0.9em;
   font-weight: bold;
-  display: -webkit-flex;
   display: flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
 
-.profile-zscore:nth-child(2) {
-  border-left: 1px solid grey;
+/* Style the first z-score if there's two of them */
+.double-zscore-left {
+  width: 42.5%;
+  padding-left: 7%;
+}
+
+/* Shift the second z-score so it looks good */
+.double-zscore-right {
+  width: 57.5%;
+  padding-left: 10%;
+}
+
+/* Adds the arrow onto the first of two z-scores */
+.double-zscore-left:after, .double-zscore-left:before {
+  left: 100%;
+  top: 50%;
+  border: solid transparent;
+  content: " ";
+  z-index: 1;
+  height: 0;
+  width: 0;
+  position: absolute;
+  pointer-events: none;
+}
+.double-zscore-left:after {
+  border-left-color: inherit;
+  border-width: 22px 0 22px 10px;
+  margin-top: -22px;
+}
+.double-zscore-left:before {
+  border-left-color: black;
+  border-width: 22.7px 0 22.7px 11px;
+  margin-top: -22.7px;
+}
+
+#visits-remaining {
+  position: absolute;
+  width: 100%;
+  top: -40%;
+  font-size: 0.5em;
+  text-align: center;
 }
 
 #offer-summary {
@@ -119,7 +186,6 @@ td {
   height: 3em;
   margin: 8px 0;
   vertical-align: top;
-  background-color: blue;
 }
 
 #profile-tabs {
@@ -132,9 +198,39 @@ td {
   padding: 2%;
 }
 
-.popover {
+.popover-trigger {
+  cursor: pointer;
+}
+
+/* Styles for saved search popover*/
+.list-group {
+  margin-bottom: 0;
+}
+.list-group-item {
+  border-right: none;
+  border-left: none;
+}
+.list-group-item:first-child {
+  border-top: none;
+}
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+#saved-search-icon + .popover {
+  width: 30vw;
+}
+#saved-search-icon + .popover .popover-content {
+  padding: 0;
+}
+
+#profile-zscore-wrapper + .popover {
   width: 35vw;
   max-width: 100vw;
+}
+
+#profile-zscore-wrapper + .popover .playerCard {
+  border: none;
 }
 
 .titleCard {
@@ -146,9 +242,73 @@ td {
   border-style: solid;
   position: relative;
   margin-top: 2%;
-  font-weight: bold; 
+  font-weight: bold;
   font-size: 3vw;
   margin-top: 0;
   border-width: 0;
   border-bottom-width: 1px;
+}
+
+.tab-pane {
+  height: 54vh;
+  overflow: scroll;
+}
+
+.tab {
+  width: 100%;
+  padding: 1% 2%;
+}
+
+.info-table {
+  table-layout: fixed;
+  width: 100%;
+}
+
+td:first-child {
+  width: 32%;
+  font-weight: bold;
+}
+
+.info-long {
+  word-wrap: break-word;
+}
+
+.info-section {
+  width: 100%;
+  margin-top: 10%;
+  margin-bottom: 2%;
+}
+
+.info-section:first-child {
+  margin-top: 0;
+  margin-bottom: 2%;
+}
+
+#topcard .editable-input {
+  width: 50% !important;
+}
+
+#bio .editable-wrap {
+  margin-left: -50%;
+  width: 100%;
+}
+
+#bio .editable-input {
+  width: 100% !important;
+}
+
+.edit-in-place span {
+  cursor: pointer;
+}
+
+.edit-in-place input {
+  display: none;
+}
+
+.edit-in-place.active span {
+  display: none;
+}
+
+.edit-in-place.active input {
+  display: inline-block;
 }

@@ -6,12 +6,14 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.5/angular-touch.min.js"></script>
   <link href='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css' type='text/css' rel='stylesheet'>
   <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
   <script src='../lib/lodash.js'></script>
   <script src='../lib/angularjs-dropdown-multiselect.js'></script>
+  <script src='../lib/xeditable.js'></script>
+  <link href='../lib/xeditable.css' rel='stylesheet'>
   <script src="../zcruit.js"></script>
   <script src="../controllers/bigBoardController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -77,15 +79,13 @@
             <div class="player-info-outer">
               <div class="player-info-inner">
                 <div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-                <div class="player-info-stats">{{p.Position_name}} - {{p.Height_feet}}'{{p.Height_inches}}" {{p.Weight}}lb</div>
+                <div class="player-info-stats">{{p.Position_name}} - {{height(p.Height, 1)}}'{{height(p.Height, 2)}}" {{p.Weight}}lb</div>
                 <div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
               </div>
             </div>
             <div class="zscore-wrapper">
-              <div class="zscore-flex" 
-              ng-class="{red: p.Zscore < 5.5, yellow: (p.Zscore < 7.0 && p.Zscore >= 5.5), green: p.Zscore >=7.0}">{{p.Zscore}}</div>
-              <div class="zscore-flex" 
-              ng-class="{red: p.Zscore2 < 5.5, yellow: (p.Zscore2 < 7.0 && p.Zscore2 >= 5.5), green: p.Zscore2 >=7.0}" ng-if="p.Visits < 2">{{p.Zscore2}}</div>
+              <div class="zscore-flex" ng-class="zscoreColor(p.Zscore)">{{p.Zscore}}</div>
+              <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
             </div>
           </div>
         </div>
