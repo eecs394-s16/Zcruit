@@ -95,9 +95,9 @@
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
           <div id="profile-zscore-wrapper"
-            uib-popover-template='zscorePopover.templateUrl'
-            popover-title="{{zscorePopover.title}}"
-            popover-placement="bottom-right"
+            uib-popover-template='"zscore_popover.html"'
+            popover-title="Zcruit Score"
+            popover-placement="left-top"
             popover-trigger="outsideClick">
             <div id="visits-remaining" ng-if="selected.Visits < 2">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
             <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
@@ -122,9 +122,9 @@
           <button id="single-button" class="btn btn-primary"
             type="button"
             uib-dropdown-toggle
-            uib-popover-template="newListPopover.templateUrl"
+            uib-popover-template='"new_list_popover.html"'
             popover-placement="left"
-            popover-title="{{newListPopover.title}}"
+            popover-title="New List"
             popover-trigger="none"
             popover-is-open="newListPopoverIsOpen">
             Add to list <span class="caret"></span>

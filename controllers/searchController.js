@@ -243,16 +243,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   getSavedLists();
 
-  $scope.newListPopover = {
-    templateUrl: 'new_list_popover.html',
-    title: "New List"
-  };
-
-  $scope.zscorePopover = {
-    templateUrl: 'zscore_popover.html',
-    title: "Zcruit Score"
-  }
-
   $scope.openBigBoard = function() {
     window.open('big_board.html', '_self');
   }
