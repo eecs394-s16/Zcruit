@@ -12,6 +12,8 @@
   <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
   <script src='../lib/lodash.js'></script>
   <script src='../lib/angularjs-dropdown-multiselect.js'></script>
+  <script src='../lib/xeditable.js'></script>
+  <link href='../lib/xeditable.css' rel='stylesheet'>
   <script src="../zcruit.js"></script>
   <script src="../controllers/searchController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -64,7 +66,7 @@
 			<div class="player-info-outer">
 			  <div class="player-info-inner">
   				<div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>
-  				<div class="player-info-stats">{{p.Position_name}} - {{height(p.Height, 1)}}'{{height(p.Height, 2)}}" {{p.Weight}}lb</div>
+  				<div class="player-info-stats">{{p.Position_name}} - {{p.Feet}}' {{p.Inches}}" {{p.Weight}}lb</div>
   				<div class="player-info-coach">{{p.HS_city}}, {{p.HS_state}} - {{initials(p.Coach_name)}}</div>
         </div>
 			</div>
@@ -99,7 +101,7 @@
 
         <div class="summary">
           <p>{{selected.Position_name}}</p>
-          <p>{{height(selected.Height, 1)}}'{{height(selected.Height, 2)}}", {{selected.Weight}}lb.</p>
+          <p><a href='#' editable-text='selected.Feet' onaftersave='updateData("Players","Height",selected.Feet)'>{{selected.Feet}}</a>'<a href='#' editable-text='selected.Inches' onaftersave='updateData("Players","Height",selected.Inches)'>{{selected.Inches}}"</a>, <a href='#' editable-text='selected.Weight' onaftersave='updateData("Players","Weight",selected.Weight)'>{{selected.Weight}} </a>lb</p>
           <p>Year: {{selected.Year}}</p>
           <p>Coach: {{selected.Coach_name}}</p>
         </div>
@@ -144,15 +146,16 @@
               <table class="info-table">
                 <tr>
                   <td>Phone</td>
-                  <td>{{phoneFormat(selected.Phone)}}</td>
+                  <td><a href='#' editable-tel='selected.Phone' e-pattern="\d{10}" e-title="10 digit phone number" onaftersave='updateData("Players","Phone",selected.Phone)'>{{phoneFormat(selected.Phone)}}</a></td>
                 </tr>
                 <tr>
                   <td>Email</td>
-                  <td><span class="info-long">{{selected.Email}}</span></td>
+                  <td><a href='#' editable-email='selected.Email' onaftersave='updateData("Players","Email",selected.Email)'><span class="info-long">{{selected.Email}}</span></a></td>
                 </tr>
                 <tr>
                   <td>Address</td>
-                  <td>{{selected.Address}}<br>{{selected.Hometown_city}}, {{selected.Hometown_state}} {{selected.Hometown_zip}}</td>
+                  <td><a href='#' editable-text='selected.Address' onaftersave='updateData("Players","Address",selected.Address)'>{{selected.Address}}</a>
+                  <br><a href='#' editable-text='selected.Hometown_city' onaftersave='updateData("Players","Hometown_city",selected.Hometown_city)'>{{selected.Hometown_city}}</a>, <a href='#' editable-text='selected.Hometown_state' onaftersave='updateData("Players","Hometown_state",selected.Hometown_state)'>{{selected.Hometown_state}} </a><a href='#' editable-text='selected.Hometown_zip' onaftersave='updateData("Players","Hometown_zip",selected.Hometown_zip)'>{{selected.Hometown_zip}}</a></td>
                 </tr>
               </table>
             </div>
@@ -174,7 +177,7 @@
                 </tr>
                 <tr>
                   <td>GPA</td>
-                  <td>{{selected.GPA}}</td>
+                  <td><a href='#' editable-text='selected.GPA' onaftersave='updateData("Players","GPA",selected.GPA)'>{{selected.GPA}}</a></td>
                 </tr>
               </table>
             </div>
@@ -194,15 +197,15 @@
               <table class="info-table">
                 <tr>
                   <td>Parent 1</td>
-                  <td>{{selected.Parent1}}</td>
+                  <td><a href='#' editable-text='selected.Parent1' onaftersave='updateData("Players","Parent1",selected.Parent1)'>{{selected.Parent1}}</a></td>
                 </tr>
                 <tr>
                   <td>Parent 2</td>
-                  <td>{{selected.Parent2}}</td>
+                  <td><a href='#' editable-text='selected.Parent2' onaftersave='updateData("Players","Parent2",selected.Parent2)'>{{selected.Parent2}}</a></td>
                 </tr>
                 <tr>
                   <td>Home</td>
-                  <td>{{selected.Hometown_city}}, {{selected.Hometown_state}}</td>
+                  <td><a href='#' editable-text='selected.Hometown_city' onaftersave='updateData("Players","Hometown_city",selected.Hometown_city)'>{{selected.Hometown_city}}</a>, <a href='#' editable-text='selected.Hometown_state' onaftersave='updateData("Players","Hometown_state",selected.Hometown_state)'>{{selected.Hometown_state}}</a></td>
                 </tr>
                 <tr>
                   <td>SES</td>

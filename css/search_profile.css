@@ -238,7 +238,7 @@ body {
   border-style: solid;
   position: relative;
   margin-top: 2%;
-  font-weight: bold; 
+  font-weight: bold;
   font-size: 3vw;
   margin-top: 0;
   border-width: 0;
@@ -271,10 +271,40 @@ td:first-child {
 
 .info-section {
   width: 100%;
-  padding-top: 5%;
-}
-
-.info-section-header {
   margin-top: 10%;
   margin-bottom: 2%;
+}
+
+.info-section:first-child {
+  margin-top: 0;
+  margin-bottom: 2%;
+}
+
+#topcard .editable-input {
+  width: 50% !important;
+}
+
+#bio .editable-wrap {
+  margin-left: -50%;
+  width: 100%;
+}
+
+#bio .editable-input {
+  width: 100% !important;
+}
+
+.edit-in-place span {
+  cursor: pointer;
+}
+
+.edit-in-place input {
+  display: none;
+}
+
+.edit-in-place.active span {
+  display: none;
+}
+
+.edit-in-place.active input {
+  display: inline-block;
 }
