@@ -72,7 +72,7 @@
 			</div>
       <div class="zscore-wrapper">
       	<div class="zscore-flex" ng-class="zscoreColor(p.Zscore)">{{p.Zscore}}</div>
-        <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
+        <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="zscoreWillGrow(p)"></div>
       </div>
 		</div>
   </div>
@@ -93,9 +93,9 @@
             popover-title="Zcruit Score"
             popover-placement="left-top"
             popover-trigger="outsideClick">
-            <div id="visits-remaining" ng-if="selected.Visits < 2">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
-            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
-            <div ng-if="selected.Visits < 2" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': selected.Visits < 2}]">{{selected.Zscore2}}</div>
+            <div id="visits-remaining" ng-if="zscoreWillGrow(selected)">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
+            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': zscoreWillGrow(selected)}]">{{selected.Zscore}}</div>
+            <div ng-if="zscoreWillGrow(selected)" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': zscoreWillGrow(selected)}]">{{selected.Zscore2}}</div>
           </div>
         </div>
 
