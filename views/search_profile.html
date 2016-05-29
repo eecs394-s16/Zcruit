@@ -34,54 +34,25 @@
         <img src="../img/search.png">
         <div>Search</div>
       </div>
+      <div class="sidebar-icon" ng-click="openSaveModal()">
+        <img src="../img/save.png">
+        <div>Save search</div>
+      </div>
+      <div id="saved-search-icon" class="sidebar-icon"
+          uib-popover-template='"saved_search_popover.html"'
+          popover-title="Saved searches"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showSavedSearchPopover">
+        <img src="../img/saved-search.png">
+        <div>Saved<br>searches</div>
+      </div>
       <div class="sidebar-icon">
         <img src="../img/sort.png">
         <div>Sort</div>
       </div>
-      <div class="sidebar-icon" ng-click="openSaveModal()">
-        <img src="../img/save.png">
-        <div>Save list</div>
-      </div>
-      <div class="sidebar-icon" ng-click="openPastQueryModal()">
-        <img src="../img/displayQuery.png">
-        <div>Past Searches</div>
-      </div>
-
     </div>
   </div>
-
-<div style="visibility: hidden">
-    <script type="text/ng-template" id="saveQuery.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Create new list</h3>
-        </div>
-
-        <div class="modal-body">
-          <div class="input-group">
-              <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="New list name...">
-          </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-    </script>
-</div>
-
-<div style="visibility: hidden">
-    <script type="text/ng-template" id="pastQuery.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Past Searches</h3>
-        </div>
-
-        <div class="modal-body" ng-repeat = "q in pastQuery">   
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-        </div>
-    </script>
-</div>
 
   <div id="resultlist">
     <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
@@ -103,6 +74,7 @@
       </div>
 		</div>
   </div>
+
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
@@ -367,10 +339,46 @@
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
-
-
-
     </script>
+</div>
+
+<!-- Save search modal -->
+<div style="visibility: hidden">
+  <script type="text/ng-template" id="saveQuery.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Save search</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="input-group">
+        <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="Search name...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+</div>
+
+<!-- Saved searches modal -->
+<div style="visibility: hidden">
+    <script type="text/ng-template" id="pastQuery.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Saved searches</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="list-group">
+        <button type="button" class="list-group-item" ng-repeat="q in queries">{{q.name}}</button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
 </div>
 
 </body>

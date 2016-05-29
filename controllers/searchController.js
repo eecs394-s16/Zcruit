@@ -1,17 +1,4 @@
 var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
-angular.module('zcruit', [])
-    .service('sharedProperties', function () {
-        var property = [];
-
-        return {
-            getProperty: function () {
-                return property;
-            },
-            setProperty: function(value) {
-                property = value;
-            }
-        };
-    });
 
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
@@ -109,7 +96,11 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
      $scope.newListPopoverIsOpen = false;
   };
 
-  $scope.pastQuery = sharedProperties.setProperty(runQuery('SELECT name FROM SavedQueries', function() {}));
+  $scope.showSavedSearchPopover = false;
+  $scope.runSavedSearch = function(search) {
+    runSearch(search.query);
+    $scope.showSavedSearchPopover = false;
+  };
  
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
@@ -121,6 +112,11 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         console.log("Query error: " + response);
       }
     });
+  }
+
+  // Returns a promise that resolves to the response object
+  function runQueryAsync(queryString) {
+    return $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString));
   }
 
   // Update the search results with a query string
@@ -182,7 +178,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       });
       // console.log($scope.players);
     });
-}
+  }
 
   // Retrieve the saved lists for this coach from the server
   function getSavedLists() {
@@ -238,35 +234,41 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         }
       }
     });
-
-    $scope.openPastQueryModal = function (size) {
-      var modalInstance = $uibModal.open({
-        animation: true,
-        templateUrl: 'pastQuery.html',
-        controller: 'pastQueryCtrl',
-        size: size,
-        resolve: {
-          items: function () {
-            return $scope.items;
-          }
-        }
+    modalInstance.result.then(function (queryName) {
+      var query = buildSearchQuery(returnParams);
+      console.log(query);
+      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + query +"')";
+      console.log(queryString);
+      runQuery(queryString,
+      function() {
+        console.log("saved into table");
       });
+    }, function () {
+      $log.info('Modal dismissed at: ' + new Date());
+    });
+  };
 
-      // modalInstance.result.then(function (queryName) {
-      //   var query = buildSearchQuery(returnParams);
-      //   console.log(query)
-      //   var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + query +"')";
-      //   console.log(queryString)
-      //   runQuery(queryString,
-      //   function() {
-      //     console.log("saved into table")
-      //   });
-      // }, function () {
-      //   $log.info('Modal dismissed at: ' + new Date());
-      // });
+  $scope.openPastQueryModal = function (size) {
+    var modalInstance = $uibModal.open({
+      animation: true,
+      templateUrl: 'pastQuery.html',
+      controller: 'pastQueryCtrl',
+      size: size,
+      resolve: {
+        // This actually seems to resolve and return the promise D:
+        queryResponse: function () {
+          return runQueryAsync("SELECT * FROM SavedQueries");
+        }
+      }
+    });
   };
 
   runSearch(defaultSearch);
+
+  runQuery("SELECT * FROM SavedQueries",
+    function(savedSearches) {
+      $scope.savedSearches = savedSearches;
+    });
 
   getSavedLists();
 
@@ -562,20 +564,20 @@ angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModal
 
 });
 
-angular.module('zcruit').controller('pastQueryCtrl', function ($scope, $uibModalInstance) {
- //get the list of all query names 
- $scope.pastQuery = sharedProperties.getProperty();
- $scope.ok = function () {
+angular.module('zcruit').controller('pastQueryCtrl', function ($scope, $uibModalInstance, queryResponse) {
+  if (queryResponse.status === 200) {
+    $scope.queries = queryResponse.data;
+  } else {
+    console.log("Query error: " + queryResponse);
+  }
+
+  $scope.ok = function () {
     var queryName = $scope.newListName; 
     console.log(queryName);
     $uibModalInstance.close(queryName);
- };
-
- $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
   };
 
+  $scope.cancel = function () {
+    $uibModalInstance.dismiss('cancel');
+  };
 });
-
-
-
