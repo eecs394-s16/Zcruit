@@ -96,9 +96,11 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
      $scope.newListPopoverIsOpen = false;
   };
 
+
   $scope.showSavedSearchPopover = false;
   $scope.runSavedSearch = function(search) {
-    runSearch(search.query);
+    searchParams = JSON.parse(search.query);
+    runSearch(buildSearchQuery(searchParams));
     $scope.showSavedSearchPopover = false;
   };
  
@@ -200,6 +202,14 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   }
 
+  // Retrieve the saved queries from the server
+  function getSavedQueries() {
+    runQuery("SELECT * FROM SavedQueries",
+      function(savedSearches) {
+        $scope.savedSearches = savedSearches;
+      });
+  }
+
   $scope.items = ['item1', 'item2', 'item3'];
 
   $scope.openSearchModal = function (size) {
@@ -215,7 +225,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
 
-    modalInstance.result.then(function (searchParams) {
+    modalInstance.result.then(function() {
       runSearch(buildSearchQuery(searchParams));
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -235,13 +245,11 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
     modalInstance.result.then(function (queryName) {
-      var query = buildSearchQuery(returnParams);
-      console.log(query);
-      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + query +"')";
+      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + JSON.stringify(searchParams) +"')";
       console.log(queryString);
-      runQuery(queryString,
-      function() {
+      runQuery(queryString, function() {
         console.log("saved into table");
+        getSavedQueries();
       });
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -265,12 +273,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   runSearch(defaultSearch);
 
-  runQuery("SELECT * FROM SavedQueries",
-    function(savedSearches) {
-      $scope.savedSearches = savedSearches;
-    });
-
   getSavedLists();
+  getSavedQueries();
 
   $scope.newListPopover = {
     templateUrl: 'new_list_popover.html',
@@ -353,8 +357,8 @@ function buildSearchQuery(params) {
 // Please note that $uibModalInstance represents a modal window (instance) dependency.
 // It is not the same as the $uibModal service used above.
 
-// Make the returnParams a global variable so the previous search is saved after closing modal
-var returnParams = {
+// Make the searchParams a global variable so the previous search is saved after closing modal
+var searchParams = {
       minZscore : 0,
       maxZscore : 10,
       minGpa : 1.0,
@@ -375,9 +379,11 @@ var returnParams = {
     };
 
 angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
-
-
   $scope.items = items;
+
+  $scope.firstName = searchParams.firstName;
+  $scope.lastName = searchParams.lastName;
+  $scope.highSchool = searchParams.highSchool;
 
   $scope.advancedFilters = false;
   $scope.showAdvancedFilters = function () {
@@ -390,8 +396,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   //Range slider config
   $scope.zscoreSlider = {
-      minValue: returnParams.minZscore,
-      maxValue: returnParams.maxZscore,
+      minValue: searchParams.minZscore,
+      maxValue: searchParams.maxZscore,
       options: {
           floor:0,
           ceil: 10,
@@ -402,16 +408,16 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
   $scope.checkboxModel = {
-       includePredicted : returnParams.includePredicted,
+       includePredicted : searchParams.includePredicted,
      };
 
 
   $scope.settings_dropdown = {
-    scrollableHeight: '150px',
+    scrollableHeight: '250px',
     scrollable: true
   };
 
-  $scope.positionModel = returnParams.positions;
+  $scope.positionModel = searchParams.positions;
   $scope.positionData = [
     {id: 'QB', label: "QB"},
     {id: "RB", label: "RB"},
@@ -431,7 +437,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id: "Walk on", label: "Walk on"}
   ];
 
-  $scope.statusModel = returnParams.statuses;
+  $scope.statusModel = searchParams.statuses;
   $scope.statusData = [
     {id:0, label: "0 - Commit"},
     {id:1, label: "1 - Offer"},
@@ -442,7 +448,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:6, label: "6 - Reject"}
   ];
 
- $scope.yearModel = returnParams.year;
+ $scope.yearModel = searchParams.year;
   $scope.yearData = [
     {id:2015, label: 2015},
     {id:2016, label: 2016},
@@ -453,8 +459,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   ];
 
   $scope.heightSlider = {
-      minValue: returnParams.minHeight,
-      maxValue: returnParams.maxHeight,
+      minValue: searchParams.minHeight,
+      maxValue: searchParams.maxHeight,
       options: {
           floor:60,
           ceil: 84,
@@ -469,8 +475,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
   $scope.weightSlider = {
-      minValue: returnParams.minWeight,
-      maxValue: returnParams.maxWeight,
+      minValue: searchParams.minWeight,
+      maxValue: searchParams.maxWeight,
       options: {
           floor:150,
           ceil: 400,
@@ -480,7 +486,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
   };
 
 
- $scope.stateModel = returnParams.states;
+ $scope.stateModel = searchParams.states;
   $scope.stateData = [
     {id:"AL", label: "AL"},{id:"AK", label: "AK"},{id:"AZ", label: "AZ"},
     {id:"AR", label: "AR"},{id:"CA", label: "CA"},{id:"CO", label: "CO"},
@@ -500,7 +506,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     {id:"WY", label: "WY"},{id:"Other", label: "Other"}
   ];
 
- $scope.coachModel = returnParams.coaches;
+ $scope.coachModel = searchParams.coaches;
   $scope.coachData = [
     {id:1, label: "Fitz"},
     {id:2, label: "Morty"},
@@ -513,8 +519,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
 
   $scope.gpaSlider = {
-      minValue: returnParams.minGpa,
-      maxValue: returnParams.maxGpa,
+      minValue: searchParams.minGpa,
+      maxValue: searchParams.maxGpa,
       options: {
           floor:1.0,
           ceil: 4.0,
@@ -532,7 +538,7 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
 
   $scope.ok = function () {
     // build the object to return
-    returnParams = {
+    searchParams = {
       minZscore : $scope.zscoreSlider.minValue,
       maxZscore : $scope.zscoreSlider.maxValue,
       minGpa : $scope.gpaSlider.minValue,
@@ -551,8 +557,8 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
       coaches : $scope.coachModel,
       includePredicted: $scope.checkboxModel.includePredicted
     };
-    console.log(returnParams);
-    $uibModalInstance.close(returnParams);
+    console.log(searchParams);
+    $uibModalInstance.close();
   };
 
   $scope.cancel = function () {
