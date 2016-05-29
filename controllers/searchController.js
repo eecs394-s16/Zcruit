@@ -72,7 +72,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   $scope.zscoreWillGrow = function(player) {
-    if (player.Visits >= 2 || player.Attended_camp === "1" || player.Visits_overnight === "1") {
+    if (player && (player.Visits >= 2 || player.Attended_camp === "1" || player.Visits_overnight === "1")) {
       return false;
     }
     return true;
