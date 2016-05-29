@@ -171,9 +171,39 @@ td {
   padding: 2%;
 }
 
-.popover {
+/* Styles for saved search popover*/
+.list-group {
+  margin-bottom: 0;
+}
+
+.list-group-item {
+  border-right: none;
+  border-left: none;
+}
+
+.list-group-item:first-child {
+  border-top: none;
+}
+
+.list-group-item:last-child {
+  border-bottom: none;
+}
+
+#saved-search-icon + .popover {
+  width: 30vw;
+}
+
+#saved-search-icon + .popover .popover-content {
+  padding: 0;
+}
+
+#profile-zscore-wrapper + .popover {
   width: 35vw;
   max-width: 100vw;
+}
+
+#profile-zscore-wrapper + .popover .playerCard {
+  border: none;
 }
 
 .titleCard {
