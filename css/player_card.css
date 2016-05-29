@@ -28,6 +28,29 @@
   border-color: rgb(255,255,102);
 }
 
+/* Triangle ZScore Fix*/
+.bright-green-t {
+  border-color: #228B22;
+}
+.green-t {
+  border-color: #93c47d;
+}
+.light-green-t {
+  border-color: #93c47d;
+}
+.light-red-t {
+  border-color: #f4cccc;
+}
+.red-t {
+  border-color: #e06666;
+}
+.bright-red-t {
+  border-color: rgb(207,60,66);
+}
+.yellow-t {
+  border-color: rgb(255,255,102);
+}
+
 .playerCard {
   width: 100%;
   height: 10vh;

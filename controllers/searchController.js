@@ -71,6 +71,23 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     return "bright-red";
   };
 
+  $scope.zscoreColorT = function(score) {
+    if (score >= 8.0) {
+      return "bright-green-t";
+    } else if (score >= 6.5) {
+      return "green-t";
+    } else if (score > 5.0) {
+      return "light-green-t";
+    } else if (score === 5.0) {
+      return "yellow-t";
+    } else if (score >= 3.5) {
+      return "light-red-t";
+    } else if (score >= 2.0) {
+      return "red-t";
+    }
+    return "bright-red-t";
+  };
+
   $scope.statusText = function(status) {
     switch(status) {
       case "0":
