@@ -34,34 +34,25 @@
         <img src="../img/search.png">
         <div>Search</div>
       </div>
+      <div class="sidebar-icon" ng-click="openSaveModal()">
+        <img src="../img/save.png">
+        <div>Save search</div>
+      </div>
+      <div id="saved-search-icon" class="sidebar-icon"
+          uib-popover-template='"saved_search_popover.html"'
+          popover-title="Saved searches"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showSavedSearchPopover">
+        <img src="../img/saved-search.png">
+        <div>Saved<br>searches</div>
+      </div>
       <div class="sidebar-icon">
         <img src="../img/sort.png">
         <div>Sort</div>
       </div>
-      <div class="sidebar-icon" ng-click="openSaveModal()">
-        <img src="../img/save.png">
-        <div>Save list</div>
-      </div>
     </div>
   </div>
-
-<div style="visibility: hidden">
-    <script type="text/ng-template" id="saveQuery.html">
-        <div class="modal-header">
-            <h3 class="modal-title">Create new list</h3>
-        </div>
-
-        <div class="modal-body">
-          <div class="input-group">
-              <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="New list name...">
-          </div>
-        </div>
-        <div class="modal-footer">
-            <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-    </script>
-</div>
 
   <div id="resultlist">
     <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
@@ -83,6 +74,7 @@
       </div>
 		</div>
   </div>
+
   <div id="profile" ng-model="selected">
     <div id="topcard">
       <div id="image-box">
@@ -250,7 +242,6 @@
         <div class="modal-body">
 
         <form>
-
           <div class="form-group row">
             <label class="col-sm-1 form-control-label">First Name</label>
             <div class="col-sm-4">
@@ -269,15 +260,14 @@
             <rzslider rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
             <br><br>
             <input type="checkbox" ng-model="checkboxModel.includePredicted">
-            <label>Include Ultimate Z-Score</label>
+            <label>Include possible Z-Score</label>
             </div>
           </div>
-
 
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Status</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel" extra-settings="settings_dropdown"></div>
+              <div ng-dropdown-multiselect="" options="statusData" selected-model="statusModel"></div>
             </div>
           </div>
 
@@ -294,28 +284,28 @@
           <div class="form-group row">
             <label class="col-sm-2 form-control-label">Year</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel" extra-settings="settings_dropdown"></div>
+              <div ng-dropdown-multiselect="" options="yearData" selected-model="yearModel"></div>
             </div>
           </div>
 
-        <div class="form-group row">
-            <label class="col-sm-2 form-control-label">High School</label>
-            <div class="col-sm-5">
-              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
-            </div>
-          </div>
-
-         <div class="form-group row">
+          <div class="form-group row">
             <label class="col-sm-2 form-control-label">State</label>
             <div class="col-sm-5">
               <div ng-dropdown-multiselect="" options="stateData" selected-model="stateModel" extra-settings="settings_dropdown"></div>
             </div>
           </div>
 
-         <div class="form-group row">
+          <div class="form-group row">
             <label class="col-sm-2 form-control-label">Area Coach</label>
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="coachData" selected-model="coachModel" extra-settings="settings_dropdown"></div>
+              <div ng-dropdown-multiselect="" options="coachData" selected-model="coachModel"></div>
+            </div>
+          </div>
+
+          <div class="form-group row">
+            <label class="col-sm-2 form-control-label">High School</label>
+            <div class="col-sm-5">
+              <input type="text" class="form-control" ng-model='highSchool' placeholder="High School">
             </div>
           </div>
 
@@ -347,10 +337,46 @@
             <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
-
-
-
     </script>
+</div>
+
+<!-- Save search modal -->
+<div style="visibility: hidden">
+  <script type="text/ng-template" id="saveQuery.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Save search</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="input-group">
+        <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="Search name...">
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
+</div>
+
+<!-- Saved searches modal -->
+<div style="visibility: hidden">
+    <script type="text/ng-template" id="pastQuery.html">
+    <div class="modal-header">
+      <h3 class="modal-title">Saved searches</h3>
+    </div>
+
+    <div class="modal-body">
+      <div class="list-group">
+        <button type="button" class="list-group-item" ng-repeat="q in queries">{{q.name}}</button>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
+      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+    </div>
+  </script>
 </div>
 
 </body>
