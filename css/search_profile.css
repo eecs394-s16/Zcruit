@@ -198,6 +198,10 @@ body {
   padding: 2%;
 }
 
+.popover-trigger {
+  cursor: pointer;
+}
+
 /* Styles for saved search popover*/
 .list-group {
   margin-bottom: 0;
