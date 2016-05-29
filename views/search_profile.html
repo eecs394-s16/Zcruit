@@ -40,7 +40,7 @@
         <img src="../img/save.png">
         <div>Save search</div>
       </div>
-      <div id="saved-search-icon" class="sidebar-icon"
+      <div id="saved-search-icon" class="sidebar-icon popover-trigger"
           uib-popover-template='"saved_search_popover.html"'
           popover-title="Saved searches"
           popover-placement="right"
@@ -88,7 +88,7 @@
 
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
-          <div id="profile-zscore-wrapper"
+          <div id="profile-zscore-wrapper" class="popover-trigger"
             uib-popover-template='"zscore_popover.html"'
             popover-title="Zcruit Score"
             popover-placement="left-top"
@@ -113,7 +113,7 @@
         </div>
 
         <div class="btn-group" uib-dropdown>
-          <button id="single-button" class="btn btn-primary"
+          <button id="single-button" class="btn btn-primary popover-trigger"
             type="button"
             uib-dropdown-toggle
             uib-popover-template='"new_list_popover.html"'
