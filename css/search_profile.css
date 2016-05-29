@@ -217,6 +217,11 @@ body {
   border-bottom: none;
 }
 
+#search-list-popover {
+  overflow-y: scroll;
+  max-height: 45vh;
+}
+
 #saved-search-icon + .popover {
   width: 30vw;
 }

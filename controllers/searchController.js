@@ -71,6 +71,13 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     return "bright-red";
   };
 
+  $scope.zscoreWillGrow = function(player) {
+    if (player.Visits >= 2 || player.Attended_camp === "1" || player.Visits_overnight === "1") {
+      return false;
+    }
+    return true;
+  };
+
   $scope.statusText = function(status) {
     switch(status) {
       case "0":
