@@ -165,9 +165,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       });
     }
   };
-  $scope.cancelNewList = function() {
-     $scope.newListPopoverIsOpen = false;
-  };
 
   // --------- Sidebar new saved search popover ---------
   $scope.showNewSavedSearchPopover = false;
@@ -180,9 +177,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         getSavedQueries();
       });
     }
-  };
-  $scope.cancelNewSavedSearch = function() {
-    $scope.showNewSavedSearchPopover = false;
   };
 
   // --------- Sidebar saved searches popover ---------

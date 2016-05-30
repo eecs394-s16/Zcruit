@@ -3,7 +3,7 @@
         <label for="new-list-name">List name:</label>
         <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="New list name...">
         <div class="popover-footer clearfix">
-            <button class="btn btn-warning" type="button" ng-click="cancelNewList()">Cancel</button>
+            <button class="btn btn-warning" type="button" ng-click="$parent.newListPopoverIsOpen = false">Cancel</button>
             <button class="btn btn-primary" type="submit">Create</button>
         </div>
     </form>
