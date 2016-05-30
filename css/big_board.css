@@ -3,7 +3,8 @@ body {
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   width: 1024px;
   height: 768px;
-  overflow: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
   background-color: white;
   white-space: nowrap;
 }

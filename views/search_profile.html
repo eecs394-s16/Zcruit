@@ -273,7 +273,7 @@
       <uib-tab index="3" heading="Notes">
         <h4>Notes</h4>
           <input id='new_note_input' type='text' class='note-input form-control' ng-model='newNotePrompt' ng-click='onTextClick($event)'> <div class='btn btn-primary note-add-button' ng-click='addNote(newNotePrompt)'>Add note</div>
-          <div class="panel panel-default" ng-repeat="note in selected.notes | orderBy : -date">
+          <div class="note-panel panel panel-default" ng-repeat="note in selected.notes | orderBy : -date">
             <div class="panel-body">
               {{note.txt}}
             </div>
