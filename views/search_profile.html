@@ -37,27 +37,43 @@
         <img src="../img/search.png">
         <div>Search</div>
       </div>
-      <div class="sidebar-icon" ng-click="openSaveModal()">
+      <div id="new-saved-search-icon" class="sidebar-icon popover-trigger"
+          uib-popover-template='"new_saved_search_popover.html"'
+          popover-title="New saved search"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showNewSavedSearchPopover">
         <img src="../img/save.png">
         <div>Save search</div>
       </div>
-      <div id="saved-search-icon" class="sidebar-icon popover-trigger"
+      <div class="sidebar-icon popover-trigger"
           uib-popover-template='"saved_search_popover.html"'
           popover-title="Saved searches"
           popover-placement="right"
           popover-trigger="outsideClick"
           popover-is-open="showSavedSearchPopover">
-        <img src="../img/saved-search.png">
+        <img src="../img/saved-search-2.png">
         <div>Saved<br>searches</div>
+      </div>
+      <div class="sidebar-icon popover-trigger"
+          uib-popover-template='"lists_popover.html"'
+          popover-title="Lists"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showListsPopover">
+        <img src="../img/user-list-2.png">
+        <div>Lists</div>
       </div>
     </div>
   </div>
 
   <div id="resultlist">
-    <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
-    </select>
+    <div id="result-header">
+      <div id="result-header-display"><span ng-show="resultTitle != ''">{{resultTitle}}</span></div>
+      <div id="result-header-clear" ng-show="resultClearable" ng-click="clearSearch()"><span class="glyphicon glyphicon-remove-sign"></span></div>
+    </div>
 
-    <div class="playerCard" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-repeat="p in players | orderBy : sortParam || defaultSortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
+    <div class="playerCard" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-repeat="p in players track by p.Player_id" ng-click="setSelectedPlayer(p)">
 			<div class="status" ng-class="statusColor(p.NU_status)"></div>
       <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
 			<div class="player-info-outer">
@@ -371,45 +387,6 @@
             <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
         </div>
     </script>
-</div>
-
-<!-- Save search modal -->
-<div style="visibility: hidden">
-  <script type="text/ng-template" id="saveQuery.html">
-    <div class="modal-header">
-      <h3 class="modal-title">Save search</h3>
-    </div>
-
-    <div class="modal-body">
-      <div class="input-group">
-        <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="Search name...">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-  </script>
-</div>
-
-<!-- Saved searches modal -->
-<div style="visibility: hidden">
-    <script type="text/ng-template" id="pastQuery.html">
-    <div class="modal-header">
-      <h3 class="modal-title">Saved searches</h3>
-    </div>
-
-    <div class="modal-body">
-      <div class="list-group">
-        <button type="button" class="list-group-item" ng-repeat="q in queries">{{q.name}}</button>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-  </script>
 </div>
 
 </body>
