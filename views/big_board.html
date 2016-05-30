@@ -73,7 +73,7 @@
       <h1 class="position-title">{{pos.Position_name}}</h1>
       <div class='positionWrapper'>
         <div class='playerCardWrapper'>
-          <div class="playerCard" ng-repeat="p in players| filter: {'Position_name' : pos.Position_name} | orderBy: 'Position_rank' " ng-click="setSelectedPlayer(p)">
+          <div class="playerCard" ng-repeat="p in players| filter: {'Position_name' : pos.Position_name} | orderBy: 'Position_rank' " ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p); toggleSelect(p);">
             <div class="status offered"></div>
             <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
             <div class="player-info-outer">
@@ -91,6 +91,192 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <div id="profile" ng-model="selected" ng-show="toggleSelectVar">
+    <div ng-show="noResult">
+      <h2 style="text-align: center;">No Results</h2>
+    </div>
+
+    <div id="topcard">
+      <div id="image-box" ng-hide="noResult">
+        <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
+        <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
+      </div>
+
+      <div id="glanceinfo" ng-hide="noResult">
+
+        <div id="name">
+          {{selected.FirstName}} {{selected.LastName}}
+          <div id="profile-zscore-wrapper" class="popover-trigger"
+            uib-popover-template='"zscore_popover.html"'
+            popover-title="Zcruit Score"
+            popover-placement="left-top"
+            popover-trigger="outsideClick">
+            <div id="visits-remaining" ng-if="zscoreWillGrow(selected)">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
+            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': zscoreWillGrow(selected)}]">{{selected.Zscore}}</div>
+            <div ng-if="zscoreWillGrow(selected)" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': zscoreWillGrow(selected)}]">{{selected.Zscore2}}</div>
+          </div>
+        </div>
+
+        <div class="summary" ng-hide="noResult">
+          <p>{{selected.Position_name}}</p>
+          <p><a href='#' editable-text='selected.Feet' onaftersave='updateData("Players","Height",selected.Feet)'>{{selected.Feet}}</a>'<a href='#' editable-text='selected.Inches' onaftersave='updateData("Players","Height",selected.Inches)'>{{selected.Inches}}"</a>, <a href='#' editable-text='selected.Weight' onaftersave='updateData("Players","Weight",selected.Weight)'>{{selected.Weight}} </a>lb</p>
+          <p>Year: {{selected.Year}}</p>
+          <p>Coach: {{selected.Coach_name}}</p>
+        </div>
+
+        <div class="summary" ng-hide="noResult">
+          <p>Uniform #: 18</p>
+          <p>{{selected.HS_name}}</p>
+          <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
+        </div>
+
+        <div class="btn-group" uib-dropdown ng-hide="noResult">
+          <button id="single-button" class="btn btn-primary popover-trigger"
+            type="button"
+            uib-dropdown-toggle
+            uib-popover-template='"new_list_popover.html"'
+            popover-placement="left"
+            popover-title="New List"
+            popover-trigger="none"
+            popover-is-open="newListPopoverIsOpen">
+            Add to list <span class="caret"></span>
+          </button>
+          <ul class="dropdown-menu" uib-dropdown-menu role="menu">
+            <li role="menuitem" ng-repeat="list in savedLists" ng-click="savePlayer(selected, list)"><a href="#">{{list.List_name}}</a></li>
+            <li class="divider"></li>
+            <li role="menuitem" ng-click="newListPopoverIsOpen = true"><a href="#">New list</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Be careful here - how are multiple offers displaying  -->
+      <div id="offer-summary" ng-hide="noResult">
+        <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
+      </div>
+    </div>
+
+    <uib-tabset id="profile-tabs" justified="true" ng-hide="noResult">
+      <uib-tab index="0" heading="Bio">
+        <div id="bio" class="tab row">
+          <div class="col-md-6">
+            <div class="info-section">
+              <h4>Contact Information</h4>
+              <table class="info-table">
+                <tr>
+                  <td>Phone</td>
+                  <td><a href='#' editable-tel='selected.Phone' e-pattern="\d{10}" e-title="10 digit phone number" onaftersave='updateData("Players","Phone",selected.Phone)'>{{phoneFormat(selected.Phone)}}</a></td>
+                </tr>
+                <tr>
+                  <td>Email</td>
+                  <td><a href='#' editable-email='selected.Email' onaftersave='updateData("Players","Email",selected.Email)'><span class="info-long">{{selected.Email}}</span></a></td>
+                </tr>
+                <tr>
+                  <td>Address</td>
+                  <td><a href='#' editable-text='selected.Address' onaftersave='updateData("Players","Address",selected.Address)'>{{selected.Address}}</a>
+                  <br><a href='#' editable-text='selected.Hometown_city' onaftersave='updateData("Players","Hometown_city",selected.Hometown_city)'>{{selected.Hometown_city}}</a>, <a href='#' editable-text='selected.Hometown_state' onaftersave='updateData("Players","Hometown_state",selected.Hometown_state)'>{{selected.Hometown_state}} </a><a href='#' editable-text='selected.Hometown_zip' onaftersave='updateData("Players","Hometown_zip",selected.Hometown_zip)'>{{selected.Hometown_zip}}</a></td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="info-section">
+              <h4>High School</h4>
+              <table class="info-table">
+                <tr>
+                  <td>Name</td>
+                  <td>{{selected.HS_name}}</td>
+                </tr>
+                <tr>
+                  <td>Address</td>
+                  <td>{{selected.HS_city}}, {{selected.HS_state}} {{selected.HS_zip}}</td>
+                </tr>
+                <tr>
+                  <td>Phone</td>
+                  <td>{{phoneFormat(selected.HS_phone)}}</td>
+                </tr>
+                <tr>
+                  <td>GPA</td>
+                  <td><a href='#' editable-text='selected.GPA' onaftersave='updateData("Players","GPA",selected.GPA)'>{{selected.GPA}}</a></td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="info-section">
+              <h4>Connections</h4>
+              <p ng-if="selected.connections.length == 0">No connections</p>
+              <ul ng-if="selected.connections.length > 0">
+                <li ng-repeat="c in selected.connections">{{c}}</li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="col-md-6">
+            <div class="info-section">
+              <h4>Family</h4>
+              <table class="info-table">
+                <tr>
+                  <td>Parent 1</td>
+                  <td><a href='#' editable-text='selected.Parent1' onaftersave='updateData("Players","Parent1",selected.Parent1)'>{{selected.Parent1}}</a></td>
+                </tr>
+                <tr>
+                  <td>Parent 2</td>
+                  <td><a href='#' editable-text='selected.Parent2' onaftersave='updateData("Players","Parent2",selected.Parent2)'>{{selected.Parent2}}</a></td>
+                </tr>
+                <tr>
+                  <td>Home</td>
+                  <td><a href='#' editable-text='selected.Hometown_city' onaftersave='updateData("Players","Hometown_city",selected.Hometown_city)'>{{selected.Hometown_city}}</a>, <a href='#' editable-text='selected.Hometown_state' onaftersave='updateData("Players","Hometown_state",selected.Hometown_state)'>{{selected.Hometown_state}}</a></td>
+                </tr>
+                <tr>
+                  <td>SES</td>
+                  <td>{{selected.SES}}</td>
+                </tr>
+                <tr>
+                  <td>Education</td>
+                  <td>{{selected.Parental_education}}</td>
+                </tr>
+              </table>
+            </div>
+
+            <div class="info-section">
+              <h4>Visits</h4>
+              <p ng-if="selected.Visits == 0 && selected.Visits_overnight == '0' && selected.Attended_camp == '0'">No visits</p>
+              <table class="table table-condensed" ng-if="selected.Visits > 0 || selected.Visits_overnight != '0' || selected.Attended_camp != '0'">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr ng-if="selected.Visits_overnight == '1'">
+                    <td>5/26/2016</td>
+                    <td>Overnight</td>
+                  </tr>
+                  <tr ng-if="selected.Attended_camp == '1'">
+                    <td>5/24/2016</td>
+                    <td>Camp</td>
+                  </tr>
+                  <tr ng-repeat="i in _.range(selected.Visits) track by $index">
+                    <td>5/{{1 + i*6}}/2016</td>
+                    <td>Regular</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </uib-tab>
+      <uib-tab index="1" heading="Stats">
+        Short Labeled Justified content
+      </uib-tab>
+      <uib-tab index="2" heading="Media">
+        Long Labeled Justified content
+      </uib-tab>
+      <uib-tab index="3" heading="Notes">
+        Long Labeled Justified content
+      </uib-tab>
+    </uib-tabset>
   </div>
 
 </body>
