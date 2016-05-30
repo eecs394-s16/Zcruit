@@ -75,7 +75,7 @@
         <div class='playerCardWrapper'>
           <div class="playerCard" ng-repeat="p in players| filter: {'Position_name' : pos.Position_name} | orderBy: 'Position_rank' " ng-click="setSelectedPlayer(p)">
             <div class="status offered"></div>
-            <div class="avatar" style="background-image: url('../img/thorson.jpg');"></div>
+            <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
             <div class="player-info-outer">
               <div class="player-info-inner">
                 <div class="player-info-name">{{p.FirstName}} {{p.LastName}}</div>

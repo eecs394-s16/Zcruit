@@ -1,0 +1,10 @@
+<div>
+    <form ng-submit="saveSearch(newSavedSearchName)">
+        <label for="new-saved-search-name">Search name:</label>
+        <input id="new-saved-search-name" type="text" class="form-control" ng-model="newSavedSearchName" placeholder="Search name...">
+        <div class="popover-footer clearfix">
+            <button class="btn btn-warning" type="button" ng-click="$parent.showNewSavedSearchPopover = false">Cancel</button>
+            <button class="btn btn-primary" type="submit">Create</button>
+        </div>
+    </form>
+</div>
