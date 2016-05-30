@@ -32,14 +32,20 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   $scope.setSelectedPlayer = function(player) {
-    $scope.selected = player;
+    if (player == undefined){
+      $scope.noResult = true;
+    }
+    else{
+      $scope.noResult = false;
+      $scope.selected = player;
 
-    if (player.Zscore >= 8.5) {
-      $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
-    } else if (player.Zscore >= 5.5) {
-      $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is moderately likely to commit.";
-    } else {
-      $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
+      if (player.Zscore >= 8.5) {
+        $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
+      } else if (player.Zscore >= 5.5) {
+        $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is moderately likely to commit.";
+      } else {
+        $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
+      }
     }
   };
 
