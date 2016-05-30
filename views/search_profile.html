@@ -254,7 +254,13 @@
         Long Labeled Justified content
       </uib-tab>
       <uib-tab index="3" heading="Notes">
-        Long Labeled Justified content
+        <h4>Notes</h4>
+          <div class="panel panel-default" ng-repeat="note in selected.notes">
+            <div class="panel-body">
+              {{note.txt}}
+            </div>
+            <div class="panel-footer">{{note.c}} @ {{note.d}}</div>
+          </div>
       </uib-tab>
     </uib-tabset>
   </div>
