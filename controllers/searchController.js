@@ -158,13 +158,31 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   // --------- New list popover ---------
   $scope.newList = function(name) {
     $scope.newListPopoverIsOpen = false;
-    runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")', function() {
-        getSavedLists();
-        // Give user some kind of feedback
-    });
+    if (name) {
+      runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")', function() {
+          getSavedLists();
+          // Give user some kind of feedback
+      });
+    }
   };
-  $scope.cancel = function() {
+  $scope.cancelNewList = function() {
      $scope.newListPopoverIsOpen = false;
+  };
+
+  // --------- Sidebar new saved search popover ---------
+  $scope.showNewSavedSearchPopover = false;
+  $scope.saveSearch = function(name) {
+    $scope.showNewSavedSearchPopover = false;
+    if (name) {
+      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + name + '",' + "'" + JSON.stringify(searchParams) +"')";
+      runQuery(queryString, function() {
+        console.log("Query saved!");
+        getSavedQueries();
+      });
+    }
+  };
+  $scope.cancelNewSavedSearch = function() {
+    $scope.showNewSavedSearchPopover = false;
   };
 
   // --------- Sidebar saved searches popover ---------

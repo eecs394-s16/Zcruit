@@ -1,17 +1,10 @@
 <div>
     <form ng-submit="newList(newListName)">
         <label for="new-list-name">List name:</label>
-        <div class="input-group">
-            <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="New list name...">
-            <div class="input-group-btn">
-                <button class="btn btn-default" type="submit">
-                    <span class="glyphicons glyphicon-plus"></span>
-                </button>
-            </div>
+        <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="New list name...">
+        <div class="popover-footer clearfix">
+            <button class="btn btn-warning" type="button" ng-click="cancelNewList()">Cancel</button>
+            <button class="btn btn-primary" type="submit">Create</button>
         </div>
     </form>
-    <div class="modal-footer">
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-
 </div>

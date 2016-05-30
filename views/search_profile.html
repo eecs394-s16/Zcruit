@@ -36,7 +36,12 @@
         <img src="../img/search.png">
         <div>Search</div>
       </div>
-      <div class="sidebar-icon" ng-click="openSaveModal()">
+      <div id="new-saved-search-icon" class="sidebar-icon popover-trigger"
+          uib-popover-template='"new_saved_search_popover.html"'
+          popover-title="New saved search"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showNewSavedSearchPopover">
         <img src="../img/save.png">
         <div>Save search</div>
       </div>
