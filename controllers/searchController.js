@@ -3,8 +3,6 @@ var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions 
 
 angular.module('zcruit').controller('searchController', ['$scope', '$location', '$http', '$uibModal', '$log', function($scope, $location, $http, $uibModal, $log) {
   var coach = 1;
-  $scope.defaultSortParam = ['NU_status', '-Zscore'];
-  $scope.sortReverse = false;
   $scope._ = _;
 
   $scope.initials = function(name) {
@@ -145,10 +143,21 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
+  $scope.resultTitle = 'All players';
+  $scope.resultClearable = false;
+
+  // Clear whatever search or list is currently active
+  $scope.clearSearch = function() {
+    runSearch(defaultSearch, function() {
+      $scope.resultTitle = 'All players';
+      $scope.resultClearable = false;
+    });
+  };
+
+  // --------- New list popover ---------
   $scope.newList = function(name) {
     $scope.newListPopoverIsOpen = false;
-    runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")',
-      function() {
+    runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")', function() {
         getSavedLists();
         // Give user some kind of feedback
     });
@@ -160,36 +169,42 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   // --------- Sidebar saved searches popover ---------
   $scope.showSavedSearchPopover = false;
   $scope.runSavedSearch = function(search) {
+    $scope.showSavedSearchPopover = false; // Close the popover
     searchParams = JSON.parse(search.query);
-    runSearch(buildSearchQuery(searchParams));
-    $scope.showSavedSearchPopover = false;
+    runSearch(buildSearchQuery(searchParams), function() {
+      $scope.resultTitle = search.name;
+      $scope.resultClearable = true; // Show the clear button
+    });
   };
 
   $scope.projectedClassSearch = function() {
+    $scope.showSavedSearchPopover = false; // Close the popover
     searchParams = defaultParams;
-    runSearch(defaultSearch + ' AND (p.NU_status = 0 OR p.NU_status = 1 and p.Zscore >= 7.0)');
-    $scope.showSavedSearchPopover = false;
+    runSearch(defaultSearch + ' AND (p.NU_status = 0 OR p.NU_status = 1 AND p.Zscore >= 7.0)', function() {
+      $scope.resultTitle = "Projected class";
+      $scope.resultClearable = true; // Show the clear button
+    });
   };
 
   $scope.offeredPlayersSearch = function() {
+    $scope.showSavedSearchPopover = false; // Close the popover
     searchParams = defaultParams;
     searchParams.statuses = [{id: 1}];
-    runSearch(buildSearchQuery(searchParams));
-    $scope.showSavedSearchPopover = false;
+    runSearch(buildSearchQuery(searchParams), function() {
+      $scope.resultTitle = "Offered";
+      $scope.resultClearable = true; // Show the clear button
+    });
   };
 
   // --------- Sidebar lists popover ---------
   $scope.showListsPopover = false;
   // Called when an option is selected from the lists pop-over
   $scope.showList = function(list) {
-    $scope.showListsPopover = false;
-    if (list.List_id === 0) {
-      // "Search Results" selected
-      runSearch(defaultSearch);
-    } else {
-      // Any other list selected
-      runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
-    }
+    $scope.showListsPopover = false; // Close the popover
+    runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ")", function() {
+      $scope.resultTitle = list.List_name;
+      $scope.resultClearable = true; // Show the clear button
+    });
   };
 
   // Run an arbitrary query, callback is passed the response if the query succeeds
@@ -212,8 +227,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   }
 
   // Update the search results with a query string
-  function runSearch(queryString) {
-    runQuery(queryString, function(response) {
+  function runSearch(queryString, callback) {
+    runQuery(queryString + " ORDER BY p.NU_Status, p.Zscore DESC", function(response) {
       // console.table(response);
 
       // Build connections and position list for each player
@@ -245,15 +260,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
 
       $scope.players = playerArray;
-      if ($scope.selectedList && $scope.selectedList.List_id !== 0) {
-        // Results already ordered! Don't do any sorting
-        $scope.sortParam = '';
-        $scope.sortReverse = false;
-      } else {
-        // It's just a regular search, so just sort regularly
-        $scope.sortParam = ['NU_status', '-Zscore'];
-        $scope.sortReverse = false;
-      }
 
       $scope.setSelectedPlayer($scope.players[0]);
       var offerQueryString = "SELECT *  FROM Players p, Colleges c, College_status cs WHERE p.Player_id = cs.Player_id AND c.College_id = cs.College_id";
@@ -279,6 +285,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
           }
       });
       // console.log($scope.players);
+      if (callback) {
+        callback();
+      }
     });
   }
 
@@ -295,8 +304,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         response[i].Player_ids = playerList;
       }
       $scope.savedLists = response;
-      // Add the default option to the selections
-      $scope.savedLists.unshift({List_name:"Search Results", List_id: 0});
       // Select the default option
       $scope.selectedList = $scope.savedLists[0];
     });
@@ -375,7 +382,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  runSearch(defaultSearch+" ORDER BY p.NU_Status, p.Zscore DESC");
+  runSearch(defaultSearch);
 
   getSavedLists();
   getSavedQueries();
@@ -473,8 +480,6 @@ function buildSearchQuery(params) {
     }
     query += ')';
   }
-  // console.log(query);
-  query += " ORDER BY p.NU_status, p.Zscore DESC";
   return query;
 }
 

@@ -62,10 +62,12 @@
   </div>
 
   <div id="resultlist">
-    <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
-    </select>
+    <div id="result-header">
+      <div id="result-header-display"><span ng-show="resultTitle != ''">{{resultTitle}}</span></div>
+      <div id="result-header-clear" ng-show="resultClearable" ng-click="clearSearch()"><span class="glyphicon glyphicon-remove-sign"></span></div>
+    </div>
 
-    <div class="playerCard" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-repeat="p in players | orderBy : sortParam || defaultSortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
+    <div class="playerCard" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-repeat="p in players track by p.Player_id" ng-click="setSelectedPlayer(p)">
 			<div class="status" ng-class="statusColor(p.NU_status)"></div>
       <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
 			<div class="player-info-outer">
