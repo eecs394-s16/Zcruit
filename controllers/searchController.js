@@ -151,6 +151,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runSearch(defaultSearch, function() {
       $scope.resultTitle = 'All players';
       $scope.resultClearable = false;
+      resetSearchParams();
     });
   };
 
@@ -179,7 +180,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.projectedClassSearch = function() {
     $scope.showSavedSearchPopover = false; // Close the popover
-    searchParams = defaultParams;
+    resetSearchParams();
     runSearch(defaultSearch + ' AND (p.NU_status = 0 OR p.NU_status = 1 AND p.Zscore >= 7.0)', function() {
       $scope.resultTitle = "Projected class";
       $scope.resultClearable = true; // Show the clear button
@@ -188,7 +189,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   $scope.offeredPlayersSearch = function() {
     $scope.showSavedSearchPopover = false; // Close the popover
-    searchParams = defaultParams;
+    resetSearchParams();
     searchParams.statuses = [{id: 1}];
     runSearch(buildSearchQuery(searchParams), function() {
       $scope.resultTitle = "Offered";
@@ -201,6 +202,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   // Called when an option is selected from the lists pop-over
   $scope.showList = function(list) {
     $scope.showListsPopover = false; // Close the popover
+    resetSearchParams();
     runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ")", function() {
       $scope.resultTitle = list.List_name;
       $scope.resultClearable = true; // Show the clear button
@@ -333,6 +335,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
 
     modalInstance.result.then(function() {
+      $scope.resultTitle = 'Search results';
+      $scope.resultClearable = true;
       runSearch(buildSearchQuery(searchParams));
     }, function () {
       $log.info('Modal dismissed at: ' + new Date());
@@ -509,7 +513,11 @@ var defaultParams = {
       coaches : [],
       includePredicted: false
     };
-var searchParams = defaultParams;
+var searchParams;
+function resetSearchParams() {
+  searchParams = JSON.parse(JSON.stringify(defaultParams));
+}
+resetSearchParams();
 
 angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
   $scope.items = items;
