@@ -46,7 +46,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       } else {
         $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
       }
-
+    $scope.selected = player;
+    console.log($scope.selected);
       if ($scope.zscoreWillGrow(player)){
         $scope.twoZscores = true;
         var numVisit = String(2 - player.Visits);
@@ -240,6 +241,12 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
           if (player.Other_strong_connections === "1") {
             player.connections.push("Other strong connection");
           }
+          noteQuery = "select * from Notes join Coaches on Notes.Coach_id=Coaches.Coach_id WHERE Notes.Player_id= " + id +  " ORDER BY Note_timestamp DESC"
+          runQuery(noteQuery, function(response) {
+            if (response.length > 0) {
+              playerArray[playerDict[id]].notes = response;
+            }
+          });
           playerArray.push(player);
           playerDict[id] = playerArray.length - 1;
         }
