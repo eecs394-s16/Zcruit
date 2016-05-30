@@ -137,9 +137,15 @@ body {
 /* Override style in player_card.css */
 
 #profile {
+  background-color: white;
+  display:block;
   float: right;
+  z-index:10;
+  position:absolute;
   width: 60%;
   height: 100%;
+  top:0;
+  right:0;
 }
 
 #topcard {
