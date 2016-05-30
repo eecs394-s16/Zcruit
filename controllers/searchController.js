@@ -241,7 +241,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
           if (player.Other_strong_connections === "1") {
             player.connections.push("Other strong connection");
           }
-          noteQuery = "select * from Notes join Coaches on Notes.Coach_id=Coaches.Coach_id WHERE Notes.Player_id= " + id +  " ORDER BY Note_timestamp DESC"
+          noteQuery = "select Notes.Note_txt as txt, Coaches.Coach_name as c, DATE(Notes.Note_timestamp) d from Notes join Coaches on Notes.Coach_id=Coaches.Coach_id WHERE Notes.Player_id= " + id +  " ORDER BY Note_timestamp DESC"
           runQuery(noteQuery, function(response) {
             if (response.length > 0) {
               playerArray[playerDict[id]].notes = response;
