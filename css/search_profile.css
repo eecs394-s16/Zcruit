@@ -205,6 +205,8 @@ body {
 /* Styles for saved search popover*/
 .list-group {
   margin-bottom: 0;
+  overflow-y: auto;
+  max-height: 45vh;
 }
 .list-group-item {
   border-right: none;
@@ -217,15 +219,10 @@ body {
   border-bottom: none;
 }
 
-#search-list-popover {
-  overflow-y: auto;
-  max-height: 45vh;
-}
-
-#saved-search-icon + .popover {
+.sidebar-icon + .popover {
   width: 30vw;
 }
-#saved-search-icon + .popover .popover-content {
+.sidebar-icon + .popover .popover-content {
   padding: 0;
 }
 

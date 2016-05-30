@@ -40,7 +40,7 @@
         <img src="../img/save.png">
         <div>Save search</div>
       </div>
-      <div id="saved-search-icon" class="sidebar-icon popover-trigger"
+      <div class="sidebar-icon popover-trigger"
           uib-popover-template='"saved_search_popover.html"'
           popover-title="Saved searches"
           popover-placement="right"
@@ -48,6 +48,15 @@
           popover-is-open="showSavedSearchPopover">
         <img src="../img/saved-search.png">
         <div>Saved<br>searches</div>
+      </div>
+      <div class="sidebar-icon popover-trigger"
+          uib-popover-template='"lists_popover.html"'
+          popover-title="Lists"
+          popover-placement="right"
+          popover-trigger="outsideClick"
+          popover-is-open="showListsPopover">
+        <img src="../img/user-list.png">
+        <div>Lists</div>
       </div>
     </div>
   </div>

@@ -7,18 +7,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   $scope.sortReverse = false;
   $scope._ = _;
 
-  // Called when an option is selected from the lists drop-down
-  $scope.showList = function() {
-    var list = $scope.selectedList;
-    if (list.List_id === 0) {
-      // "Search Results" selected
-      runSearch(defaultSearch);
-    } else {
-      // Any other list selected
-      runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
-    }
-  };
-
   $scope.initials = function(name) {
     name = name.split(' ');
     return name[0][0] + name[1][0];
@@ -32,7 +20,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   $scope.setSelectedPlayer = function(player) {
-    if (player == undefined){
+    if (player === undefined){
       $scope.noResult = true;
     }
     else{
@@ -60,9 +48,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
 
       if (player.Zscore2 >= 8.5) {
-
-
-
         $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is strongly likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
       } else if (player.Zscore2 >= 5.5) {
         $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is moderately likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
@@ -172,6 +157,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
      $scope.newListPopoverIsOpen = false;
   };
 
+  // --------- Sidebar saved searches popover ---------
   $scope.showSavedSearchPopover = false;
   $scope.runSavedSearch = function(search) {
     searchParams = JSON.parse(search.query);
@@ -190,6 +176,20 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     searchParams.statuses = [{id: 1}];
     runSearch(buildSearchQuery(searchParams));
     $scope.showSavedSearchPopover = false;
+  };
+
+  // --------- Sidebar lists popover ---------
+  $scope.showListsPopover = false;
+  // Called when an option is selected from the lists pop-over
+  $scope.showList = function(list) {
+    $scope.showListsPopover = false;
+    if (list.List_id === 0) {
+      // "Search Results" selected
+      runSearch(defaultSearch);
+    } else {
+      // Any other list selected
+      runSearch(defaultSearch+" AND p.Player_id IN (" + list.Player_ids.join(",") + ") ORDER BY FIELD (p.Player_id, " + list.Player_ids.join(",") + ")");
+    }
   };
 
   // Run an arbitrary query, callback is passed the response if the query succeeds
@@ -217,7 +217,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // console.table(response);
 
       // Build connections and position list for each player
-      console.table(response);
       var playerDict = {};
       var playerArray = [];
       for (var i = 0, l = response.length; i < l; i++) {
