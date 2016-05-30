@@ -255,11 +255,14 @@
       </uib-tab>
       <uib-tab index="3" heading="Notes">
         <h4>Notes</h4>
+          <a href='#' editable-textarea="newNotePrompt" e-rows="8" e-cols="50" onaftersave='addNote(newNotePrompt)'>
+            <pre>Add new note</pre>
+          </a>
           <div class="panel panel-default" ng-repeat="note in selected.notes">
             <div class="panel-body">
               {{note.txt}}
             </div>
-            <div class="panel-footer">{{note.c}} @ {{note.d}}</div>
+            <div class="panel-footer">{{note.c}} @ {{note.date}}</div>
           </div>
       </uib-tab>
     </uib-tabset>
