@@ -32,14 +32,43 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   $scope.setSelectedPlayer = function(player) {
-    $scope.selected = player;
+    if (player == undefined){
+      $scope.noResult = true;
+    }
+    else{
+      $scope.noResult = false;
+      $scope.selected = player;
 
-    if (player.Zscore >= 8.5) {
-      $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
-    } else if (player.Zscore >= 5.5) {
-      $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is moderately likely to commit.";
-    } else {
-      $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
+      if (player.Zscore >= 8.5) {
+        $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is strongly likely to commit.";
+      } else if (player.Zscore >= 5.5) {
+        $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is moderately likely to commit.";
+      } else {
+        $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
+      }
+
+      if ($scope.zscoreWillGrow(player)){
+        $scope.twoZscores = true;
+        var numVisit = String(2 - player.Visits);
+        var pluralVisit = "";
+        if (numVisit == 2){
+          pluralVisit = "s";
+        }
+      }
+      else{
+        $scope.twoZscores = false;
+      }
+
+      if (player.Zscore2 >= 8.5) {
+        
+
+
+        $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is strongly likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+      } else if (player.Zscore2 >= 5.5) {
+        $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is moderately likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+      } else {
+        $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is unlikely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+      }
     }
   };
 
@@ -69,6 +98,13 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       return "red";
     }
     return "bright-red";
+  };
+
+  $scope.zscoreWillGrow = function(player) {
+    if (player && (player.Visits >= 2 || player.Attended_camp === "1" || player.Visits_overnight === "1")) {
+      return false;
+    }
+    return true;
   };
 
   $scope.statusText = function(status) {
@@ -139,6 +175,18 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   $scope.showSavedSearchPopover = false;
   $scope.runSavedSearch = function(search) {
     searchParams = JSON.parse(search.query);
+    runSearch(buildSearchQuery(searchParams));
+    $scope.showSavedSearchPopover = false;
+  };
+
+  $scope.projectedClassSearch = function() {
+    runSearch(defaultSearch + ' AND (p.NU_status = 0 OR p.NU_status = 1 and p.Zscore >= 7.0)');
+    $scope.showSavedSearchPopover = false;
+  };
+
+  $scope.offeredPlayersSearch = function() {
+    searchParams = defaultParams;
+    searchParams.statuses = [{id: 1}];
     runSearch(buildSearchQuery(searchParams));
     $scope.showSavedSearchPopover = false;
   };
@@ -307,13 +355,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  runSearch(defaultSearch);
-
   runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
     $scope.Colleges = response;
   });
-
-  getSavedLists();
 
   $scope.openPastQueryModal = function (size) {
     var modalInstance = $uibModal.open({
@@ -439,7 +483,7 @@ function buildSearchQuery(params) {
 // It is not the same as the $uibModal service used above.
 
 // Make the searchParams a global variable so the previous search is saved after closing modal
-var searchParams = {
+var defaultParams = {
       minZscore : 0,
       maxZscore : 10,
       minGpa : 1.0,
@@ -458,6 +502,7 @@ var searchParams = {
       coaches : [],
       includePredicted: false
     };
+var searchParams = defaultParams;
 
 angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
   $scope.items = items;

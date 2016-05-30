@@ -72,19 +72,23 @@
 			</div>
       <div class="zscore-wrapper">
       	<div class="zscore-flex" ng-class="zscoreColor(p.Zscore)">{{p.Zscore}}</div>
-        <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
+        <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="zscoreWillGrow(p)"></div>
       </div>
 		</div>
   </div>
 
   <div id="profile" ng-model="selected">
+    <div ng-show="noResult">
+      <h2 style="text-align: center;">No Results</h2> 
+    </div>
+
     <div id="topcard">
-      <div id="image-box">
+      <div id="image-box" ng-hide="noResult">
         <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
         <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
       </div>
 
-      <div id="glanceinfo">
+      <div id="glanceinfo" ng-hide="noResult">
 
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
@@ -93,26 +97,26 @@
             popover-title="Zcruit Score"
             popover-placement="left-top"
             popover-trigger="outsideClick">
-            <div id="visits-remaining" ng-if="selected.Visits < 2">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
-            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': selected.Visits < 2}]">{{selected.Zscore}}</div>
-            <div ng-if="selected.Visits < 2" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': selected.Visits < 2}]">{{selected.Zscore2}}</div>
+            <div id="visits-remaining" ng-if="zscoreWillGrow(selected)">{{2 - selected.Visits}} visit{{selected.Visits == 0 ? 's' : ''}} to raise</div>
+            <div ng-class="['profile-zscore', zscoreColor(selected.Zscore), {'double-zscore-left': zscoreWillGrow(selected)}]">{{selected.Zscore}}</div>
+            <div ng-if="zscoreWillGrow(selected)" ng-class="['profile-zscore', zscoreColor(selected.Zscore2), {'double-zscore-right': zscoreWillGrow(selected)}]">{{selected.Zscore2}}</div>
           </div>
         </div>
 
-        <div class="summary">
+        <div class="summary" ng-hide="noResult">
           <p>{{selected.Position_name}}</p>
           <p><a href='#' editable-text='selected.Feet' onaftersave='updateData("Players","Height",selected.Feet)'>{{selected.Feet}}</a>'<a href='#' editable-text='selected.Inches' onaftersave='updateData("Players","Height",selected.Inches)'>{{selected.Inches}}"</a>, <a href='#' editable-text='selected.Weight' onaftersave='updateData("Players","Weight",selected.Weight)'>{{selected.Weight}} </a>lb</p>
           <p>Year: {{selected.Year}}</p>
           <p>Coach: {{selected.Coach_name}}</p>
         </div>
 
-        <div class="summary">
+        <div class="summary" ng-hide="noResult">
           <p>Uniform #: 18</p>
           <p>{{selected.HS_name}}</p>
           <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
         </div>
 
-        <div class="btn-group" uib-dropdown>
+        <div class="btn-group" uib-dropdown ng-hide="noResult">
           <button id="single-button" class="btn btn-primary popover-trigger"
             type="button"
             uib-dropdown-toggle
@@ -132,12 +136,12 @@
       </div>
 
       <!-- Be careful here - how are multiple offers displaying  -->
-      <div id="offer-summary" >
+      <div id="offer-summary" ng-hide="noResult">
         <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
       </div>
     </div>
 
-    <uib-tabset id="profile-tabs" justified="true">
+    <uib-tabset id="profile-tabs" justified="true" ng-hide="noResult">
       <uib-tab index="0" heading="Bio">
         <div id="bio" class="tab row">
           <div class="col-md-6">
@@ -286,7 +290,7 @@
             <rzslider rz-slider-model="zscoreSlider.minValue" rz-slider-high="zscoreSlider.maxValue" rz-slider-options="zscoreSlider.options"></rzslider>
             <br><br>
             <input type="checkbox" ng-model="checkboxModel.includePredicted">
-            <label>Include possible Z-Score</label>
+            <label>Include projected Z-Score</label>
             </div>
           </div>
 
@@ -303,7 +307,6 @@
               <div ng-dropdown-multiselect="" options="positionData" selected-model="positionModel" extra-settings="settings_dropdown"></div>
             </div>
             <div class="col-sm-5">
-              {{positionModel}}
             </div>
           </div>
 

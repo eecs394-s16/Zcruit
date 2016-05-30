@@ -1,6 +1,10 @@
 <div id="popoverWrapper">
-  <div>{{zscoreExplanation}} <a>More info on Zscores -></a></div>
-  <br>
+  <div>{{zscoreExplanation}} </div>
+  <div ng-if="twoZscores">
+    <hr>
+    <div> {{zscoreExplanation2}}</div>
+  </div>
+  <hr>
   <div>Here are some players with a similar score who committed to NU in the past.</div>
   <br>
   <div class="playerCard">

@@ -1,5 +1,7 @@
 <div id="search-list-popover">
     <div class="list-group">
+        <button type="button" class="list-group-item" ng-click="projectedClassSearch()">Projected class<span class="badge"><span class="glyphicon glyphicon-star"></span></span></button>
+        <button type="button" class="list-group-item" ng-click="offeredPlayersSearch()">Offered<span class="badge"><span class="glyphicon glyphicon-star"></span></span></button>
         <button type="button" class="list-group-item" ng-repeat="q in savedSearches" ng-click="runSavedSearch(q)">{{q.name}}</button>
     </div>
 </div>
