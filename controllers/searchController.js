@@ -475,6 +475,7 @@ function buildSearchQuery(params) {
     query += ')';
   }
   // console.log(query);
+  query += " ORDER BY p.NU_status, p.Zscore DESC";
   return query;
 }
 
