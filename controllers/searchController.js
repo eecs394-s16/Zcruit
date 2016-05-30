@@ -149,6 +149,18 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runSearch(buildSearchQuery(searchParams));
     $scope.showSavedSearchPopover = false;
   };
+
+  $scope.projectedClassSearch = function() {
+    runSearch(defaultSearch + ' AND (p.NU_status = 0 OR p.NU_status = 1 and p.Zscore >= 7.0)');
+    $scope.showSavedSearchPopover = false;
+  };
+
+  $scope.offeredPlayersSearch = function() {
+    searchParams = defaultParams;
+    searchParams.statuses = [{id: 1}];
+    runSearch(buildSearchQuery(searchParams));
+    $scope.showSavedSearchPopover = false;
+  };
  
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
@@ -314,13 +326,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  runSearch(defaultSearch);
-
   runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
     $scope.Colleges = response;
   });
-
-  getSavedLists();
 
   $scope.openPastQueryModal = function (size) {
     var modalInstance = $uibModal.open({
@@ -446,7 +454,7 @@ function buildSearchQuery(params) {
 // It is not the same as the $uibModal service used above.
 
 // Make the searchParams a global variable so the previous search is saved after closing modal
-var searchParams = {
+var defaultParams = {
       minZscore : 0,
       maxZscore : 10,
       minGpa : 1.0,
@@ -465,6 +473,7 @@ var searchParams = {
       coaches : [],
       includePredicted: false
     };
+var searchParams = defaultParams;
 
 angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibModalInstance,$timeout, items, lodash) {
   $scope.items = items;

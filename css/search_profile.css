@@ -218,7 +218,7 @@ body {
 }
 
 #search-list-popover {
-  overflow-y: scroll;
+  overflow-y: auto;
   max-height: 45vh;
 }
 
