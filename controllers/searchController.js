@@ -46,6 +46,29 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       } else {
         $scope.zscoreExplanation = "A score of " + player.Zscore + " means this player is unlikely to commit.";
       }
+
+      if ($scope.zscoreWillGrow(player)){
+        $scope.twoZscores = true;
+        var numVisit = String(2 - player.Visits);
+        var pluralVisit = "";
+        if (numVisit == 2){
+          pluralVisit = "s";
+        }
+      }
+      else{
+        $scope.twoZscores = false;
+      }
+
+      if (player.Zscore2 >= 8.5) {
+        
+
+
+        $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is strongly likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+      } else if (player.Zscore2 >= 5.5) {
+        $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is moderately likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+      } else {
+        $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is unlikely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+      }
     }
   };
 
