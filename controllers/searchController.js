@@ -157,6 +157,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   $scope.projectedClassSearch = function() {
+    searchParams = defaultParams;
     runSearch(defaultSearch + ' AND (p.NU_status = 0 OR p.NU_status = 1 and p.Zscore >= 7.0)');
     $scope.showSavedSearchPopover = false;
   };
