@@ -361,48 +361,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  $scope.openSaveModal = function (size) {
-    var modalInstance = $uibModal.open({
-      animation: true,
-      templateUrl: 'saveQuery.html',
-      controller: 'saveQueryCtrl',
-      size: size,
-      resolve: {
-        items: function () {
-          return $scope.items;
-        }
-      }
-    });
-    modalInstance.result.then(function (queryName) {
-      var queryString = 'INSERT INTO SavedQueries (Coach_id, name, query) VALUES (' + 1 + ',"' + queryName + '",' + "'" + JSON.stringify(searchParams) +"')";
-      console.log(queryString);
-      runQuery(queryString, function() {
-        console.log("saved into table");
-        getSavedQueries();
-      });
-    }, function () {
-      $log.info('Modal dismissed at: ' + new Date());
-    });
-  };
-
   runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
     $scope.Colleges = response;
   });
-
-  $scope.openPastQueryModal = function (size) {
-    var modalInstance = $uibModal.open({
-      animation: true,
-      templateUrl: 'pastQuery.html',
-      controller: 'pastQueryCtrl',
-      size: size,
-      resolve: {
-        // This actually seems to resolve and return the promise D:
-        queryResponse: function () {
-          return runQueryAsync("SELECT * FROM SavedQueries");
-        }
-      }
-    });
-  };
 
   runSearch(defaultSearch);
 
@@ -724,35 +685,4 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
     $uibModalInstance.dismiss('cancel');
   };
 
-});
-
-angular.module('zcruit').controller('saveQueryCtrl', function ($scope, $uibModalInstance) {
- $scope.ok = function () {
-    var queryName = $scope.newListName;
-    console.log(queryName);
-    $uibModalInstance.close(queryName);
- };
-
- $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
-
-});
-
-angular.module('zcruit').controller('pastQueryCtrl', function ($scope, $uibModalInstance, queryResponse) {
-  if (queryResponse.status === 200) {
-    $scope.queries = queryResponse.data;
-  } else {
-    console.log("Query error: " + queryResponse);
-  }
-
-  $scope.ok = function () {
-    var queryName = $scope.newListName;
-    console.log(queryName);
-    $uibModalInstance.close(queryName);
-  };
-
-  $scope.cancel = function () {
-    $uibModalInstance.dismiss('cancel');
-  };
 });

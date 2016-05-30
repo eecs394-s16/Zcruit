@@ -381,45 +381,6 @@
     </script>
 </div>
 
-<!-- Save search modal -->
-<div style="visibility: hidden">
-  <script type="text/ng-template" id="saveQuery.html">
-    <div class="modal-header">
-      <h3 class="modal-title">Save search</h3>
-    </div>
-
-    <div class="modal-body">
-      <div class="input-group">
-        <input id="new-list-name" type="text" class="form-control" ng-model="newListName" placeholder="Search name...">
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-  </script>
-</div>
-
-<!-- Saved searches modal -->
-<div style="visibility: hidden">
-    <script type="text/ng-template" id="pastQuery.html">
-    <div class="modal-header">
-      <h3 class="modal-title">Saved searches</h3>
-    </div>
-
-    <div class="modal-body">
-      <div class="list-group">
-        <button type="button" class="list-group-item" ng-repeat="q in queries">{{q.name}}</button>
-      </div>
-    </div>
-
-    <div class="modal-footer">
-      <button class="btn btn-primary" type="button" ng-click="ok()">OK</button>
-      <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
-    </div>
-  </script>
-</div>
-
 </body>
 
 </html>
