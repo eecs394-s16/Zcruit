@@ -60,7 +60,7 @@
     <select class="form-control titleCard" ng-options="list as list.List_name for list in savedLists" ng-model="selectedList" ng-change="showList()">
     </select>
 
-    <div class="playerCard" ng-repeat="p in players | orderBy : sortParam || defaultSortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
+    <div class="playerCard" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-repeat="p in players | orderBy : sortParam || defaultSortParam : sortReverse track by p.Player_id" ng-click="setSelectedPlayer(p)">
 			<div class="status" ng-class="statusColor(p.NU_status)"></div>
       <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
 			<div class="player-info-outer">
@@ -79,7 +79,7 @@
 
   <div id="profile" ng-model="selected">
     <div ng-show="noResult">
-      <h2 style="text-align: center;">No Results</h2> 
+      <h2 style="text-align: center;">No Results</h2>
     </div>
 
     <div id="topcard">

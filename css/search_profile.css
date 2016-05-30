@@ -317,3 +317,7 @@ td:first-child {
 .edit-in-place.active input {
   display: inline-block;
 }
+
+.selected_player {
+  background-color: lightgray;
+}

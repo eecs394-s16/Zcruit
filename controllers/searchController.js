@@ -60,7 +60,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
 
       if (player.Zscore2 >= 8.5) {
-        
+
 
 
         $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is strongly likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
@@ -191,7 +191,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     runSearch(buildSearchQuery(searchParams));
     $scope.showSavedSearchPopover = false;
   };
- 
+
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
@@ -217,6 +217,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // console.table(response);
 
       // Build connections and position list for each player
+      console.table(response);
       var playerDict = {};
       var playerArray = [];
       for (var i = 0, l = response.length; i < l; i++) {
@@ -375,7 +376,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     });
   };
 
-  runSearch(defaultSearch);
+  runSearch(defaultSearch+" ORDER BY p.NU_Status, p.Zscore DESC");
 
   getSavedLists();
   getSavedQueries();
@@ -715,7 +716,7 @@ angular.module('zcruit').controller('pastQueryCtrl', function ($scope, $uibModal
   }
 
   $scope.ok = function () {
-    var queryName = $scope.newListName; 
+    var queryName = $scope.newListName;
     console.log(queryName);
     $uibModalInstance.close(queryName);
   };
