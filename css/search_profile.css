@@ -321,3 +321,11 @@ td:first-child {
 .selected_player {
   background-color: lightgray;
 }
+.note-input {
+  margin-right: 2%;
+  width:70%;
+  margin-bottom: 5%
+}
+.note-add-button {
+
+}
