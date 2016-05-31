@@ -96,8 +96,4 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     query += " END WHERE Pos_id IN (" + ids.join(',') + ")";
     runQuery(query);
   };
-
-  $scope.noSwipe = function(event) {
-    event.preventDefault();
-  };
 }]);
