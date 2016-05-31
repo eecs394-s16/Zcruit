@@ -87,10 +87,8 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
 
     // Update the position ranks in the database
     var query = "UPDATE Positions SET Position_rank = CASE Pos_id";
-    var lo = Math.min(newIndex, oldIndex);
-    var hi = Math.max(newIndex, oldIndex);
     var ids = [];
-    for (var i = lo; i <= hi; i++) {
+    for (var i = 0, l = $scope.positions[pos].length; i < l; i++) {
       var p = $scope.positions[pos][i];
       ids.push(p.Pos_id);
       query += " WHEN " + p.Pos_id + " THEN " + (i + 1);
