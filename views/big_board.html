@@ -39,7 +39,7 @@
         <img src="../img/calendar.png">
         <div>Pick year</div>
       </div>
-      <div class="sidebar-icon">
+      <div class="sidebar-icon" ng-click="openMyLists()">
         <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
         <img src="../img/user-list-2.png">
         <div>Player lists</div>
@@ -64,7 +64,7 @@
       <h1 class="position-title">{{pos}}</h1>
       <div class='positionWrapper'>
         <ul class='playerCardWrapper' slip-list slip-reorder="reorder($event, pos, $spliceIndex, $originalIndex)">
-          <li class="playerCard" ng-repeat="p in players" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p); toggleSelect(p);">
+          <li class="playerCard" ng-repeat="p in players" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p)">
             <div class="status offered"></div>
             <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
             <div class="player-info-outer">
@@ -84,18 +84,14 @@
     </div>
   </div>
 
-  <div id="profile" ng-model="selected" ng-show="toggleSelectVar">
-    <div ng-show="noResult">
-      <h2 style="text-align: center;">No Results</h2>
-    </div>
-
+  <div id="profile" ng-model="selected" ng-show="selected != null">
     <div id="topcard">
-      <div id="image-box" ng-hide="noResult">
+      <div id="image-box">
         <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
         <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
       </div>
 
-      <div id="glanceinfo" ng-hide="noResult">
+      <div id="glanceinfo">
 
         <div id="name">
           {{selected.FirstName}} {{selected.LastName}}
@@ -110,20 +106,20 @@
           </div>
         </div>
 
-        <div class="summary" ng-hide="noResult">
+        <div class="summary">
           <p>{{selected.Position_name}}</p>
           <p><a href='#' editable-text='selected.Feet' onaftersave='updateData("Players","Height",selected.Feet)'>{{selected.Feet}}</a>'<a href='#' editable-text='selected.Inches' onaftersave='updateData("Players","Height",selected.Inches)'>{{selected.Inches}}"</a>, <a href='#' editable-text='selected.Weight' onaftersave='updateData("Players","Weight",selected.Weight)'>{{selected.Weight}} </a>lb</p>
           <p>Year: {{selected.Year}}</p>
           <p>Coach: {{selected.Coach_name}}</p>
         </div>
 
-        <div class="summary" ng-hide="noResult">
+        <div class="summary">
           <p>Uniform #: 18</p>
           <p>{{selected.HS_name}}</p>
           <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
         </div>
 
-        <div class="btn-group" uib-dropdown ng-hide="noResult">
+        <div class="btn-group" uib-dropdown>
           <button id="single-button" class="btn btn-primary popover-trigger"
             type="button"
             uib-dropdown-toggle
@@ -143,12 +139,12 @@
       </div>
 
       <!-- Be careful here - how are multiple offers displaying  -->
-      <div id="offer-summary" ng-hide="noResult">
+      <div id="offer-summary">
         <img class="offer-icon" ng-repeat="school in selected.offers track by school.id" ng-src="{{school.img_path}}">
       </div>
     </div>
 
-    <uib-tabset id="profile-tabs" justified="true" ng-hide="noResult">
+    <uib-tabset id="profile-tabs" justified="true">
       <uib-tab index="0" heading="Bio">
         <div id="bio" class="tab row">
           <div class="col-md-6">
