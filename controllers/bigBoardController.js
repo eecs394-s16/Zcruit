@@ -3,9 +3,13 @@ var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions 
 
 angular.module('zcruit').controller('bigBoardController', ['$scope','$location','$http',function($scope,$location,$http) {
 
+  var coach = 1;
+  $scope._ = _;
+  var board = angular.element(document.getElementById("board"));
+
   $scope.openSearchProfile = function(){
     window.open('search_profile.html','_self');
-  }
+  };
 
   $scope.zscoreColor = function(score) {
     if (score >= 8.0) {
@@ -39,14 +43,10 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   }
   
   // Begin List JS
-  $scope.showLists = false;
-  $scope.openMyLists = function(){
-    $scope.showLists = !$scope.showLists;
-  }
 
   $scope.openList = function(listID){
     window.open('search_profile.html','_self');
-  }
+  };
 
   runQuery('SELECT DISTINCT List_name FROM SavedLists', function(response) {
     $scope.myLists = response;
@@ -65,11 +65,10 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     }
   };
 
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id ORDER BY Position_name, Position_rank'))
-  .then(function(response) {
+  runQuery('SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id ORDER BY Position_name, Position_rank',
+    function(players) {
     // Put the players into their positions
     // Players are already ordered by position rank, so no sorting needed
-    var players = response.data;
     var positions = {};
     for (var i = 0, l = players.length; i < l; i++) {
       var p = players[i];
@@ -83,9 +82,6 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
 
     $scope.positions = positions;
   });
-
-  var coach = 1;
-  $scope._ = _;
 
   $scope.initials = function(name) {
     if (name !== undefined) {
@@ -101,32 +97,18 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     }
   };
 
-  // Checks whether a card is selected, opening and closing the profile
-  $scope.toggleSelect = function(selected){
-    // initialize previousSelected as the first player you click
-    if (previousSelected == undefined){
-      previousSelected = selected;
-    }
-
-    // If you click the same card twice, toggle the display on and off
-    if (selected.Player_id == previousSelected.Player_id){
-      $scope.toggleSelectVar = !$scope.toggleSelectVar;
-    }
-    
-    // Whenever you click a new card, display the profile
-    else{
-      $scope.toggleSelectVar = true;
-    }
-    // store previousSelected as the player you just clicked
-    previousSelected = selected;
-
-  }
-
-  $scope.setSelectedPlayer = function(player) {
+  $scope.setSelectedPlayer = function(player, event) {
     // If we're clicking on a player we already clicked on, unselect them
     if ($scope.selected && $scope.selected.Player_id === player.Player_id) {
       $scope.selected = null;
       return;
+    }
+
+    // If no selected player yet or selected player is different position from previously selected
+    if (!$scope.selected || $scope.selected.Position_name !== player.Position_name) {
+      // Scroll the big board so the player card is visible
+      var p = document.getElementById(player.Position_name);
+      board.scrollTo(p.offsetLeft - 105, 0);
     }
 
     $scope.selected = $scope.players[player.Player_id];
@@ -274,12 +256,12 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     });
   }
 
-  // Returns a promise that resolves to the response object
-  function runQueryAsync(queryString) {
-    return $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString));
-  }
-
   $scope.reorder = function(event, pos, newIndex, oldIndex) {
+    // If the card didn't move, don't bother doing anything
+    if (newIndex === oldIndex) {
+      return;
+    }
+
     $scope.positions[pos].splice(newIndex, 0, $scope.positions[pos].splice(oldIndex, 1)[0]);
 
     // Update the position ranks in the database
@@ -296,7 +278,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
 
   // Update the search results with a query string
   function runSearch(queryString) {
-    runQuery(queryString, function(response) {
+    runQuery(queryString + " ORDER BY p.NU_Status, p.Zscore DESC", function(response) {
       // console.table(response);
 
       // Build connections and position list for each player
@@ -345,7 +327,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     });
   }
 
-  runSearch(defaultSearch+" ORDER BY p.NU_Status, p.Zscore DESC");
+  runSearch(defaultSearch);
 
   // Retrieve the saved lists for this coach from the server
   function getSavedLists() {

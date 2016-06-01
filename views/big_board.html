@@ -8,6 +8,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.5.3/angular-animate.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/1.3.2/ui-bootstrap-tpls.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-touch/1.5.5/angular-touch.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-scroll/1.0.0/angular-scroll.min.js"></script>
   <link href='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css' type='text/css' rel='stylesheet'>
   <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
   <script src='../lib/lodash.js'></script>
@@ -39,7 +40,7 @@
         <img src="../img/calendar.png">
         <div>Pick year</div>
       </div>
-      <div class="sidebar-icon" ng-click="openMyLists()">
+      <div class="sidebar-icon" ng-click="showLists = !showLists">
         <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
         <img src="../img/user-list-2.png">
         <div>Player lists</div>
@@ -60,11 +61,11 @@
       </div>
     </div>  
 
-    <div class="position" ng-repeat="(pos, players) in positions">
+    <div class="position" ng-repeat="(pos, players) in positions" id="{{pos}}">
       <h1 class="position-title">{{pos}}</h1>
       <div class='positionWrapper'>
         <ul class='playerCardWrapper' slip-list slip-reorder="reorder($event, pos, $spliceIndex, $originalIndex)">
-          <li class="playerCard" ng-repeat="p in players" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p)">
+          <li class="playerCard" ng-repeat="p in players" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p, $event)">
             <div class="status offered"></div>
             <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
             <div class="player-info-outer">
