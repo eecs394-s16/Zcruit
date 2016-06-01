@@ -138,3 +138,12 @@
   border-left-color: transparent;
   background-color: transparent;
 }
+
+/*.profile-status.editable-click, .profile-status.a.editable-click {
+  color:inherit;
+}*/
+.editable-click, a.editable-click {
+  color:inherit;
+  text-decoration: underline;
+  border-bottom:none;
+}

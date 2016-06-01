@@ -98,7 +98,9 @@
     <div id="topcard">
       <div id="image-box" ng-hide="noResult">
         <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
-        <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
+        <div id="profile-status" ng-class="statusColor(selected.NU_status)">
+        <a href='#' editable-select="selected.NU_status" e-ng-options="s.value as s.text for s in NU_statuses" onaftersave='updateData("Players","NU_status",selected.NU_status)'>
+          {{statusText(selected.NU_status)}}</a></div>
       </div>
 
       <div id="glanceinfo" ng-hide="noResult">
