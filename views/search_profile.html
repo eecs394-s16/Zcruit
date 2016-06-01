@@ -129,23 +129,14 @@
           <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
         </div>
 
-        <div class="btn-group" uib-dropdown ng-hide="noResult">
-          <button id="single-button" class="btn btn-primary popover-trigger"
-            type="button"
-            uib-dropdown-toggle
-            uib-popover-template='"new_list_popover.html"'
-            popover-placement="left"
-            popover-title="New List"
-            popover-trigger="none"
-            popover-is-open="newListPopoverIsOpen">
-            Add to list <span class="caret"></span>
-          </button>
-          <ul class="dropdown-menu" uib-dropdown-menu role="menu">
-            <li role="menuitem" ng-repeat="list in savedLists" ng-click="savePlayer(selected, list)"><a href="#">{{list.List_name}}</a></li>
-            <li class="divider"></li>
-            <li role="menuitem" ng-click="newListPopoverIsOpen = true"><a href="#">New list</a></li>
-          </ul>
-        </div>
+          <div class="form-group row">
+            <div class="col-sm-5">
+              <div ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="settings_dropdown"></div>
+            </div>
+            <div class="col-sm-5">
+            </div>
+          </div>
+
       </div>
 
       <!-- Be careful here - how are multiple offers displaying  -->
