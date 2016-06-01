@@ -82,13 +82,37 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   };
 
-  $scope.onListSelect= function(item) {
+  $scope.onListSelect = function(item) {
     getSavedLists()
     $scope.savePlayer($scope.selected,item.id)
     getSavedLists()
   };
 
-  $scope.onListDeselect= function(item) {
+  $scope.onListUnselectAll = function(item) {
+    console.log(item)
+    console.log("WOOO")
+    getSavedLists()
+    $scope.currLists = $scope.SavedLists
+    for (var i = 0; i < $scope.currLists.length; i++) {
+      $scope.onListDeselect($scope.currLists[i])
+    }
+    getSavedLists()
+  }
+
+  $scope.onListSelectAll = function(item) {
+    console.log(item)
+    console.log("WOAAAAOO")
+    getSavedLists()
+    $scope.currLists = $scope.SavedLists
+    console.log($scope.currLists)
+    for (var i = 0; i < $scope.currLists.length; i++) {
+      $scope.onListSelect($scope.currLists[i])
+    }
+    getSavedLists()
+  }
+
+
+  $scope.onListDeselect = function(item) {
     getSavedLists()
     while (item.id.Player_ids.indexOf(parseInt($scope.selected.Player_id)) > -1) {
       var index = item.id.Player_ids.indexOf(parseInt($scope.selected.Player_id));
@@ -636,6 +660,15 @@ angular.module('zcruit').controller('ModalInstanceCtrl', function ($scope, $uibM
        includePredicted : searchParams.includePredicted,
      };
 
+
+  $scope.settings_dropdown_player = {
+    buttonDefaultText: 'Their Lists',
+    scrollableHeight: '250px',
+    scrollable: true,
+    smartButtonTextConverter: function(itemText, originalItem) {
+        return 'List';
+    }
+  };
 
   $scope.settings_dropdown = {
     scrollableHeight: '250px',

@@ -131,7 +131,19 @@
 
           <div class="form-group row">
             <div class="col-sm-5">
-              <div ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="settings_dropdown" events="{onItemSelect: onListSelect, onItemDeselect: onListDeselect };"></div>
+              <div style="display:inline-block" ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="settings_dropdown_player" events="{onItemSelect: onListSelect, onItemDeselect: onListDeselect, onSelectAll: onListSelectAll, onUnselectAll: onListUnselectAll };"></div>
+              <button id="single-button" class="btn btn-primary popover-trigger"
+              ng-click="newListPopoverIsOpen = true"
+            type="button"
+            uib-dropdown-toggle
+            uib-popover-template='"new_list_popover.html"'
+            popover-placement="left"
+            popover-title="Add To New List"
+            popover-trigger="none"
+            popover-is-open="newListPopoverIsOpen">
+            <span class="glyphicon glyphicon-plus-sign"></span>
+          </button>
+
             </div>
             <div class="col-sm-5">
             </div>
