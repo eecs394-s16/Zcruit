@@ -63,6 +63,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
 
+    $scope.selected.listData = []
+    $scope.selected.listModel = []
     for (var i = 0; i < $scope.savedLists.length; i++) { 
         $scope.selected.listData.push({
             id:   $scope.savedLists[i].List_name,
