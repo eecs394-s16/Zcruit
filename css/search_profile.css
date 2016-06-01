@@ -6,6 +6,36 @@ body {
   height: 768px;
 }
 
+/* Result header styles */
+#result-header {
+  width: 100%;
+  height: 7vh;
+  position: relative;
+  font-weight: bold;
+  font-size: 3vw;
+  margin-top: 0;
+  padding-left: 5%;
+  border-radius: 0;
+  border-width: 0;
+  border-bottom: 1px solid #aaa;
+}
+
+#result-header-display {
+  float: left;
+  display: flex;
+  align-items: center;
+  width: 85%;
+  height: 100%;
+}
+
+#result-header-clear {
+  float: left;
+  display: flex;
+  align-items: center;
+  width: 15%;
+  height: 100%;
+}
+
 #resultlist {
   display: inline-block;
   float: left;
@@ -23,6 +53,10 @@ body {
   margin-top: 0;
   border-width: 0;
   border-bottom-width: 1px;
+}
+
+.selected_player {
+  background-color: lightgray;
 }
 
 #profile {
@@ -202,9 +236,12 @@ body {
   cursor: pointer;
 }
 
-/* Styles for saved search popover*/
+/* Popover styles */
 .list-group {
   margin-bottom: 0;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  max-height: 45vh;
 }
 .list-group-item {
   border-right: none;
@@ -217,16 +254,23 @@ body {
   border-bottom: none;
 }
 
-#search-list-popover {
-  overflow-y: auto;
-  max-height: 45vh;
+.popover-footer {
+  padding-top: 1vh;
 }
 
-#saved-search-icon + .popover {
+.popover-footer > .btn {
+  float: right;
+  margin-left: 5%;
+}
+
+.sidebar-icon + .popover {
   width: 30vw;
 }
-#saved-search-icon + .popover .popover-content {
+.sidebar-icon + .popover .popover-content {
   padding: 0;
+}
+#new-saved-search-icon + .popover .popover-content {
+  padding: 9px 14px;
 }
 
 #profile-zscore-wrapper + .popover {
@@ -238,25 +282,11 @@ body {
   border: none;
 }
 
-.titleCard {
-  width: 100%;
-  height: 7vh;
-  border-width: 1px;
-  border-color: #aaa;
-  border-radius: 0;
-  border-style: solid;
-  position: relative;
-  margin-top: 2%;
-  font-weight: bold;
-  font-size: 3vw;
-  margin-top: 0;
-  border-width: 0;
-  border-bottom-width: 1px;
-}
-
+/* Profile info styles */
 .tab-pane {
   height: 54vh;
   overflow: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .tab {
@@ -318,6 +348,17 @@ td:first-child {
   display: inline-block;
 }
 
-.selected_player {
-  background-color: lightgray;
+/* Notes tab styles */
+.note-panel {
+  width: 99%;
+}
+.note-input {
+  margin-right: 2%;
+  width:65%;
+  margin-bottom: 5%;
+  display:inline-block;
+  padding:0;
+}
+.note-add-button {
+
 }

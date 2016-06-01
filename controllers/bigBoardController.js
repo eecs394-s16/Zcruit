@@ -27,6 +27,20 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     }
     return "bright-red";
   };
+
+  // Run an arbitrary query, callback is passed the response if the query succeeds
+  function runQuery(queryString, callback) {
+    $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
+    .then(function(response) {
+      if (response.status === 200) {
+        if (callback) {
+          callback(response.data);
+        }
+      } else {
+        console.log("Query error: " + response);
+      }
+    });
+  }
   
   // Begin List JS
   $scope.showLists = false;
@@ -40,8 +54,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
 
   $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT List_name FROM SavedLists'))
   .then(function(response){
-    $scope.myLists = eval(response.data);
-    console.log($scope.myLists);
+    $scope.myLists = response.data;
   });
 
   // End List JS
@@ -79,15 +92,23 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     }
   };
 
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query='+ encodeURIComponent('SELECT DISTINCT Position_name FROM Positions'))
-  .then(function(response){
-  	$scope.positions = eval(response.data);
-  	console.log($scope.positions);
-  });
-
-  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id'))
+  $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent('SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id ORDER BY Position_name, Position_rank'))
   .then(function(response) {
-    $scope.players = eval(response.data);
+    // Put the players into their positions
+    // Players are already ordered by position rank, so no sorting needed
+    var players = response.data;
+    var positions = {};
+    for (var i = 0, l = players.length; i < l; i++) {
+      var p = players[i];
+      var pos = p.Position_name;
+      if (pos in positions) {
+        positions[pos].push(p);
+      } else {
+        positions[pos] = [p];
+      }
+    }
+
+    $scope.positions = positions;
   });
 
   var coach = 1;
@@ -372,6 +393,21 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
       // console.log($scope.players);
     });
   }
+  
+  $scope.reorder = function(event, pos, newIndex, oldIndex) {
+    $scope.positions[pos].splice(newIndex, 0, $scope.positions[pos].splice(oldIndex, 1)[0]);
+
+    // Update the position ranks in the database
+    var query = "UPDATE Positions SET Position_rank = CASE Pos_id";
+    var ids = [];
+    for (var i = 0, l = $scope.positions[pos].length; i < l; i++) {
+      var p = $scope.positions[pos][i];
+      ids.push(p.Pos_id);
+      query += " WHEN " + p.Pos_id + " THEN " + (i + 1);
+    }
+    query += " END WHERE Pos_id IN (" + ids.join(',') + ")";
+    runQuery(query);
+  };
 
   // Retrieve the saved lists for this coach from the server
   function getSavedLists() {

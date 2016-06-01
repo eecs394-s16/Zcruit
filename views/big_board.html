@@ -14,6 +14,8 @@
   <script src='../lib/angularjs-dropdown-multiselect.js'></script>
   <script src='../lib/xeditable.js'></script>
   <link href='../lib/xeditable.css' rel='stylesheet'>
+  <script src="../lib/slip.js" type="text/javascript"></script>
+  <script src="../lib/angular-slip.js" type="text/javascript"></script>
   <script src="../zcruit.js"></script>
   <script src="../controllers/bigBoardController.js"></script>
   <link href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
@@ -24,34 +26,23 @@
 
 <body ng-controller="bigBoardController">
   <div id="sidebar">
-    <div id="sidebar-field" ng-click="openSearchProfile();">
+    <div id="sidebar-upper" ng-click="openSearchProfile();">
       <div class="sidebar-icon">
         <img src="../img/search.png">
         <div>Search</div>
       </div>
     </div>
-    <br>
-    <div id="sidebar-field">
+
+    <div id="sidebar-middle">
       <div class="sidebar-icon">
         <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
         <img src="../img/calendar.png">
         <div>Pick year</div>
       </div>
-    </div>
-    <br>
-    <div id="sidebar-field">
       <div class="sidebar-icon">
         <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
-        <img src="../img/star.png">
-        <div>My Favorites</div>
-      </div>
-    </div>
-    <br>
-    <div id="sidebar-field" ng-click="openMyLists();">
-      <div class="sidebar-icon">
-        <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
-        <img src="../img/note.png">
-        <div>My Lists</div>
+        <img src="../img/user-list-2.png">
+        <div>Player lists</div>
       </div>
     </div>
   </div>
@@ -69,11 +60,11 @@
       </div>
     </div>  
 
-    <div class="position" ng-repeat="pos in positions">
-      <h1 class="position-title">{{pos.Position_name}}</h1>
+    <div class="position" ng-repeat="(pos, players) in positions">
+      <h1 class="position-title">{{pos}}</h1>
       <div class='positionWrapper'>
-        <div class='playerCardWrapper'>
-          <div class="playerCard" ng-repeat="p in players| filter: {'Position_name' : pos.Position_name} | orderBy: 'Position_rank' " ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p); toggleSelect(p);">
+        <ul class='playerCardWrapper' slip-list slip-reorder="reorder($event, pos, $spliceIndex, $originalIndex)">
+          <li class="playerCard" ng-repeat="p in players" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p); toggleSelect(p);">
             <div class="status offered"></div>
             <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
             <div class="player-info-outer">
@@ -88,7 +79,7 @@
               <div class="zscore-corner" ng-class="zscoreColor(p.Zscore2)" ng-if="p.Visits < 2"></div>
             </div>
           </div>
-        </div>
+        </ul>
       </div>
     </div>
   </div>
