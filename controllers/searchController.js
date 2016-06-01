@@ -62,6 +62,21 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         $scope.selected.notes = response;
       }
     });
+
+    for (var i = 0; i < $scope.savedLists.length; i++) { 
+        $scope.selected.listData.push({
+            id:   $scope.savedLists[i].List_name,
+            label: $scope.savedLists[i].List_name
+        });
+        var playersInList = $scope.savedLists[i].Player_ids
+
+        if (playersInList.indexOf(parseInt(id)) > -1) {
+          $scope.selected.listModel.push({
+            id:   $scope.savedLists[i].List_name
+          });
+        }
+    }
+
   };
 
   $scope.height = function(heightInfo, type) {
@@ -278,6 +293,8 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
             player.connections.push("Other strong connection");
           }
           player.notes = [];
+          player.listData = [];
+          player.listModel = [];
           playerArray.push(player);
           playerDict[id] = playerArray.length - 1;
         }
@@ -330,6 +347,9 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       $scope.savedLists = response;
       // Select the default option
       $scope.selectedList = $scope.savedLists[0];
+
+
+
     });
   }
 
