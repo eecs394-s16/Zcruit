@@ -108,8 +108,10 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   };
 
   $scope.initials = function(name) {
-    name = name.split(' ');
-    return name[0][0] + name[1][0];
+    if (name !== undefined) {
+      name = name.split(' ');
+      return name[0][0] + name[1][0];
+    }
   };
 
   $scope.phoneFormat = function(phone) {
