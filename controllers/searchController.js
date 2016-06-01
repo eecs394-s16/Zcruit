@@ -67,19 +67,36 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     $scope.selected.listModel = []
     for (var i = 0; i < $scope.savedLists.length; i++) { 
         $scope.selected.listData.push({
-            id:   $scope.savedLists[i].List_name,
+            id:   $scope.savedLists[i],
             label: $scope.savedLists[i].List_name
         });
         var playersInList = $scope.savedLists[i].Player_ids
 
         if (playersInList.indexOf(parseInt(id)) > -1) {
           $scope.selected.listModel.push({
-            id:   $scope.savedLists[i].List_name
+            id:   $scope.savedLists[i]
           });
         }
     }
 
   };
+
+  $scope.onListSelect= function(item) {
+    $scope.savePlayer($scope.selected,item.id)
+  };
+
+  $scope.onListDeselect= function(item) {
+    while (item.id.Player_ids.indexOf(parseInt($scope.selected.Player_id)) > -1) {
+      var index = item.id.Player_ids.indexOf(parseInt($scope.selected.Player_id));
+      item.id.Player_ids.splice(index, 1);     
+    } 
+    runQuery('UPDATE SavedLists SET Player_ids = "' + item.id.Player_ids.join() + '" WHERE List_id = ' + item.id.List_id);
+  };
+
+
+  $scope.savePlayer = function(player, list) {
+  };
+
 
   $scope.height = function(heightInfo, type) {
 
