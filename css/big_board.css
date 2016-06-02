@@ -461,3 +461,7 @@ td:first-child {
 .selected_player {
   background-color: lightgray;
 }
+
+.sidebar-text {
+    line-height: initial;
+}
