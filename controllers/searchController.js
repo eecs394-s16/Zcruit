@@ -5,6 +5,22 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   var coach = 1;
   $scope._ = _;
 
+  $scope.NU_statuses = [
+    {value: "0", text: 'Committed'},
+    {value: "1", text: 'Offer'},
+    {value: "2", text: 'Active Recruit'},
+    {value: "3", text: 'Evaluation needed'},
+    {value: "4", text: 'FBS recruit'},
+    {value: "5", text: 'Walk on'},
+    {value: "6", text: 'Rejected'}
+  ];
+
+
+  // $scope.show_status = function() {
+  //   var selected_status = $filter('filter')($scope.NU_statuses, {value: $scope.user.status});
+  //   return ($scope.)
+  // }
+
   $scope.initials = function(name) {
     name = name.split(' ');
     return name[0][0] + name[1][0];
@@ -453,7 +469,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
       else
       {
-        if (key==='Phone' | key==='Weight' | key==='GPA' | key==='Hometown_zip'){
+        if (key==='Phone' | key==='Weight' | key==='GPA' | key==='Hometown_zip' | key==='NU_status'){
           var sqlQuery = "UPDATE "+tableName+" SET "+key+"="+newValue+" WHERE ";
         }
         else{
