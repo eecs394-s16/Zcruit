@@ -6,11 +6,10 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   background-color: white;
-  /*white-space: nowrap;*/
 }
 
-* {
-  -webkit-overflow-scrolling: touch;
+body {
+  white-space: nowrap;
 }
 
 #board {
@@ -53,6 +52,7 @@ body {
   overflow: visible;
   margin: 0;
   padding: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .playerCard {
@@ -170,6 +170,7 @@ body {
   height: 100%;
   top:0;
   right:0;
+  white-space: initial;
   border-left: 1px solid grey;
 }
 
@@ -404,6 +405,7 @@ body {
 .tab {
   width: 100%;
   padding: 1% 2%;
+  -webkit-overflow-scrolling: touch;
 }
 
 .info-table {
