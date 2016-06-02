@@ -30,22 +30,10 @@
     <div id="sidebar-upper" ng-click="openSearchProfile();">
       <div class="sidebar-icon">
         <img src="../img/search.png">
-        <div>Search</div>
+        <div class='sidebar-text'>Search <br> & <br> Lists</div>
       </div>
     </div>
 
-    <div id="sidebar-middle">
-      <div class="sidebar-icon">
-        <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
-        <img src="../img/calendar.png">
-        <div>Pick year</div>
-      </div>
-      <div class="sidebar-icon" ng-click="showLists = !showLists">
-        <!--Icon made by Freepik from flaticon.com is licensed by CC 3.0 BY-->
-        <img src="../img/user-list-2.png">
-        <div>Player lists</div>
-      </div>
-    </div>
   </div>
 
   <div id="board" ng-class="{'buffer': showScrollBuffer}">
@@ -59,7 +47,7 @@
           </div>
         </div>
       </div>
-    </div>  
+    </div>
 
     <div class="position" ng-repeat="(pos, players) in positions" id="{{pos}}">
       <h1 class="position-title">{{pos}}</h1>
@@ -89,7 +77,11 @@
     <div id="topcard">
       <div id="image-box">
         <div id="profile-image" ng-style="{'background-image': 'url(' + selected.Img_url + ')'}"></div>
-        <div id="profile-status" ng-class="statusColor(selected.NU_status)">{{statusText(selected.NU_status)}}</div>
+        <div id="profile-status" ng-class="statusColor(selected.NU_status)">
+          <a href='#' editable-select="selected.NU_status" e-ng-options="s.value as s.text for s in NU_statuses" onaftersave='updateData("Players","NU_status",selected.NU_status)'>
+          {{statusText(selected.NU_status)}}
+          </a>
+        </div>
       </div>
 
       <div id="glanceinfo">
