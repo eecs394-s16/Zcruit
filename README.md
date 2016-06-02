@@ -13,7 +13,7 @@ On this app, you can:
 Note:
 *The current Zcruit scores are fake and don't match with the actual algorithm 
 ## Requirements
-This app is built with HTML, CSS, and AngularJS. No extra installation is required.
+This app is built with HTML, CSS, AngularJS, and PHP. No extra installation is required.
 
 Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the porject, and click the 'big_board.html' file under the views folder to view the project on your browser. 
 
