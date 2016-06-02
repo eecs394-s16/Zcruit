@@ -469,3 +469,17 @@ td:first-child {
 .sidebar-text {
     line-height: initial;
 }
+/* Notes tab styles */
+.note-panel {
+  width: 99%;
+}
+.note-input {
+  margin-right: 2%;
+  width:65%;
+  margin-bottom: 5%;
+  display:inline-block;
+  padding:0;
+}
+.note-add-button {
+
+}
