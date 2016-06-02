@@ -34,6 +34,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   };
 
   $scope.setSelectedPlayer = function(player) {
+
     if (player === undefined){
       $scope.noResult = true;
     }
@@ -79,40 +80,41 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
 
-    getSavedLists()
-    $scope.selected.listData = []
+    getSavedLists2()
+    $scope.selected.listData = [{id:1,label:"+ Add New List +"}]
     $scope.selected.listModel = []
-    for (var i = 0; i < $scope.savedLists.length; i++) { 
-        $scope.selected.listData.push({
-            id:   $scope.savedLists[i],
-            label: $scope.savedLists[i].List_name
-        });
-        var playersInList = $scope.savedLists[i].Player_ids
-
-        if (playersInList.indexOf(parseInt(id)) > -1) {
-          $scope.selected.listModel.push({
-            id:   $scope.savedLists[i]
-          });
-        }
-    }
 
   };
 
   $scope.onListSelect = function(item) {
-    getSavedLists()
-    $scope.savePlayer($scope.selected,item.id)
-    getSavedLists()
+    if (item.id == 1) {
+      $scope.newListPopoverIsOpen = true
+      if(listToDelete.indexOf(item.id) !== -1) {
+        $scope.selected.listModel.splice(i, 1);
+      }
+    }
+    else {
+      getSavedLists()
+      $scope.savePlayer($scope.selected,item.id)
+      getSavedLists()
+    }
   };
 
   $scope.onListUnselectAll = function(item) {
-    console.log(item)
-    console.log("WOOO")
-    getSavedLists()
-    $scope.currLists = $scope.SavedLists
-    for (var i = 0; i < $scope.currLists.length; i++) {
-      $scope.onListDeselect($scope.currLists[i])
+    if (item.id == 1) {
+      $scope.newListPopoverIsOpen = true
+      if(listToDelete.indexOf(item.id) !== -1) {
+        $scope.selected.listModel.splice(i, 1);
+      }
     }
-    getSavedLists()
+    else {
+      getSavedLists()
+      $scope.currLists = $scope.SavedLists
+      for (var i = 0; i < $scope.currLists.length; i++) {
+        $scope.onListDeselect($scope.currLists[i])
+      }
+      getSavedLists()
+    }
   }
 
   $scope.onListSelectAll = function(item) {
@@ -352,7 +354,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
             player.connections.push("Other strong connection");
           }
           player.notes = [];
-          player.listData = [];
+          player.listData = [{id:1,label:"+ Add New List +"}];
           player.listModel = [];
           playerArray.push(player);
           playerDict[id] = playerArray.length - 1;
@@ -407,9 +409,47 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       // Select the default option
       $scope.selectedList = $scope.savedLists[0];
 
+    });
+
+
+  }
+
+
+  // Retrieve the saved lists for this coach from the server
+  function getSavedLists2() {
+    runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
+      for (var i = 0, l = response.length; i < l; i++) {
+        // Save a representation of the player lists on client
+        var playerList = [];
+        if (response[i].Player_ids) {
+          playerList = response[i].Player_ids.toString().split(',').map(function(e, i, a) { return parseInt(e, 10); });
+          // console.log(playerList);
+        }
+        response[i].Player_ids = playerList;
+      }
+      $scope.savedLists = response;
+      // Select the default option
+      $scope.selectedList = $scope.savedLists[0];
+
+      for (var i = 0; i < $scope.savedLists.length; i++) { 
+        $scope.selected.listData.push({
+            id:   $scope.savedLists[i],
+            label: $scope.savedLists[i].List_name
+        });
+        var playersInList = $scope.savedLists[i].Player_ids
+
+        if (playersInList.indexOf(parseInt($scope.selected.Player_id)) > -1) {
+          $scope.selected.listModel.push({
+            id:   $scope.savedLists[i]
+          });
+        }
+    }
+
 
 
     });
+
+
   }
 
   // Retrieve the saved queries from the server
