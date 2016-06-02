@@ -137,7 +137,9 @@ body {
   animation: 0.3s listShow;
 }
 
-
+.buffer {
+  margin-left: -60% !important;
+}
 
 
 
