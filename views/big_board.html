@@ -66,7 +66,7 @@
       <div class='positionWrapper'>
         <ul class='playerCardWrapper' slip-list slip-reorder="reorder($event, pos, $spliceIndex, $originalIndex)">
           <li class="playerCard" ng-repeat="p in players" ng-class="(p.Player_id==selected.Player_id) ? 'selected_player' : ''" ng-click="setSelectedPlayer(p, $event)">
-            <div class="status offered"></div>
+            <div class="status" ng-class="statusColor(p.NU_status)"></div>
             <div class="avatar" ng-style="{'background-image': 'url(' + p.Img_url + ')'}"></div>
             <div class="player-info-outer">
               <div class="player-info-inner">
