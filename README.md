@@ -1,13 +1,13 @@
 Zcruit - College Football Recruitment Management System
 ====================================
 ## DESCRIPTION
-Zcruit is a management system for college football recruitment. The main users of this app will be the football team coaches, and the app dimension is optimized for ipads. 
+Zcruit is a management system for college football recruitment. This app is intended to be used by football team coaches and recruiters. The app is optimized for iPads. 
 
 On this app, you can:
 * View and edit profiles of all prospective football players in the database
-* Filter players to find targeted players
+* Filter players by different criteria (e.g. positions played, location of high school) to find targeted players
 * See the prediction of how likely a player will commit to school based on his Zcruit score
-* Easily move a player’s ranking of a position by drag-and-drop
+* Easily move a player’s ranking in his position compared to other recruits by using drag-and-drop
 * Add players into customized categories
 
 ## Requirements
@@ -23,7 +23,7 @@ Recommended browser
 * [William Xiao](https://github.com/PaeP3nguin)
 * [Bruno Peynetti](https://github.com/bpeynetti)
 * [Shawn Caeiro](https://github.com/shawncaeiro)
-* [Kristen Ammadio](https://github.com/kmads)
+* [Kristen Amaddio](https://github.com/kmads)
 * [Aiqi Liu](http://github.com/aiqiliu)
 
 
