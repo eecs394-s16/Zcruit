@@ -55,6 +55,10 @@ body {
   border-bottom-width: 1px;
 }
 
+.selected_player {
+  background-color: lightgray;
+}
+
 #profile {
   float: left;
   width: 60%;
@@ -344,8 +348,9 @@ td:first-child {
   display: inline-block;
 }
 
-.selected_player {
-  background-color: lightgray;
+/* Notes tab styles */
+.note-panel {
+  width: 99%;
 }
 .note-input {
   margin-right: 2%;
