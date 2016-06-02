@@ -75,7 +75,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     }
   };
 
-  runQuery('SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id ORDER BY Position_name, Position_rank',
+  runQuery(defaultSearch + ' ORDER BY Position_name, Position_rank',
     function(players) {
     // Put the players into their positions
     // Players are already ordered by position rank, so no sorting needed
