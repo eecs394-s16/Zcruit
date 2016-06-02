@@ -23,6 +23,7 @@ body {
 #result-header-display {
   float: left;
   display: flex;
+  display: -webkit-flex;
   align-items: center;
   width: 85%;
   height: 100%;
@@ -31,6 +32,7 @@ body {
 #result-header-clear {
   float: left;
   display: flex;
+  display: -webkit-flex;
   align-items: center;
   width: 15%;
   height: 100%;
@@ -157,6 +159,7 @@ body {
   line-height: 0.9em;
   font-weight: bold;
   display: flex;
+  display: -webkit-flex;
   justify-content: center; /* align horizontal */
   align-items: center; /* align vertical */
 }
