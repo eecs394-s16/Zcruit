@@ -6,7 +6,7 @@ body {
   overflow-x: auto;
   overflow-y: hidden;
   background-color: white;
-  white-space: nowrap;
+  /*white-space: nowrap;*/
 }
 
 * {
