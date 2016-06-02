@@ -164,6 +164,13 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     } else {
       $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is unlikely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
     }
+    var id = player.Player_id;
+    noteQuery = "select Notes.Note_txt as txt, Coaches.Coach_name as c, Coaches.Coach_id c_id, DATE(Notes.Note_timestamp) date from Notes join Coaches on Notes.Coach_id=Coaches.Coach_id WHERE Notes.Player_id= " + id +  " ORDER BY Note_timestamp DESC";
+    runQuery(noteQuery, function(response) {
+      if (response.length > 0) {
+        $scope.selected.notes = response;
+      }
+    });
   };
 
   $scope.height = function(heightInfo, type) {
@@ -331,6 +338,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
           player.Feet = Math.floor(player.Height / 12);
           player.Inches = player.Height % 12;
           player.offers = [];
+          player.notes = [];
           playerDict[id] = player;
         }
       }
@@ -376,6 +384,60 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   runQuery("SELECT * FROM Colleges ORDER BY College_id", function(response) {
     $scope.Colleges = response;
   });
+
+  $scope.formatDate = function(){
+      var d = new Date(),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [year, month, day].join('-');
+  	};
+
+  $scope.onTextClick = function ($event) {
+            $event.target.select();
+  };
+  $scope.addNote = function(txt)
+  {
+    // var txt = $scope.newNotePrompt;
+    // console.log($scope.newNotePrompt);
+    //adds a new note
+    var newNote = {}
+    // remove any whitespace at the end
+    txt = txt.trim();
+    if (txt)
+    {
+      newNote.txt = txt;
+      newNote.date = $scope.formatDate();
+      // hard coad the coach id to a random between 1 and 6
+      var coaches = ['','Pat Fitzgerald','Morty Schapiro','Eric Schulz','Barack Obama','Henry Bienen','Michael Jordan','George Washington']
+      newNote.c_id =Math.floor(Math.random() * 7+1);
+      newNote.c = coaches[newNote.c_id] ;
+      newNote.p = $scope.selected.Player_id;
+
+      //adds at the beginning of the array
+      $scope.selected.notes.unshift(newNote);
+      //now fix to fit in mysql
+      txt = txt.replace('"','""');
+      txt = txt.replace("'","''");
+      // update the player
+      for(var i = 0; i < $scope.players.length; i++)
+      {
+        if ($scope.players[i].Player_id === $scope.selected.Player_id)
+        {
+          $scope.players[i] = $scope.selected;
+        }
+      }
+      var insertNoteQuery = "INSERT INTO Notes (Note_timestamp, Player_id,Coach_id,Note_txt) VALUES (NOW(),"+newNote.p+','+newNote.c_id+",'"+txt+"')";
+      console.log(insertNoteQuery)
+      runQuery(insertNoteQuery);
+      $scope.newNotePrompt = '';
+      $('#new_note_input').val('');
+    }
+  };
 
   getSavedLists();
 
