@@ -1,7 +1,7 @@
 var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
 
-angular.module('zcruit').controller('bigBoardController', ['$scope','$location','$http',function($scope,$location,$http) {
+angular.module('zcruit').controller('bigBoardController', ['$scope','$location','$http','$timeout',function($scope,$location,$http,$timeout) {
 
   var coach = 1;
   $scope._ = _;
@@ -111,14 +111,28 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     // If we're clicking on a player we already clicked on, unselect them
     if ($scope.selected && $scope.selected.Player_id === player.Player_id) {
       $scope.selected = null;
+      $scope.showScrollBuffer = false;
       return;
     }
 
     // If no selected player yet or selected player is different position from previously selected
     if (!$scope.selected || $scope.selected.Position_name !== player.Position_name) {
       // Scroll the big board so the player card is visible
-      var p = document.getElementById(player.Position_name);
-      board.scrollTo(p.offsetLeft - 105, 0);
+      var pos = document.getElementById(player.Position_name);
+
+      // Find which # position this is
+      var parent = pos.parentNode;
+      var index = Array.prototype.indexOf.call(parent.children, pos);
+
+      // If this position is one of the last three, do terrible things to make the scrolling work
+      if (index >= _.size($scope.positions) - 2) {
+        // Show the big white scroll buffer
+        $scope.showScrollBuffer = true;
+        // Defer the scroll top so the scroll buffer shows up in time
+        $timeout(function() { board.scrollTo(pos.offsetLeft - 105, 0); });
+      } else {
+        board.scrollTo(pos.offsetLeft - 105, 0);
+      }
     }
 
     $scope.selected = $scope.players[player.Player_id];
