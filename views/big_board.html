@@ -11,6 +11,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-scroll/1.0.0/angular-scroll.min.js"></script>
   <link href='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css' type='text/css' rel='stylesheet'>
   <script src='https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js'></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
   <script src='../lib/lodash.js'></script>
   <script src='../lib/angularjs-dropdown-multiselect.js'></script>
   <script src='../lib/xeditable.js'></script>
@@ -254,7 +255,14 @@
         Long Labeled Justified content
       </uib-tab>
       <uib-tab index="3" heading="Notes">
-        Long Labeled Justified content
+        <h4>Notes</h4>
+          <input id='new_note_input' type='text' class='note-input form-control' ng-model='newNotePrompt' ng-click='onTextClick($event)'> <div class='btn btn-primary note-add-button' ng-click='addNote(newNotePrompt)'>Add note</div>
+          <div class="note-panel panel panel-default" ng-repeat="note in selected.notes | orderBy : -date">
+            <div class="panel-body">
+              {{note.txt}}
+            </div>
+            <div class="panel-footer">{{note.c}} @ {{note.date}}</div>
+          </div>
       </uib-tab>
     </uib-tabset>
   </div>
