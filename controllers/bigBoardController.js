@@ -40,6 +40,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
 
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
+    //MODIFY THIS TO REACH YOUR OWN SERVER 
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
     .then(function(response) {
       if (response.status === 200) {
