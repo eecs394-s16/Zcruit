@@ -13,11 +13,22 @@ On this app, you can:
 Note:
 *The current Zcruit scores are fake and don't match with the actual algorithm 
 ## Requirements
-This app is built with HTML, CSS, AngularJS, and PHP. No extra installation is required.
+This app is built with HTML, CSS, AngularJS, and PHP. The back-end works with the query.php file and the database (zcruit.sql). 
 
-Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the project, and click the 'big_board.html' file under the views folder to view the project on your browser. 
+Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the project.
 
-Note: In order to see the popovers in your browser, you might need to run a simple Python server to serve the files locally. 
+Back-end requirements:
+* MySQL and PHP server 
+* Install the database from either `db/zcruit.sql` or use a database uploader to load `db/zcruit.csv`. 
+* Modify `php/query.php` to connect to your database.
+* Modify `controllers/search_profile.js` and `controllers/bigBoardController.js` to reach your version of `php/query.php`. 
+* Start the server and make sure `php/query.php` is reachable.
+
+Front-end requirements 
+
+Open on `views/big_board.html` on your browser to view the project, or access them on your own server. 
+
+Note: In order to see the popovers in your browser, you might need to run a simple Python server to serve the files locally.
 * For Python2.x: run `python -m SimpleHTTPServer`
 * For Python3.x: run `python -m http.server`
 * Open your browser and navigate to `localhost:8000/views/big_board.html`
