@@ -237,6 +237,7 @@ body {
   width: 70%;
   height: 70%;
   padding: 0 0 2% 3%;
+  white-space: initial;
 }
 
 #name {

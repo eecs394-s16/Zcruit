@@ -80,7 +80,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
     });
 
-    getSavedLists2();
+    getSavedLists(true);
   };
 
   // --------- Add and remove from lists ---------
@@ -236,6 +236,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     }
   };
 
+  // --------- Clearing searches ---------
   $scope.resultTitle = 'All players';
   $scope.resultClearable = false;
 
@@ -253,7 +254,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     $scope.newListPopoverIsOpen = false;
     if (name) {
       runQuery('INSERT INTO SavedLists (Coach_id, List_name) VALUES (' + coach + ',"' + name + '")', function() {
-          getSavedLists2();
+          getSavedLists(true);
           // Give user some kind of feedback
       });
     }
@@ -400,23 +401,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
   }
 
   // Retrieve the saved lists for this coach from the server
-  function getSavedLists() {
-    runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
-      for (var i = 0, l = response.length; i < l; i++) {
-        // Save a representation of the player lists on client
-        var playerList = [];
-        if (response[i].Player_ids) {
-          playerList = response[i].Player_ids.toString().split(',').map(function(e, i, a) { return parseInt(e, 10); });
-          // console.log(playerList);
-        }
-        response[i].Player_ids = playerList;
-      }
-      $scope.savedLists = response;
-    });
-  }
-
-  // Retrieve the saved lists for this coach from the server
-  function getSavedLists2() {
+  function getSavedLists(updateListModel) {
     runQuery('SELECT * FROM SavedLists WHERE Coach_id = ' + coach, function(response) {
       for (var i = 0, l = response.length; i < l; i++) {
         // Save a representation of the player lists on client
@@ -429,20 +414,22 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
       }
       $scope.savedLists = response;
 
-      $scope.selected.listData = [{id:1,label:"+ Add New List +"}];
-      $scope.selected.listModel = [];
-    
-      for (var i = 0; i < $scope.savedLists.length; i++) { 
-        $scope.selected.listData.push({
-            id:   $scope.savedLists[i],
-            label: $scope.savedLists[i].List_name
-        });
-        var playersInList = $scope.savedLists[i].Player_ids;
+      if (updateListModel === true) {
+        $scope.selected.listData = [{id:1,label:"+ Add New List +"}];
+        $scope.selected.listModel = [];
 
-        if (playersInList.indexOf(parseInt($scope.selected.Player_id)) > -1) {
-          $scope.selected.listModel.push({
-            id:   $scope.savedLists[i]
+        for (var i = 0; i < $scope.savedLists.length; i++) { 
+          $scope.selected.listData.push({
+              id:   $scope.savedLists[i],
+              label: $scope.savedLists[i].List_name
           });
+          var playersInList = $scope.savedLists[i].Player_ids;
+
+          if (playersInList.indexOf(parseInt($scope.selected.Player_id)) > -1) {
+            $scope.selected.listModel.push({
+              id:   $scope.savedLists[i]
+            });
+          }
         }
       }
     });

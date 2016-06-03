@@ -134,26 +134,25 @@
           <p>{{selected.HS_city}}, {{selected.HS_state}}</p>
         </div>
 
-          <div class="form-group row">
-            <div class="col-sm-5">
-            <div id="single-button"
-              ng-click="newListPopoverIsOpen = true"
-            type="button"
-            uib-dropdown-toggle
-            uib-popover-template='"new_list_popover.html"'
-            popover-placement="left"
-            popover-title="Add To New List"
-            popover-trigger="none"
-            popover-is-open="newListPopoverIsOpen"
-            style="height:1px;"
-            >
+        <div class="form-group row">
+          <div class="col-sm-5">
+          <div id="single-button"
+            ng-click="newListPopoverIsOpen = true"
+          type="button"
+          uib-dropdown-toggle
+          uib-popover-template='"new_list_popover.html"'
+          popover-placement="left"
+          popover-title="Add To New List"
+          popover-trigger="none"
+          popover-is-open="newListPopoverIsOpen"
+          style="height:1px;"
+          >
+        </div>
+            <div style="display:inline-block" ng-if="savedLists !== undefined" ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="settings_dropdown_player" events="{onItemSelect: onListSelect, onItemDeselect: onListDeselect, onSelectAll: onListSelectAll, onDeselectAll: onListUnselectAll }" translation-texts="listSelectText" style="margin-left:0px;"></div>
           </div>
-              <div style="display:inline-block" ng-if="savedLists !== undefined" ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="settings_dropdown_player" events="{onItemSelect: onListSelect, onItemDeselect: onListDeselect, onSelectAll: onListSelectAll, onDeselectAll: onListUnselectAll }" translation-texts="listSelectText" style="margin-left:0px;"></div>
-            </div>
-            <div class="col-sm-5">
-            </div>
+          <div class="col-sm-5">
           </div>
-
+        </div>
       </div>
 
       <!-- Be careful here - how are multiple offers displaying  -->
