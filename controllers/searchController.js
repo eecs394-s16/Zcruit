@@ -15,12 +15,6 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
     {value: "6", text: 'Rejected'}
   ];
 
-
-  // $scope.show_status = function() {
-  //   var selected_status = $filter('filter')($scope.NU_statuses, {value: $scope.user.status});
-  //   return ($scope.)
-  // }
-
   $scope.initials = function(name) {
     name = name.split(' ');
     return name[0][0] + name[1][0];

@@ -171,7 +171,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
       if (response.length > 0) {
         $scope.selected.notes = response;
       }
-    }
+    });
 
     getSavedLists(true);
   };
