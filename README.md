@@ -17,14 +17,14 @@ This app is built with HTML, CSS, AngularJS, and PHP. The back-end works with th
 
 Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the project.
 
-Back-end requirements:
+#### Back-end requirements:
 * MySQL and PHP server 
 * Install the database from either `db/zcruit.sql` or use a database uploader to load `db/zcruit.csv`. 
 * Modify `php/query.php` to connect to your database.
 * Modify `controllers/search_profile.js` and `controllers/bigBoardController.js` to reach your version of `php/query.php`. 
 * Start the server and make sure `php/query.php` is reachable.
 
-Front-end requirements 
+#### Front-end requirements 
 
 Open on `views/big_board.html` on your browser to view the project, or access them on your own server. 
 
