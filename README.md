@@ -34,7 +34,7 @@ Note: In order to see the popovers in your browser, you might need to run a simp
 * Open your browser and navigate to `localhost:8000/views/big_board.html`
 
 Recommended browsers
-* Google Chrome (Enable "Toggle Device mode" when inspecting the page, and choose "iPad" as your device)
+* Google Chrome (Enable [Device mode](https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/?hl=en) when inspecting the page, and choose "iPad" as your device, then press the rotate button)
 * Safari via computer
 * Safari via Xcode iPad Retina simulator
 
