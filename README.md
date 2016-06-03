@@ -15,11 +15,17 @@ Note:
 ## Requirements
 This app is built with HTML, CSS, AngularJS, and PHP. No extra installation is required.
 
-Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the porject, and click the 'big_board.html' file under the views folder to view the project on your browser. 
+Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the project, and click the 'big_board.html' file under the views folder to view the project on your browser. 
 
-Recommended browser
+Note: In order to see the popovers in your browser, you might need to run a simple Python server to serve the files locally. 
+* For Python2.x: run `python -m SimpleHTTPServer`
+* For Python3.x: run `python -m http.server`
+* Open your browser and navigate to `localhost:8000/views/big_board.html`
+
+Recommended browsers
 * Google Chrome (Enable "Toggle Device mode" when inspecting the page, and choose "iPad" as your device)
-* Safari (Since the popovers won't work under normal Chrome browsing mode)
+* Safari via computer
+* Safari via Xcode iPad Retina simulator
 
 ## Contributors
 * [William Xiao](https://github.com/PaeP3nguin)
