@@ -148,13 +148,7 @@
             style="height:1px;"
             >
           </div>
-              <div style="display:inline-block" ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="{
-    buttonDefaultText: 'Their Lists',
-    scrollableHeight: '250px',
-    scrollable: true
-  };" events="{onItemSelect: onListSelect, onItemDeselect: onListDeselect, onSelectAll: onListSelectAll, onUnselectAll: onListUnselectAll };" style="margin-left:0px;"></div>
-
-
+              <div style="display:inline-block" ng-if="savedLists !== undefined" ng-dropdown-multiselect="" options="selected.listData" selected-model="selected.listModel" extra-settings="settings_dropdown_player" events="{onItemSelect: onListSelect, onItemDeselect: onListDeselect, onSelectAll: onListSelectAll, onDeselectAll: onListUnselectAll }" translation-texts="listSelectText" style="margin-left:0px;"></div>
             </div>
             <div class="col-sm-5">
             </div>
