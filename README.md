@@ -19,7 +19,7 @@ Run `git clone https://github.com/eecs394-s16/Zcruit.git` to clone the project.
 
 #### Back-end requirements:
 * MySQL and PHP server 
-* Install the database from either `db/zcruit.sql` or use a database uploader to load `db/zcruit.csv`. 
+* Install the database from either `db/zcruit.sql` or use a database uploader to the tables in csv format under the `db/table/` directory. The `db/zcruit.csv` file has all the tables in csv format. 
 * Modify `php/query.php` to connect to your database.
 * Modify `controllers/search_profile.js` and `controllers/bigBoardController.js` to reach your version of `php/query.php`. 
 * Start the server and make sure `php/query.php` is reachable.
@@ -34,7 +34,7 @@ Note: In order to see the popovers in your browser, you might need to run a simp
 * Open your browser and navigate to `localhost:8000/views/big_board.html`
 
 Recommended browsers
-* Google Chrome (Enable [Device mode](https://developers.google.com/web/tools/chrome-devtools/iterate/device-mode/?hl=en) when inspecting the page, and choose "iPad" as your device, then press the rotate button)
+* Google Chrome (Enable "Toggle Device mode" when inspecting the page, and choose "iPad" as your device)
 * Safari via computer
 * Safari via Xcode iPad Retina simulator
 
