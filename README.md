@@ -39,10 +39,9 @@ Recommended browsers
 * Safari via Xcode iPad Retina simulator
 
 ## Contributors
-* [William Xiao](https://github.com/PaeP3nguin)
-* [Bruno Peynetti](https://github.com/bpeynetti)
-* [Shawn Caeiro](https://github.com/shawncaeiro)
 * [Kristen Amaddio](https://github.com/kmads)
+* [Shawn Caeiro](https://github.com/shawncaeiro)
 * [Aiqi Liu](http://github.com/aiqiliu)
-
+* [Bruno Peynetti](https://github.com/bpeynetti)
+* [William Xiao](https://github.com/PaeP3nguin)
 
