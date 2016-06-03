@@ -1,10 +1,20 @@
 var defaultSearch = 'SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos, Coaches c WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id AND p.AreaCoach_id = c.Coach_id';
 
 
-angular.module('zcruit').controller('bigBoardController', ['$scope','$location','$http',function($scope,$location,$http) {
+angular.module('zcruit').controller('bigBoardController', ['$scope','$location','$http','$timeout',function($scope,$location,$http,$timeout) {
 
   var coach = 1;
   $scope._ = _;
+  $scope.NU_statuses = [
+    {value: "0", text: 'Committed'},
+    {value: "1", text: 'Offer'},
+    {value: "2", text: 'Active Recruit'},
+    {value: "3", text: 'Evaluation needed'},
+    {value: "4", text: 'FBS recruit'},
+    {value: "5", text: 'Walk on'},
+    {value: "6", text: 'Rejected'}
+  ];
+
   var board = angular.element(document.getElementById("board"));
 
   $scope.openSearchProfile = function(){
@@ -41,7 +51,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
       }
     });
   }
-  
+
   // Begin List JS
 
   $scope.openList = function(listID){
@@ -53,7 +63,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
   });
 
   // End List JS
-  
+
   $scope.height = function(heightInfo, type) {
 
     if (type == 1) {
@@ -65,7 +75,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     }
   };
 
-  runQuery('SELECT DISTINCT * FROM Players p, HighSchools h, Positions pos WHERE p.HighSchool_id = h.HS_id AND p.Player_id = pos.Player_id ORDER BY Position_name, Position_rank',
+  runQuery(defaultSearch + ' ORDER BY Position_name, Position_rank',
     function(players) {
     // Put the players into their positions
     // Players are already ordered by position rank, so no sorting needed
@@ -101,14 +111,28 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     // If we're clicking on a player we already clicked on, unselect them
     if ($scope.selected && $scope.selected.Player_id === player.Player_id) {
       $scope.selected = null;
+      $scope.showScrollBuffer = false;
       return;
     }
 
     // If no selected player yet or selected player is different position from previously selected
     if (!$scope.selected || $scope.selected.Position_name !== player.Position_name) {
       // Scroll the big board so the player card is visible
-      var p = document.getElementById(player.Position_name);
-      board.scrollTo(p.offsetLeft - 105, 0);
+      var pos = document.getElementById(player.Position_name);
+
+      // Find which # position this is
+      var parent = pos.parentNode;
+      var index = Array.prototype.indexOf.call(parent.children, pos);
+
+      // If this position is one of the last three, do terrible things to make the scrolling work
+      if (index >= _.size($scope.positions) - 2) {
+        // Show the big white scroll buffer
+        $scope.showScrollBuffer = true;
+        // Defer the scroll top so the scroll buffer shows up in time
+        $timeout(function() { board.scrollTo(pos.offsetLeft - 105, 0); });
+      } else {
+        board.scrollTo(pos.offsetLeft - 105, 0);
+      }
     }
 
     $scope.selected = $scope.players[player.Player_id];
@@ -139,6 +163,14 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
       $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is moderately likely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
     } else {
       $scope.zscoreExplanation2 = "A projected score of " + player.Zscore2 + " means this player is unlikely to commit given " + numVisit + " additional visit" + pluralVisit + " to the university.";
+    }
+
+    var id = player.Player_id;
+    noteQuery = "select Notes.Note_txt as txt, Coaches.Coach_name as c, Coaches.Coach_id c_id, DATE(Notes.Note_timestamp) date from Notes join Coaches on Notes.Coach_id=Coaches.Coach_id WHERE Notes.Player_id= " + id +  " ORDER BY Note_timestamp DESC";
+    runQuery(noteQuery, function(response) {
+      if (response.length > 0) {
+        $scope.selected.notes = response;
+      }
     }
 
     getSavedLists(true);
@@ -375,6 +407,7 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
           player.Feet = Math.floor(player.Height / 12);
           player.Inches = player.Height % 12;
           player.offers = [];
+          player.notes = [];
           playerDict[id] = player;
         }
       }
@@ -436,6 +469,60 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
     $scope.Colleges = response;
   });
 
+  $scope.formatDate = function(){
+      var d = new Date(),
+          month = '' + (d.getMonth() + 1),
+          day = '' + d.getDate(),
+          year = d.getFullYear();
+
+      if (month.length < 2) month = '0' + month;
+      if (day.length < 2) day = '0' + day;
+
+      return [year, month, day].join('-');
+  	};
+
+  $scope.onTextClick = function ($event) {
+            $event.target.select();
+  };
+  $scope.addNote = function(txt)
+  {
+    // var txt = $scope.newNotePrompt;
+    // console.log($scope.newNotePrompt);
+    //adds a new note
+    var newNote = {}
+    // remove any whitespace at the end
+    txt = txt.trim();
+    if (txt)
+    {
+      newNote.txt = txt;
+      newNote.date = $scope.formatDate();
+      // hard coad the coach id to a random between 1 and 6
+      var coaches = ['','Pat Fitzgerald','Morty Schapiro','Eric Schulz','Barack Obama','Henry Bienen','Michael Jordan','George Washington']
+      newNote.c_id =Math.floor(Math.random() * 7+1);
+      newNote.c = coaches[newNote.c_id] ;
+      newNote.p = $scope.selected.Player_id;
+
+      //adds at the beginning of the array
+      $scope.selected.notes.unshift(newNote);
+      //now fix to fit in mysql
+      txt = txt.replace('"','""');
+      txt = txt.replace("'","''");
+      // update the player
+      for(var i = 0; i < $scope.players.length; i++)
+      {
+        if ($scope.players[i].Player_id === $scope.selected.Player_id)
+        {
+          $scope.players[i] = $scope.selected;
+        }
+      }
+      var insertNoteQuery = "INSERT INTO Notes (Note_timestamp, Player_id,Coach_id,Note_txt) VALUES (NOW(),"+newNote.p+','+newNote.c_id+",'"+txt+"')";
+      console.log(insertNoteQuery)
+      runQuery(insertNoteQuery);
+      $scope.newNotePrompt = '';
+      $('#new_note_input').val('');
+    }
+  };
+
   getSavedLists();
 
   $scope.updateData = function(tableName,key,newValue)
@@ -450,7 +537,13 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
       }
       else
       {
-        var sqlQuery = "UPDATE "+tableName+" SET "+key+"="+newValue+" WHERE ";
+        if (key==='Phone' | key==='Weight' | key==='GPA' | key==='Hometown_zip' | key==='NU_status'){
+          var sqlQuery = "UPDATE "+tableName+" SET "+key+"="+newValue+" WHERE ";
+        }
+        else{
+          var sqlQuery = "UPDATE "+tableName+" SET "+key+"='"+newValue+"' WHERE ";
+        }
+
       }
       if (tableName === 'Players')
       {
@@ -459,11 +552,12 @@ angular.module('zcruit').controller('bigBoardController', ['$scope','$location',
       else if (tableName === 'HighSchools') {
         sqlQuery += "HS_id="+$scope.selected.HS_id;
       }
-      for(var i = 0; i < $scope.players.length; i++)
+
+      for (var i=0; i< $scope.positions[$scope.selected.Position_name].length; i++)
       {
-        if ($scope.players[i].Player_id === $scope.selected.Player_id)
+        if ($scope.positions[$scope.selected.Position_name][i].Player_id === $scope.selected.Player_id)
         {
-          $scope.players[i] = $scope.selected;
+          $scope.positions[$scope.selected.Position_name][i] = $scope.selected;
         }
       }
       console.log(sqlQuery);
