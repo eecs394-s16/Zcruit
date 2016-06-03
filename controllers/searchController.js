@@ -311,6 +311,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   // Run an arbitrary query, callback is passed the response if the query succeeds
   function runQuery(queryString, callback) {
+    // CHANGE TO ADDRESS OF SERVER
     $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString))
     .then(function(response) {
       if (response.status === 200) {
@@ -325,6 +326,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
 
   // Returns a promise that resolves to the response object
   function runQueryAsync(queryString) {
+    // CHANGE TO ADDRESS OF SERVER 
     return $http.get('https://zcruit-bpeynetti.c9users.io/php/query.php?query=' + encodeURIComponent(queryString));
   }
 
@@ -412,7 +414,7 @@ angular.module('zcruit').controller('searchController', ['$scope', '$location', 
         $scope.selected.listData = [{id:1,label:"+ Add New List +"}];
         $scope.selected.listModel = [];
 
-        for (var i = 0; i < $scope.savedLists.length; i++) { 
+        for (var i = 0; i < $scope.savedLists.length; i++) {
           $scope.selected.listData.push({
               id:   $scope.savedLists[i],
               label: $scope.savedLists[i].List_name

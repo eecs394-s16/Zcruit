@@ -1,5 +1,6 @@
 <?php
 header('Access-Control-Allow-Origin: *');
+// CHANGE THE FOLLOWING LINE TO USE LOCAL DATABASE (USERNAME, PASSWORD, AND DATABASE NAME )
 $conn = mysqli_connect("localhost","bpeynetti","","zcruit");
 
 if (mysqli_connect_errno($conn))
